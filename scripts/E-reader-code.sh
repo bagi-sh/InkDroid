@@ -3,6 +3,7 @@
 REPO="/home/$USER/Projects/android_e-reader_project"
 PACKAGES="android-tools curl bc jq"
 LOG_REMOVACOES="$REPO/scripts/debloatlog.txt"
+touch $LOG_REMOVACOES
 JSON="$REPO/dependences/blacklist.json"
 # Instalando dependências 
 install_dependencies() {
