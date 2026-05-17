@@ -1,11 +1,9 @@
 #!/bin/bash
 # Define as variavéis do código
-REPO=$(/home/$USER/android_e-reader_project)
-PACKAGES=$(android-tools curl bc jq)
-ANDROID_VER=$(adb shell getprop ro.build.version.release)
-FABRICANTE=$(adb shell getprop ro.product.manufacturer)
-LOG_REMOVACOES=($REPO/scripts/debloatlog.txt)
-JSON=($REPO/Installation\ Resources/blacklis.json)
+REPO="/home/$USER/Projects/android_e-reader_project"
+PACKAGES="android-tools curl bc jq"
+LOG_REMOVACOES="$REPO/scripts/debloatlog.txt"
+JSON="$REPO/dependences/blacklist.json"
 # Instalando dependências 
 install_dependencies() {
 	if [ -x "$(command -v apt-get)"]; then 
@@ -15,12 +13,15 @@ install_dependencies() {
 	elif [-x "$(command -v pacman)"]; then
 		sudo pacman -Sy --no-confirm $PACKAGES
 	elif [ -x "$(command -v zypper)" ]; then
-        	sudo zypper install -y $PACKAGES
+       	sudo zypper install -y $PACKAGES
 	else 
 		echo "ERRO: Falha ao identificar gerenciador de pacotes. verifique as permissões ou instale manualmente"
 		exit 1 
 	fi
 }
+
+ANDROID_VER=$(adb shell getprop ro.build.version.release)
+FABRICANTE=$(adb shell getprop ro.product.manufacturer)
 
 # Verifica se há exatamente um dispositivo conectado e autorizado
 # O comando 'adb devices' lista os IDs. Filtramos a linha do cabeçalho e linhas vazias.
@@ -54,6 +55,12 @@ echo " Modelo:     $MODELO"
 echo " Android:    $ANDROID_VER"
 echo "--------------------------------------------------"
 
+# Valida se o arquivo JSON corrigido realmente existe no caminho absoluto
+if [ ! -f "$JSON" ]; then
+    echo -e "\e[31m[ERRO]\e[0m Arquivo JSON não encontrado em: $JSON"
+    exit 1
+fi
+
 # Inicializa o arquivo de log/relatório
 echo "=== RELATÓRIO DE DEBLOAT ===" > "$LOG_REMOVACOES"
 echo "Apareilho: $FABRICANTE $MODELO (Android $ANDROID_VER)" >> "$LOG_REMOVACOES"
@@ -71,11 +78,12 @@ jq -r '.[] | .[]' "$JSON" | while read -r pacote; do
     [ -z "$pacote" ] && continue
     
     echo -n "Processando: $pacote ... "
-    
-    # Executa a desinstalação a nível de usuário comum (User 0) sem necessidade de Root
-    # Captura a saída de erro padrão para evitar mensagens poluídas no terminal
-    RESULTADO=$(adb shell pm uninstall -k --user 0 "$pacote" 2>&1)
-    
+
+ # Executa a desinstalação a nível de usuário comum (User 0) sem necessidade de Root
+# Captura a saída de erro padrão para evitar mensagens poluídas no terminal    
+# usa '< /dev/null' para impedir o ADB de quebrar o fluxo do JQ
+    RESULTADO=$(adb shell pm uninstall -k --user 0 "$pacote" < /dev/null 2>&1)
+
     # Valida o resultado do comando enviado ao Android
     if echo "$RESULTADO" | grep -q "Success"; then
         echo -e "\e[32m[REMOVIDO]\e[0m"

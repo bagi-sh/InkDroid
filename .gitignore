@@ -1,6 +1,7 @@
 # Logs e arquivos temporários
 *.log
 adb.txt
+log
 
 # Arquivos de sistema
 .DS_Store

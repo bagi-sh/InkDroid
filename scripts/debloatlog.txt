@@ -1,0 +1,46 @@
+=== RELATÓRIO DE DEBLOAT ===
+Apareilho: Multilaser M8_4G (Android 13)
+Data da execução: dom 17 mai 2026 11:26:23 -03
+---------------------------------
+[SUCESSO] Pacote removido: com.google.android.apps.assistant
+[SUCESSO] Pacote removido: com.google.android.apps.maps
+[SUCESSO] Pacote removido: com.google.android.apps.tachyon
+[SUCESSO] Pacote removido: com.google.android.tts
+[SUCESSO] Pacote removido: com.google.android.gm
+[INFO] Pacote ausente na ROM padrão: com.google.android.googlequicksearchbox
+[INFO] Pacote ausente na ROM padrão: com.google.android.apps.photos
+[SUCESSO] Pacote removido: com.google.android.apps.docs
+[SUCESSO] Pacote removido: com.google.android.calendar
+[SUCESSO] Pacote removido: com.google.android.contacts
+[SUCESSO] Pacote removido: com.google.android.feedback
+[SUCESSO] Pacote removido: com.google.android.videos
+[INFO] Pacote ausente na ROM padrão: com.google.android.music
+[SUCESSO] Pacote removido: com.google.android.apps.youtube.music
+[SUCESSO] Pacote removido: com.android.chrome
+[SUCESSO] Pacote removido: br.com.multilaser.lsitec.sellout
+[SUCESSO] Pacote removido: br.com.multilaser.lsitec.uai
+[SUCESSO] Pacote removido: br.com.multilaser.multifeedback
+[SUCESSO] Pacote removido: penseavanti.com.br.app2shop_multilaser
+[INFO] Pacote ausente na ROM padrão: com.facebook.system
+[INFO] Pacote ausente na ROM padrão: com.facebook.appmanager
+[INFO] Pacote ausente na ROM padrão: com.facebook.services
+[SUCESSO] Pacote removido: com.instagram.lite
+[INFO] Pacote ausente na ROM padrão: com.discord
+[INFO] Pacote ausente na ROM padrão: com.snapchat.android
+[INFO] Pacote ausente na ROM padrão: com.linkedin.android
+[INFO] Pacote ausente na ROM padrão: com.instagram.android
+[INFO] Pacote ausente na ROM padrão: com.facebook.katana
+[INFO] Pacote ausente na ROM padrão: com.facebook.orca
+[INFO] Pacote ausente na ROM padrão: com.facebook.lite
+[INFO] Pacote ausente na ROM padrão: com.whatsapp
+[INFO] Pacote ausente na ROM padrão: com.whatsapp.w4b
+[INFO] Pacote ausente na ROM padrão: com.instagram.barcelona
+[INFO] Pacote ausente na ROM padrão: com.zhiliaoapp.musically
+[INFO] Pacote ausente na ROM padrão: com.zhiliaoapp.musically.go
+[SUCESSO] Pacote removido: com.google.android.youtube
+[INFO] Pacote ausente na ROM padrão: com.kwai.video
+[INFO] Pacote ausente na ROM padrão: com.twitter.android
+[INFO] Pacote ausente na ROM padrão: xyz.bluesky.app
+[SUCESSO] Pacote removido: com.reddit.frontpage
+[INFO] Pacote ausente na ROM padrão: com.pinterest
+[INFO] Pacote ausente na ROM padrão: com.tumblr
