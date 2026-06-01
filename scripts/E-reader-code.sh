@@ -1,8 +1,8 @@
 #!/bin/bash
 # Define as variavéis do código
-REPO="/home/$USER/Projects/android_e-reader_project"
+REPO="/home/$USER/android_e-reader_project"
 PACKAGES="android-tools curl bc jq"
-LOG_REMOVACOES="$REPO/scripts/debloatlog.txt"
+LOG_REMOVACOES="$REPO/debloatlog.txt"
 touch $LOG_REMOVACOES
 JSON="$REPO/dependences/blacklist.json"
 # Instalando dependências 
@@ -20,9 +20,6 @@ install_dependencies() {
 		exit 1 
 	fi
 }
-
-ANDROID_VER=$(adb shell getprop ro.build.version.release)
-FABRICANTE=$(adb shell getprop ro.product.manufacturer)
 
 # Verifica se há exatamente um dispositivo conectado e autorizado
 # O comando 'adb devices' lista os IDs. Filtramos a linha do cabeçalho e linhas vazias.
@@ -48,6 +45,9 @@ else
     echo "Certifique-se de que a Depuração USB está ativa e o computador foi autorizado."
     exit 1
 fi
+
+ANDROID_VER=$(adb shell getprop ro.build.version.release)
+FABRICANTE=$(adb shell getprop ro.product.manufacturer)
 
 echo -e "\e[32m[CONECTADO]\e[0m Dispositivo detectado com sucesso!"
 echo "--------------------------------------------------"
