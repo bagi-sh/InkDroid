@@ -18,9 +18,9 @@ install_dependencies() {
 	else 
 		echo "ERRO: Falha ao identificar gerenciador de pacotes. verifique as permissões ou instale manualmente"
 		exit 1 
-	fi
+	fi				 	 
 }
-
+install_dependencies
 # Verifica se há exatamente um dispositivo conectado e autorizado
 # O comando 'adb devices' lista os IDs. Filtramos a linha do cabeçalho e linhas vazias.
 DEVICE_CHECK=$(adb devices | grep -v "List of devices attached" | grep "device$" | wc -l)
@@ -101,4 +101,4 @@ done
 
 echo "--------------------------------------------------"
 echo -e "\e[32m[CONCLUÍDO]\e[0m Otimização finalizada!"
-echo "O relatório detalhado foi salvo em: ./$LOG_REMOVACOES"
+echo "O relatório detalhado foi salvo em: $LOG_REMOVACOES"
