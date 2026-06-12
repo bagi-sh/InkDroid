@@ -20,5 +20,4 @@ Antes de iniciar, certifique-se de possuir:
 
 1. **Clonar o Repositório**:
    ```bash
-   git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
-   cd nome-do-repositorio
+   git clone https://www.github.com/Bagi-sh/InkDroid.git
