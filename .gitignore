@@ -1,7 +1,7 @@
 # Logs e arquivos temporários
 *.log
 adb.txt
-log
+*log
 
 # Arquivos de sistema
 .DS_Store
@@ -9,3 +9,4 @@ Thumbs.db
 
 # Binários ou ferramentas locais (caso baixe o platform-tools na pasta)
 platform-tools/
+*.apk
