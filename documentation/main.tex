@@ -1,0 +1,175 @@
+\documentclass[
+    12pt,
+    openright,
+    oneside,
+    a4paper,
+    english,
+    brazil
+    ]{abntex2}
+
+% Pacotes essenciais
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage[brazilian,hyperpageref]{backref}
+\usepackage[alf]{abntex2cite}
+
+% Configurações de Capa e Folha de Rosto
+\titulo{: Repurposing de tablets legados via debloat automatizado para leitura focada}
+\autor{ALISSON GABRIEL DOS SANTOS ALVES}
+\local{Salvador}
+\data{2026}
+\instituicao{Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT}
+\tipotrabalho{Trabalho de Conclusão de Curso (TCC)}
+\preambulo{Trabalho de Conclusão de Curso apresentado ao Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT, como parte dos requisitos para obtenção do Certificado de conclusão de curso.}
+\orientador{Gilberto Monteiro}
+
+% Configurações de links e PDF
+\makeatletter
+\hypersetup{
+    pdftitle={\@title},
+    pdfauthor={\@author},
+    pdfsubject={\imprimirpreambulo},
+    pdfcreator={LaTeX with abnTeX2},
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=black,
+    bookmarksdepth=4
+}
+\makeatother
+
+% Ajustes do layout ABNT
+\setlength{\parindent}{1.3cm}
+\setlength{\parskip}{0.2cm}
+\makeindex
+
+\begin{document}
+\selectlanguage{brazil}
+\frenchspacing
+
+% --- ELEMENTOS PRÉ-TEXTUAIS ---
+\imprimircapa
+
+% Ajuste pontual para imprimir o curso na folha de rosto
+\makeatletter
+\begin{cleardoublepage}
+  \thispagestyle{empty}
+  \begin{center}
+    {\ABNTEXchapterfont\large\imprimirautor}
+    \vfill
+    \begin{center}
+        {\ABNTEXchapterfont\bfseries\Large\imprimirtitulo}
+    \end{center}
+    \vfill
+        \hspace{.45\textwidth}
+        \begin{minipage}{.5\textwidth}
+            \SingleSpacing
+            \imprimirpreambulo\\
+            \vspace{0.5cm}
+            \textbf{Curso:} Técnico em Informática\\
+            \textbf{Orientador:} \imprimirorientador
+        \end{minipage}
+    
+    \vfill
+    {\large\imprimirlocal}\\
+    {\large Ano \imprimirdata}
+\end{center}
+\end{cleardoublepage}
+\makeatother
+\cleardoublepage
+% Resumo
+\setlength{\absparsep}{18pt}
+
+\begin{resumo}
+\noindent ALVES, Alisson Gabriel dos Santos. \textbf{: Repurposing de tablets legados via debloat automatizado para leitura focada}. 2026. Trabalho de Conclusão de Curso (TCC) -- Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT, Salvador, 2026.
+
+\vspace{\onelineskip}
+
+Analisa o impacto do padrão de consumo linear na indústria de hardware mobile e o fenômeno do envelhecimento de software (\textit{software aging}), que gera descartes precoces de dispositivos funcionalmente íntegros. Define como objetivo central o desenvolvimento de uma solução de software para promover a preservação ambiental e a saúde digital por meio da ressignificação (\textit{repurposing}) de tablets Android legados em dispositivos de leitura focada (E-readers). Utiliza como objeto de estudo o tablet Multilaser M8 4G da rede pública estadual da Bahia. Emprega uma metodologia aplicada e experimental, fundamentada no uso da ferramenta Android Debug Bridge (ADB) para intervenções não invasivas em três camadas sistêmicas: aplicação, framework e kernel. O método compreende a execução de um \textit{debloat} radical para remoção de serviços redundantes, o ajuste de parâmetros ergonômicos como escala de cinza e densidade de pixels para mitigar a Síndrome da Visão do Computador (CVS), além da aplicação de \textit{underclock} e redução da taxa de atualização da tela para otimização energética. Valida a eficácia da intervenção por meio de análise quantitativa de desempenho e autonomia, utilizando métricas de \textit{Throughput}, \textit{Slowdown} e o modelo de Desejabilidade Composta para equilibrar performance e consumo. Conclui que a engenharia de software consciente permite a conversão de potenciais resíduos eletrônicos em ativos educacionais valiosos, comprovando a viabilidade técnica de políticas de TI sustentáveis e a democratização do acesso a ferramentas de leitura fluida e livre de distrações.
+
+\vspace{\onelineskip}
+\noindent \textbf{Palavras-chave}: Debloat Android. Green IT. Saúde Digital. Obsolescência de Software. Deep Work.
+\end{resumo}
+
+% Abstract
+\begin{resumo}[Abstract]
+\begin{otherlanguage*}{english}
+\noindent ALVES, Alisson Gabriel dos Santos. \textbf{: Repurposing legacy tablets via automated debloat for focused reading}. 2026. Graduation Thesis (TCC) -- Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT, Salvador, 2026.
+
+\vspace{\onelineskip}
+
+This research analyzes the impact of linear consumption patterns in the mobile hardware industry and the phenomenon of software aging, which triggers the premature disposal of functionally sound devices. The central objective is the development of a software solution that combines environmental preservation and digital health by repurposing legacy Android tablets into focused reading devices (E-readers). The study specifically focuses on the Multilaser M8 4G tablet distributed within the Bahia state public school system. The methodology is classified as applied and experimental, utilizing a mixed approach to validate hardware repurposing. The technical procedure employs the Android Debug Bridge (ADB) for non-invasive interventions across three systemic layers: application, framework, and kernel. The method involves automated debloating to remove redundant services and Google Mobile Services (GMS), the adjustment of ergonomic parameters such as grayscale and pixel density to mitigate Computer Vision Syndrome (CVS), and kernel-level underclocking to maximize energy efficiency. The effectiveness of the intervention is validated through quantitative performance and autonomy analysis, using Throughput and Slowdown metrics alongside Composite Desirability models to balance performance and power consumption. It concludes that conscious software engineering enables the conversion of potential electronic waste into valuable educational assets, proving the technical viability of sustainable IT policies and the democratization of distraction-free reading tools.
+
+\vspace{\onelineskip}
+\noindent \textbf{Keywords}: Android Debloat. Green IT. Digital Health. Software Obsolescence. Deep Work.
+\end{otherlanguage*}
+\end{resumo}
+
+% Sumário
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+
+% --- ELEMENTOS TEXTUAIS ---
+\textual
+
+\chapter{INTRODUÇÃO}
+A crise ambiental contemporânea é considerada por muitos o problema de maior relevância da atualidade, sendo essa, muito impulsionada pelo atual padrão de consumo linear da indústria no geral. Esse padrão se mostra ainda mais forte no contexto de hardwares mobile, que são renovados a cada ano, prometendo grandes mudanças, deixando em pouco tempo aparelhos funcionais obsoletos ou "artificialmente incapazes", \citeonline{parnas1994} diz que esse efeito está fundamentalmente ligado ao que ele chama de \textit{software aging} onde a medida que as aplicações se atualizam elas exigem cada vez mais do hardware, ainda que o mesmo seja perfeitamente capaz tornando o software em um "fardo oneroso". Essa prática impulsiona o aumento da geração de resíduos sólidos, em especial, o lixo eletroeletrônico, que possuem metais pesados de difícil decomposição. Segundo o relatório The Global E-waste Monitor \cite{balde2024}, a geração de lixo eletrônico, estimada em 62 bilhões de kg no ano de 2022, cresce cinco vezes mais do que a reciclagem documentada, com apenas 22,3\% dos resíduos coletados adequadamente em 2022.
+
+\section{Problema de Pesquisa}
+A "incapacidade artificial" nos dispositivos móveis é impulsionada pelo \textit{overhead} de processamento do Google Mobile Services (GMS) e pela evolução das camadas de \textit{runtime} (ART) e pelas atualizações do sistema que vêm perfeitamente otimizadas para o hardware de última geração, mas com grandes falhas de otimização para os mais antigos. Isso deixa dispositivos com hardware perfeitamente funcionais, freiados pelo software.
+\section{Objetivos}
+A presente pesquisa tem por objetivo o desenvolvimento de uma solução de software que combine preservação ambiental e saúde digital através da \textit{repurposing} de tablets Android, em E-readers, dando um novo significado funcional para dispositivos obsoletos. Em específico o tablet Multilaser M8 4G distribuído pelas escolas da rede pública estadual da Bahia.
+
+Nesse dispositivo, será realizado um \textit{debloat} automatizado para otimizar o uso do armazenamento, memória RAM e ciclos de CPU, junto a implementação de uma interface monocromática e ajustes ergonômicos para redução de fadiga visual. Tal preocupação com a fadiga visual e ergonomia, vem do crescente índice de CVS (Síndrome da Visão do Computador), a qual atinge cerca de 70\% da população mundial \cite{sa2016}. Além disso, outra preocupação da presente pesquisa é a validação da autonomia energética, conforme \citeonline{monteiro2023} o perfil do usuário e serviços de fundo são os maiores vilões da bateria. A automatização também terá como meta o ajuste de parâmetros do Kernel para maximizar a autonomia energética. Essa automação será disponibilizada de forma Open Source em portais como Github de forma gratuita e em linguagens como Shell Script (Bash) e Python.
+
+\chapter{JUSTIFICATIVA}
+A necessidade dessa pesquisa é fortemente fundamentada na urgência de combater o modelo de consumo linear consolidado atualmente. Em 2022, a categoria de resíduos sólidos, que inclui aparelhos eletrônicos como celulares, tablets e laptops, chegou a acumular 5 bilhões de kg de lixo \cite{balde2024}. Entretanto, o destino da maioria dos dispositivos obsoletos, não é o descarte, mas sim a chamada hibernação doméstica. Estima-se que famílias da União Europeia possuam cerca de 74 itens eletrônicos em suas casas, dos quais, boa parcela está quebrada ou sem uso. No Brasil, a Associação Brasileira de Reciclagem de Eletroeletrônicos e Eletrodomésticos \cite{abree2024} também sinaliza que cerca de 85\% dos brasileiros possuem algum tipo de aparelho eletrônico parado em suas casas. O Brasil também é o maior gerador de \textit{E-waste} da América Latina segundo a \citeonline{abree2024}. Esses dados representam um panorama preocupante em que por diversos fatores, dispositivos legado em seu pleno funcionamento são encontrados no seu estado de hibernação. A presente pesquisa pode ajudar a mitigar os danos dessa situação, dando um novo propósito para aqueles dispositivos que já não servem bem as exigências dos softwares e aplicativos modernos.
+
+Somado a isso, o desenvolvimento da pesquisa também ancora-se nos conceitos de saúde digital e minimalismo para promover o \textit{Deep Work} por meio de modificações em várias das partes que compõem o sistema Android. De acordo com \citeonline{newport2019}, a tecnologia dos dias de hoje é projetada para capturar nossa atenção, o que, em dispositivos de múltiplas funções mostra-se um agente de fragmentação do foco, com diversos serviços disputando pelo seu olhar e atrapalhando o chamado \textit{Deep Work}. A proposta de ressignificação visa também combater essa natureza de modo a tornar o aparelho em um dispositivo de leitura livre de distrações.
+
+Finalmente, o projeto possui um forte componente de conveniência e democratização tecnológica. Ao transformar um dispositivo comum, como Multilaser M8 4G da rede estadual, em uma ferramenta educacional fluida, o estudo remove a barreira financeira imposta pelo alto custo de dispositivos especializados como o Kindle. Trata-se de uma prova de conceito de que a Engenharia Verde pode converter um dispositivo que seria trocado e descartado, em um ativo educacional valioso e acessível.
+
+\chapter{METODOLOGIA}
+A presente pesquisa classifica-se como aplicada e experimental, com abordagem mista para validar a eficácia da ressignificação do hardware. O procedimento técnico central vai utilizar o Android Debug Bridge (ADB), como principal ferramenta, permitindo a comunicação entre a automação e o tablet de forma nativa e segura. Trata-se de uma ferramenta de CLI (\textit{Command Line Interface}) oficial de desenvolvimento disponibilizada pelo Android Open Source Project (AOSP). Operando no modelo cliente-servidor, ela dá acesso ao Shell Unix dos dispositivos Android de forma não invasiva e sem necessidade de acesso root \cite{android2025}. Essa ferramenta possibilita a escrita de um código para realizar alterações profundas nos dispositivos, essas que vão acontecer em 3 camadas principais:
+
+\begin{enumerate}
+    \item \textbf{Nível de Aplicação}: Nesta etapa o script vai, de forma automática, instalar os aplicativos necessários para o pleno funcionamento do dispositivo como um E-reader, e remover processos redundantes ou aplicativos pré-instalados (\textit{bloatwares}), fazendo um \textit{debloat} completo. Desse modo, além de remover redes sociais, apps que prejudicam o \textit{deep work} e atrapalham o foco, também serão removidos, caso o usuário optar, os chamados Google Mobile Services (GMS) que incluem telemetrias intrusivas. Esta ação libera recursos desperdiçados em coisas desnecessárias e constroem a base para as modificações mais profundas.
+    
+    \item \textbf{Nível de Framework}: Essa é a fase em que ocorre a manipulação do banco de dados \texttt{settings.db} e do gestor de janelas (\textit{Window Manager} ou WM) para alterar diversas das configurações padrão. Nessa fase, algumas das principais modificações vão ser a aplicação de um filtro de luz azul nativo, simulando E-Inks de E-reader especializados. Essa alteração mostra-se relevante pois, segundo \citeonline{benedetto2013}, as telas E-ink diminuem drasticamente o risco de CSV, e embora a tela continue sendo LCD, a redução da luz azul e a escala de cinza reduzem o brilho e o contraste agressivo, mitigando a CVS, embora não atinja as propriedades físicas de reflexão de luz do papel eletrônico real aumentará o conforto ocular do usuário. A manipulação da densidade de pixels (DPI) e da escala de cinza também será aplicada visando otimizar a renderização de fontes, reduzindo a carga cognitiva e visual durante a leitura \cite{sa2016, android2025}.
+    
+    \item \textbf{Nível de Kernel}: Por fim, essa é a parte de maior dificuldade, mas que vai aplicar as maiores diferenças práticas. Aqui, a automação vai aplicar técnicas de \textit{underclock} (limitação da frequência do processador) e redução da taxa de atualização da tela via Surface Flinger, para tornar a tela do aparelho mais semelhante ao padrão da indústria, além de ajudar com a eficiência energética.
+\end{enumerate}
+
+Essas modificações serão acompanhadas de uma análise de dados para medir a diferença de desempenho, uso de recursos de hardware e autonomia da bateria, por meio de uma comparação quantitativa usando métricas como \textit{Throughput} e \textit{Slowdown} para comprovar se a alteração foi de fato benéfica ou não do ponto de vista de fluidez do sistema, utilizando modelos de Desejabilidade Composta para equilibrar desempenho e consumo energético \cite{pontes2017}.
+
+\chapter{Desenvolvimento e Implementação} \label{cap:desenvolvimento} Este capítulo detalha os procedimentos técnicos realizados para a construção da ferramenta  estruturando-se conforme os níveis sistêmicos estabelecidos na metodologia: aplicação, framework e kernel \cite{android2025}. A implementação foi conduzida em ambiente Linux, visando a integração nativa com ferramentas de automação via terminal. 
+
+\section{Intervenções em Nível de Aplicação} O primeiro nível de intervenção foca na desoneração do sistema através da remoção de processos redundantes e na preparação do ambiente de comunicação com o hardware alvo, assim como a instalação de ferramentas que serão necessárias no uso do aparelho como dispositivo de leitura \cite{android2025}. 
+
+\subsection{Configuração do Ambiente e Protocolo de Comunicação} O desenvolvimento iniciou-se pela configuração da \textit{Android Debug Bridge} (ADB), que, como citado anteriormente, trata-se de uma ferramenta de linha de comando (\textit{Command Line Interface} - CLI) oficial do \textit{Android Open Source Project} (AOSP), que opera em um modelo cliente-servidor \cite{android2025}. A comunicação entre a estação de trabalho (cliente) e o tablet Multilaser M8 4G (servidor) ocorre de forma não invasiva, permitindo o acesso ao \textit{Shell}\footnote{O \textit{Shell} é um programa que atua como interface entre o usuário e o sistema operacional, processando comandos de texto para executar funções do sistema.} \textit{Unix}\footnote{O \textit{Unix} foi um dos primeiros e mais importantes sistemas operacionais, servindo de molde até hoje para sistemas como Linux, MacOS, BSDs e etc. incluindo o Android} do dispositivo Android sem a necessidade de privilégios de administrador (\textit{root}) \cite{android2025}. Essa ferramenta é disponibilizada pelo Google com o objetivo de ser utilizada por desenvolvedores e assistências técnicas para diagnósticos e resolução de problemas em aparelhos Android, sendo essa, uma ferramenta indispensável para o presente projeto
+
+Inicialmente, foram realizados testes manuais para validar os comandos fundamentais de instalação e desinstalação de pacotes locais e familiarização com a ferramenta. Após testes manuais, a primeira automação começou como um teste para garantir a integridade do processo, implementando uma rotina de verificação de segurança, assegurando que apenas um único dispositivo estivesse conectado e pronto para receber as instruções, evitando conflitos de execução em múltiplos terminais. Paralelamente, estabeleceu-se o controle de versão via repositório Git, permitindo o rastreamento de modificações e a organização colaborativa do código-fonte, parte crucial do projeto, visto que o mesmo tem por objetivo se manter open source.
+
+\subsection{Lógica de Automação e Processamento de Bloatwares}
+Para otimizar a manutenção do código e evitar arquivos extensos, optou-se pela segregação da lista de aplicativos a serem removidos, utilizando o formato JSON\footnote{\textit{JavaScript Object Notation} (JSON) é um formato leve de intercâmbio de dados, estruturado em pares de chave-valor, amplamente utilizado para armazenamento de configurações e comunicação entre sistemas.} para criar o arquivo \texttt{blacklist.json}. Neste arquivo, catalogaram-se os serviços do \textit{Google Mobile Services} (GMS), redes sociais, jogos e aplicativos pré-instalados identificados como prejudiciais ao foco e ao desempenho do dispositivo.
+
+Para a leitura e processamento desses dados dentro do \textit{script} de automação, integrou-se o utilitário \texttt{jq}. O \texttt{jq} é um processador de JSON via CLI, que permite extrair, filtrar e manipular dados estruturados de forma ágil em ambiente de terminal. Com essa ferramenta, desenvolveu-se um algoritmo baseado em estruturas de repetição (\textit{loops}), que percorre a lista de pacotes no arquivo JSON e executa a tentativa de desinstalação para cada item. Essa abordagem torna-se eficaz não apenas pela facilidade maior de manutenção e modificação do código principal, mas também pela possibilidade de customização, já que o usuário pode facilmente modificar o arquivo e adicionar ou remover aplicativos. Ao final de cada ciclo, o algoritmo gera \textit{logs} detalhados, registrando falhas e sucessos, o que permite a auditoria do processo de \textit{debloat} e a validação da liberação de recursos do sistema \cite{android2025}. Os testes até aqui correram bem, e agora, para finalizar essa camada de aplicação, resta a instalação de outros aplicativos que serão essenciais, e a possível troca do launcher.
+
+\chapter{CONSIDERAÇÕES FINAIS E RESULTADOS ESPERADOS}
+Espera-se demonstrar que os dispositivos legados ainda possuem alto potencial técnico quando desonerados de softwares mal otimizados, podendo ser adaptados para tarefas que não demandam alto desempenho, assim evitando o descarte. O artefato final servirá como prova de conceito para políticas de TI sustentáveis, provando que a engenharia de software consciente pode converter o que seria resíduo eletrônico em um ativo educacional valioso e focado no ser humano.
+
+% --- ELEMENTOS PÓS-TEXTUAIS ---
+\postextual
+\bibliography{referencias}
+
+\end{document}
+
+
