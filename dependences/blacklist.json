@@ -3,8 +3,8 @@
 		"com.google.android.apps.assistant",
 		"com.google.android.apps.maps",
 		"com.google.android.apps.tachyon",
-	        "com.google.android.tts",
-	    	"com.google.android.gm",
+	  "com.google.android.tts",
+	 	"com.google.android.gm",
 		"com.google.android.googlequicksearchbox",
 		"com.google.android.apps.photos",
 		"com.google.android.apps.docs",
@@ -17,7 +17,7 @@
 		"com.android.chrome"
 	],
 
-	"bloatware_fabricante": [
+	"bloatware_vendor": [
 		"br.com.multilaser.lsitec.sellout",
 		"br.com.multilaser.lsitec.uai",
 		"br.com.multilaser.multifeedback",
@@ -25,7 +25,7 @@
 
 	],
 
-	"Redes_sociais": [
+	"social": [
 		"com.facebook.system",
 		"com.facebook.appmanager",
 		"com.facebook.services",

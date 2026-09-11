@@ -16,53 +16,53 @@ install_dependencies() {
 	elif [ -x "$(command -v zypper)" ]; then
     sudo zypper install -y $PACKAGES
 	else 
-		echo "ERRO: Falha ao identificar gerenciador de pacotes. verifique as permissões ou instale manualmente"
+		echo "ERROR: couldn't install dependeces packages, please install $PACKAGES manually."
 		exit 1 
 	fi				 	 
 }
 
 install_dependencies()
-# Verifica se há exatamente um dispositivo conectado e autorizado
+# Verify if only one device is connected 
 DEVICE_CHECK=$(adb devices | grep -v "List of devices attached" | grep "device$" | wc -l)
 
 if [ "$DEVICE_CHECK" -eq 1 ]; then
-    echo "Status: Dispositivo compatível encontrado."
+    echo "Status: Compatible device found."
 
     MODEL=$(adb shell getprop ro.product.model | tr -d '\r')
 
-    echo "Dispositivo identificado"
-    
-    echo "Iniciando procedimentos para o dispositivo"
+    echo "Device Identified"
 
 elif [ "$DEVICE_CHECK" -gt 1 ]; then
-    echo "Erro: Mais de um dispositivo conectado. Desconecte os excedentes."
+    echo "Error: More than one device connected, please keep only one"
     exit 1
 else
-    echo "Erro: Nenhum dispositivo encontrado ou não autorizado."
-    echo "Certifique-se de que a Depuração USB está ativa e o computador foi autorizado."
+    echo "Error: cant found any compatible device."
+    echo "Make sure debugging USB is on and with your PC checked as known"
     exit 1
 fi
 
 ANDROID_VER=$(adb shell getprop ro.build.version.release)
 VENDOR=$(adb shell getprop ro.product.manufacturer)
 
-echo -e "\e[32m[CONECTADO]\e[0m Dispositivo detectado com sucesso!"
+echo -e "\e[32m[CONNECTED]\e[0m Device Detected whitout problems!"
 echo "--------------------------------------------------"
-echo " Fabricante: $VENDOR"
-echo " Modelo:     $MODEL"
-echo " Android:    $ANDROID_VER"
+echo " Vendor:    $VENDOR"
+echo " Model:     $MODEL"
+echo " Android:   $ANDROID_VER"
 echo "--------------------------------------------------"
 
-# Valida se o arquivo JSON corrigido realmente existe no caminho absoluto
+# DO A VERIFICATION HERE (Y/N)
+
+# Validate JSON file path
 if [ ! -f "$JSON" ]; then
-    echo -e "\e[31m[ERRO]\e[0m Arquivo JSON não encontrado em: $JSON"
+    echo -e "\e[31m[ERROR]\e[0m JSON blacklist file not found in: $JSON"
     exit 1
 fi
 
 # Inicializa o arquivo de log/relatório
-echo "=== RELATÓRIO DE DEBLOAT ===" > "$LOG_ACTIONS"
-echo "Aparelho: $VENDOR $MODEL (Android $ANDROID_VER)" >> "$LOG_ACTIONS"
-echo "Data da execução: $(date)" >> "$LOG_ACTIONS"
+echo "=== SCRIPT RELATORY ===" > "$LOG_ACTIONS"
+echo "DEVICE: $VENDOR $MODEL (Android $ANDROID_VER)" >> "$LOG_ACTIONS"
+echo "DATE: $(date)" >> "$LOG_ACTIONS"
 echo "---------------------------------" >> "$LOG_ACTIONS"
 
 # --- Execução do Processo de Otimização (Parsing do JSON) ---
@@ -94,10 +94,9 @@ jq -r '.[] | .[]' "$JSON" | while read -r pacote; do
 done
 
 echo "--------------------------------------------------"
-echo -e "\e[32m[CONCLUÍDO]\e[0m Otimização finalizada!"
-echo "O relatório detalhado foi salvo em: $LOG_ACTIONS"
+echo -e "\e[32m[FINISHED]\e[0m All of blacklist apps are uninstalled"
 
-echo "Starting Download for apps"
+echo "Starting essetials downloads..."
 
 curl -fL "$(curl fsSL https://api.github.com/repos/koreader/koreader/releases/latest | jq -r '.assets[] | select(.name | endswith(".apk")) | .browser_download_url' | head -n 1)"  -o ./Koreader.apk
 if [ -e ./Koreader.apk ]; then
