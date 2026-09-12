@@ -290,7 +290,6 @@ InkDroid/
 │   ├── main.tex                    # Thesis source code (PT-BR)
 │   ├── referencias.bib             # Academic citations and bibliography
 │   └── build/main.pdf              # Compiled thesis document (PDF)
-├── Notes/                          # Technical planning, architecture & reports
 └── README.md                       # Documentation & user guide
 ```
 
