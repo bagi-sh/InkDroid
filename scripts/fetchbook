@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# ==============================================================================
-# bookdl.sh - CLI Book Downloader with Multi-source & Language Filtering
-# ==============================================================================
-
 set -e
 
 # Default settings
@@ -11,162 +7,235 @@ DEST_DIR="."
 SOURCE="all"
 LANG_CODE="pt"
 AUTO_PICK=false
+PUSH_TO_DEVICE=false
+TARGET_DIR="/sdcard/Books"
 QUERY=""
 
-show_help() {
-  cat << EOF
-Usage: $(basename "$0") [OPTIONS] "TITLE, AUTHOR, OR METADATA"
+showHelp() {
+  cat << 'EOF'
+Usage: fetchbook [OPTIONS] "TITLE, AUTHOR, OR METADATA"
 
 Options:
   -f, --format FORMAT   File format (epub, pdf, mobi). Default: epub
   -d, --dir DIRECTORY   Destination directory. Default: current directory (.)
-  -s, --source SOURCE   Search source: 'libgen', 'annas', or 'all'. Default: all
-  -l, --lang LANGUAGE   Language code (pt, en, es). Default: pt
+  -s, --source SOURCE   Search source: 'gutenberg', 'archive', 'libgen', or 'all'. Default: all
+  -l, --lang LANGUAGE   Language code (pt, en, es, all). Default: pt
   -a, --auto            Automatically download first result without menu
+  -p, --push            Push downloaded book to connected Android tablet (/sdcard/Books/)
+  --target-dir DIR      Target directory on Android device. Default: /sdcard/Books
   -h, --help            Show this help screen
 
 Examples:
-  $(basename "$0") "The Hobbit"
-  $(basename "$0") -f pdf -d ~/Books -l en "Dune"
-  $(basename "$0") -s libgen -f epub -l pt "Neuromancer"
+  fetchbook "Dom Casmurro"
+  fetchbook -s gutenberg -l pt "Machado de Assis"
+  fetchbook -s libgen -f epub -l en "Dune"
+  fetchbook -p -f epub "Memorias Posthumas"
 EOF
   exit 0
 }
 
 # Parse CLI arguments
-while [[ $# -gt 0 ]]; do
+while [ $# -gt 0 ]; do
   case "$1" in
     -f|--format) FORMAT="$2"; shift 2 ;;
     -d|--dir) DEST_DIR="$2"; shift 2 ;;
     -s|--source) SOURCE="$2"; shift 2 ;;
     -l|--lang) LANG_CODE="$2"; shift 2 ;;
     -a|--auto) AUTO_PICK=true; shift ;;
-    -h|--help) show_help ;;
-    *) QUERY="$1"; shift ;;
+    -p|--push) PUSH_TO_DEVICE=true; shift ;;
+    --target-dir) TARGET_DIR="$2"; shift 2 ;;
+    -h|--help) showHelp ;;
+    *)
+      if [ -z "$QUERY" ]; then
+        QUERY="$1"
+      else
+        QUERY="$QUERY $1"
+      fi
+      shift
+      ;;
   esac
 done
 
 if [ -z "$QUERY" ]; then
-  echo "Error: No title or metadata provided."
-  show_help
+  echo "Error: No title or metadata provided." >&2
+  showHelp
 fi
 
 mkdir -p "$DEST_DIR"
 
-echo "Searching for: \"$QUERY\" [Language: $LANG_CODE | Format: $FORMAT]..."
+echo "Searching for: \"$QUERY\" [Format: $FORMAT | Language: $LANG_CODE | Source: $SOURCE]..."
 
-# Embedded Python engine for HTTP parsing and JSON formatting
-PYTHON_SCRIPT=$(cat << 'EOF'
-import sys, urllib.request, urllib.parse, re, json
-from html import unescape
+# Multi-tier book search engine in Python
+PYTHON_ENGINE=$(cat << 'EOF'
+import sys, urllib.request, urllib.parse, json, ssl, re
 
 query = sys.argv[1]
 lang = sys.argv[2].lower()
 fmt = sys.argv[3].lower()
 source = sys.argv[4].lower()
 
-headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'}
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
 results = []
 
-def fetch_libgen(q, l, f):
-    url = f"http://libgen.is/search.php?req={urllib.parse.quote(q)}&phrase=1&view=simple&column=def&sort=def"
-    req = urllib.request.Request(url, headers=headers)
+def search_gutenberg(q, l, f):
+    url = f"https://gutendex.com/books/?search={urllib.parse.quote(q)}"
+    if l and l != "all":
+        url += f"&languages={l}"
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            html = resp.read().decode('utf-8', errors='ignore')
-            rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
-            for r in rows[1:]:
-                cols = re.findall(r'<td[^>]*>(.*?)</td>', r, re.DOTALL)
-                if len(cols) >= 10:
-                    author = re.sub(r'<[^>]+>', '', cols[1]).strip()
-                    title = re.sub(r'<[^>]+>', '', cols[2]).strip()
-                    language = re.sub(r'<[^>]+>', '', cols[6]).strip().lower()
-                    extension = re.sub(r'<[^>]+>', '', cols[8]).strip().lower()
-                    
-                    m = re.search(r'href="(http://library\.lol/[^"]+|http://libgen\.rocks/[^"]+)"', cols[9])
-                    if not m:
-                        m = re.search(r'href="([^"]+)"', cols[9])
-                    mirror = m.group(1) if m else ""
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=8, context=ctx) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            for b in data.get("results", [])[:10]:
+                title = b.get("title", "").strip()
+                authors = ", ".join([a.get("name") for a in b.get("authors", [])]) or "Unknown"
+                formats = b.get("formats", {})
+                dl_link = ""
+                matched_fmt = f.upper()
+                if f == "epub":
+                    dl_link = formats.get("application/epub+zip") or formats.get("application/epub+zip; charset=utf-8")
+                elif f == "mobi":
+                    dl_link = formats.get("application/x-mobipocket-ebook")
+                elif f == "pdf":
+                    dl_link = formats.get("application/pdf")
 
-                    if l in ['pt', 'por', 'portuguese']:
-                        if not any(x in language for x in ['portuguese', 'por', 'pt']):
-                            continue
-                    elif l in ['en', 'eng', 'english']:
-                        if not any(x in language for x in ['english', 'eng', 'en']):
-                            continue
-                    elif l and l not in language:
-                        continue
+                if not dl_link and "application/epub+zip" in formats:
+                    dl_link = formats["application/epub+zip"]
+                    matched_fmt = "EPUB"
 
-                    if f and extension != f:
-                        continue
-
-                    if mirror:
-                        results.append({
-                            'source': 'LibGen',
-                            'title': unescape(title),
-                            'author': unescape(author) or 'Unknown',
-                            'format': extension.upper(),
-                            'link': mirror
-                        })
-    except Exception:
-        pass
-
-def fetch_annas(q, l, f):
-    url = f"https://annas-archive.org/search?lang={l}&ext={f}&q={urllib.parse.quote(q)}"
-    req = urllib.request.Request(url, headers=headers)
-    try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            html = resp.read().decode('utf-8', errors='ignore')
-            cards = re.findall(r'href="(/md5/[a-f0-9]+)"[^>]*>(.*?)</a>', html, re.DOTALL)
-            for path, content in cards[:10]:
-                clean_text = re.sub(r'<[^>]+>', ' ', content)
-                clean_text = ' '.join(clean_text.split())
-                if len(clean_text) > 5:
+                if dl_link:
                     results.append({
-                        'source': "Anna's Archive",
-                        'title': unescape(clean_text[:90]),
-                        'author': 'Various/Archive',
-                        'format': f.upper(),
-                        'link': f"https://annas-archive.org{path}"
+                        'source': 'Gutenberg',
+                        'title': title,
+                        'author': authors,
+                        'format': matched_fmt,
+                        'link': dl_link,
+                        'direct': True
                     })
     except Exception:
         pass
 
-if source in ['all', 'libgen']:
-    fetch_libgen(query, lang, fmt)
-if source in ['all', 'annas']:
-    fetch_annas(query, lang, fmt)
+def search_archive(q, l, f):
+    url = f"https://openlibrary.org/search.json?q={urllib.parse.quote(q)}&limit=10"
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=8, context=ctx) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            for doc in data.get("docs", [])[:8]:
+                title = doc.get("title", "").strip()
+                authors = ", ".join(doc.get("author_name", [])) or "Unknown"
+                ia_list = doc.get("ia", [])
+                if not ia_list:
+                    continue
+                ia_id = ia_list[0]
+                dl_url = f"https://archive.org/download/{ia_id}/{ia_id}.{f}"
+                results.append({
+                    'source': 'OpenLibrary',
+                    'title': title,
+                    'author': authors,
+                    'format': f.upper(),
+                    'link': dl_url,
+                    'direct': True
+                })
+    except Exception:
+        pass
+
+def search_libgen(q, l, f):
+    mirrors = ["https://libgen.li", "https://libgen.vg"]
+    for mirror in mirrors:
+        try:
+            url = f"{mirror}/index.php?req={urllib.parse.quote(q)}&columns[]=t&columns[]=a&objects[]=f&topics[]=l&topics[]=f&res=25"
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=6, context=ctx) as resp:
+                html = resp.read().decode('utf-8', errors='ignore')
+                rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
+                for r in rows[1:]:
+                    cols = re.findall(r'<td[^>]*>(.*?)</td>', r, re.DOTALL)
+                    if len(cols) >= 8:
+                        clean_cols = [re.sub(r'<[^>]+>', ' ', c).strip() for c in cols]
+                        title_cell = clean_cols[0]
+                        author = clean_cols[1] or "Unknown"
+                        book_lang = clean_cols[4].lower() if len(clean_cols) > 4 else ""
+                        extension = clean_cols[7].lower() if len(clean_cols) > 7 else ""
+
+                        if l and l != "all":
+                            if l in ["pt", "por", "portuguese"] and not any(k in book_lang for k in ["pt", "por", "portuguese"]):
+                                continue
+                            elif l in ["en", "eng", "english"] and not any(k in book_lang for k in ["en", "eng", "english"]):
+                                continue
+                            elif l in ["es", "spa", "spanish"] and not any(k in book_lang for k in ["es", "spa", "spanish"]):
+                                continue
+
+                        if f and extension and f.lower() != extension:
+                            continue
+
+                        links = re.findall(r'href=[\"\x27]([^\s\"\x27]+)[\"\x27]', r)
+                        dl_link = ""
+                        for lk in links:
+                            if "md5=" in lk:
+                                md5 = lk.split("md5=")[-1].split("&")[0]
+                                dl_link = f"https://libgen.rocks/ads.php?md5={md5}"
+                                break
+                            elif "get.php" in lk or "annas-archive" in lk or "libgen.me" in lk:
+                                dl_link = lk if lk.startswith("http") else f"{mirror}{lk}"
+                                break
+
+                        clean_title = re.sub(r'\s+', ' ', title_cell)[:90].strip()
+                        if clean_title and (dl_link or links):
+                            results.append({
+                                'source': 'LibGen',
+                                'title': clean_title,
+                                'author': author[:50],
+                                'format': (extension or f).upper(),
+                                'link': dl_link or links[0],
+                                'direct': False
+                            })
+            if results:
+                break
+        except Exception:
+            continue
+
+if source in ['all', 'gutenberg']:
+    search_gutenberg(query, lang, fmt)
+if source in ['all', 'archive', 'openlibrary'] and len(results) < 5:
+    search_archive(query, lang, fmt)
+if source in ['all', 'libgen'] and len(results) < 15:
+    search_libgen(query, lang, fmt)
 
 print(json.dumps(results))
 EOF
 )
 
-RAW_JSON=$(python3 -c "$PYTHON_SCRIPT" "$QUERY" "$LANG_CODE" "$FORMAT" "$SOURCE")
-NUM_RESULTS=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(len(json.load(sys.stdin)))")
+RAW_JSON=$(python3 -c "$PYTHON_ENGINE" "$QUERY" "$LANG_CODE" "$FORMAT" "$SOURCE" 2>/dev/null || echo "[]")
+NUM_RESULTS=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(len(json.load(sys.stdin)))" 2>/dev/null || echo 0)
 
 if [ "$NUM_RESULTS" -eq 0 ]; then
-  echo "Error: No books found for \"$QUERY\" in [$FORMAT] format and [$LANG_CODE] language."
+  echo "Error: No books found for \"$QUERY\" in [$FORMAT] format and [$LANG_CODE] language." >&2
   exit 1
 fi
 
 SELECTED_LINK=""
 SELECTED_TITLE=""
+IS_DIRECT="false"
 
-# Auto-pick vs Interactive Menu
+# Result selection logic
 if [ "$AUTO_PICK" = true ] || [ "$NUM_RESULTS" -eq 1 ]; then
-  echo "Downloading first result found..."
+  echo "Selecting first result found..."
   SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['link'])")
   SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['title'])")
+  IS_DIRECT=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(str(json.load(sys.stdin)[0].get('direct', False)).lower())")
 else
   echo -e "\nFound $NUM_RESULTS results:"
-  
-  if command -v fzf &> /dev/null; then
-    # Interactive menu with fzf if installed
+
+  if command -v fzf >/dev/null 2>&1; then
     SELECTED_ITEM=$(echo "$RAW_JSON" | python3 -c "
 import sys, json
 for i, r in enumerate(json.load(sys.stdin)):
     print(f\"{i+1} | [{r['source']}] {r['title']} - {r['author']} ({r['format']})\")
-" | fzf --prompt="Select book > ")
+" | fzf --prompt="Select book > " --reverse)
 
     if [ -z "$SELECTED_ITEM" ]; then
       echo "Operation canceled."
@@ -177,51 +246,55 @@ for i, r in enumerate(json.load(sys.stdin)):
     INDEX=$((INDEX - 1))
     SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['link'])")
     SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['title'])")
+    IS_DIRECT=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(str(json.load(sys.stdin)[$INDEX].get('direct', False)).lower())")
   else
-    # Fallback to native Bash select menu
-    options=()
-    while IFS= read -r line; do
-      options+=("$line")
-    done < <(echo "$RAW_JSON" | python3 -c "
+    echo "$RAW_JSON" | python3 -c "
 import sys, json
-for r in json.load(sys.stdin):
-    print(f\"[{r['source']}] {r['title']} - {r['author']} ({r['format']})\")
-")
-
-    PS3="Enter option number: "
-    select opt in "${options[@]}"; do
-      if [ -n "$opt" ]; then
-        INDEX=$((REPLY - 1))
+for i, r in enumerate(json.load(sys.stdin)):
+    print(f\"  [{i+1}] [{r['source']}] {r['title']} - {r['author']} ({r['format']})\")
+"
+    while true; do
+      read -r -p "Enter option number [1-$NUM_RESULTS] or 'q' to cancel: " choice
+      if [ "$choice" = "q" ] || [ "$choice" = "Q" ]; then
+        echo "Operation canceled."
+        exit 0
+      fi
+      if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$NUM_RESULTS" ]; then
+        INDEX=$((choice - 1))
         SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['link'])")
         SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['title'])")
+        IS_DIRECT=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(str(json.load(sys.stdin)[$INDEX].get('direct', False)).lower())")
         break
       else
-        echo "Invalid option."
+        echo "Invalid option. Please enter a valid number."
       fi
     done
   fi
 fi
 
-# Resolve mirror direct download URL
-echo -e "\nResolving direct download link..."
+# Resolve direct download URL if needed
+DIRECT_URL="$SELECTED_LINK"
 
-DOWNLOAD_SCRIPT=$(cat << 'EOF'
-import sys, urllib.request, re
+if [ "$IS_DIRECT" != "true" ]; then
+  echo "Resolving mirror download URL..."
+  RESOLVE_SCRIPT=$(cat << 'EOF'
+import sys, urllib.request, ssl, re
 
 link = sys.argv[1]
-headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'}
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'}
 
 try:
     req = urllib.request.Request(link, headers=headers)
-    with urllib.request.urlopen(req, timeout=10) as resp:
+    with urllib.request.urlopen(req, timeout=8, context=ctx) as resp:
         html = resp.read().decode('utf-8', errors='ignore')
-        # Library.lol / LibGen direct mirrors
-        m = re.search(r'href="(https?://[^"]+/(?:main|get)/[^"]+)"', html)
+        m = re.search(r'href=[\"\x27](https?://[^\s\"\x27]+/(?:main|get)/[^\s\"\x27]+)[\"\x27]', html)
         if m:
             print(m.group(1))
         else:
-            # Anna's Archive direct pattern
-            m2 = re.search(r'href="(https?://[^"]+\.(?:epub|pdf|mobi)[^"]*)"', html, re.IGNORECASE)
+            m2 = re.search(r'href=[\"\x27](https?://[^\s\"\x27]+\.(?:epub|pdf|mobi)[^\s\"\x27]*)[\"\x27]', html, re.IGNORECASE)
             if m2:
                 print(m2.group(1))
             else:
@@ -229,20 +302,71 @@ try:
 except Exception:
     print(link)
 EOF
-)
+  )
+  DIRECT_URL=$(python3 -c "$RESOLVE_SCRIPT" "$SELECTED_LINK" 2>/dev/null || echo "$SELECTED_LINK")
+fi
 
-DIRECT_URL=$(python3 -c "$DOWNLOAD_SCRIPT" "$SELECTED_LINK")
-
-# Format output file name
+# Sanitize file name
 SAFE_FILENAME=$(echo "$SELECTED_TITLE" | sed 's/[^a-zA-Z0-9 _-]/_/g' | tr -s '_' | cut -c1-60)
 OUTPUT_FILE="${DEST_DIR}/${SAFE_FILENAME}.${FORMAT}"
 
 echo "Saving to: $OUTPUT_FILE"
 curl -# -L "$DIRECT_URL" -o "$OUTPUT_FILE" --user-agent "Mozilla/5.0"
 
-if [ -f "$OUTPUT_FILE" ] && [ -s "$OUTPUT_FILE" ]; then
-  echo -e "\nDownload completed successfully!"
+# Verify downloaded file
+FILE_VALID=false
+if [ -f "$OUTPUT_FILE" ]; then
+  FILE_SIZE=$(wc -c < "$OUTPUT_FILE" || echo 0)
+  if [ "$FILE_SIZE" -gt 1024 ]; then
+    FILE_VALID=true
+  fi
+fi
+
+if [ "$FILE_VALID" = true ]; then
+  echo -e "\n\e[32m[SUCCESS]\e[0m Download completed successfully!"
 else
-  echo -e "\nCould not download directly. Opening mirror link in browser..."
-  xdg-open "$SELECTED_LINK" 2>/dev/null || sensible-browser "$SELECTED_LINK" 2>/dev/null
+  echo -e "\n\e[33m[NOTICE]\e[0m Direct download could not be completed automatically."
+  echo "Opening mirror in browser: $SELECTED_LINK"
+  xdg-open "$SELECTED_LINK" 2>/dev/null || sensible-browser "$SELECTED_LINK" 2>/dev/null || true
+  exit 0
+fi
+
+# Push to tablet function
+pushToDevice() {
+  local local_file="$1"
+  local target_dir="${2:-/sdcard/Books}"
+
+  if ! command -v adb >/dev/null 2>&1; then
+    echo "Warning: adb not found, skipping tablet push." >&2
+    return 1
+  fi
+
+  local count
+  count=$(adb devices | grep -v "List of devices attached" | grep -c "device$" || true)
+  if [ "$count" -eq 0 ]; then
+    echo "Notice: No Android device connected. File saved locally at: $local_file"
+    return 0
+  fi
+
+  echo "Transferring $(basename "$local_file") to Android device ($target_dir)..."
+  adb shell mkdir -p "$target_dir" >/dev/null 2>&1 || true
+  adb push "$local_file" "$target_dir/"
+
+  local remote_path="${target_dir}/$(basename "$local_file")"
+  adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d "file://${remote_path}" >/dev/null 2>&1 || true
+  echo -e "\e[32m[DONE]\e[0m Book transferred and indexed on tablet!"
+}
+
+# Auto-push or prompt to transfer to connected tablet
+if [ "$PUSH_TO_DEVICE" = true ]; then
+  pushToDevice "$OUTPUT_FILE" "$TARGET_DIR"
+elif [ "$AUTO_PICK" = false ] && command -v adb >/dev/null 2>&1; then
+  DEVICE_COUNT=$(adb devices 2>/dev/null | grep -v "List of devices attached" | grep -c "device$" || true)
+  if [ "$DEVICE_COUNT" -gt 0 ]; then
+    read -r -p "Do you want to send this book to the connected tablet? [Y/n]: " send_yn
+    case "$send_yn" in
+      [Yy]* | "" ) pushToDevice "$OUTPUT_FILE" "$TARGET_DIR" ;;
+      * ) ;;
+    esac
+  fi
 fi
