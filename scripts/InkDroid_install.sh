@@ -6,7 +6,7 @@ LOG_ACTIONS="$REPO/debloatlog.txt"
 touch "$LOG_ACTIONS"
 JSON="$REPO/dependences/blacklist.json"
 
-install_dependencies() {
+installDependencies() {
 	if [ -x "$(command -v apt-get)" ]; then 
 		sudo apt-get update && sudo apt-get install -y $PACKAGES
 	elif [ -x "$(command -v dnf)" ]; then
@@ -21,7 +21,20 @@ install_dependencies() {
 	fi				 	 
 }
 
-install_dependencies()
+setDefaultLauncher() {
+  if adb shell pm list packages | grep -q "app.olauncher"; then
+    echo "Olauncher detected. Setting as default HOME..."
+    adb shell cmd role add-role-holder android.app.role.HOME app.olauncher
+    DEFAULTLAUNCHER=$(adb shell cmd role get-role-holders android.app.role.HOME | tr -d '\r')
+    echo "The Default launcher is now $DEFAULTLAUNCHER"
+    return 0
+  else
+    echo "Error: app.olauncher is not installed on the device." >&2
+    return 1
+  fi
+}
+
+installDependencies()
 # Verify if only one device is connected 
 DEVICE_CHECK=$(adb devices | grep -v "List of devices attached" | grep "device$" | wc -l)
 
@@ -52,6 +65,15 @@ echo " Android:   $ANDROID_VER"
 echo "--------------------------------------------------"
 
 # DO A VERIFICATION HERE (Y/N)
+
+while true; do
+    read -p "Continue script in the $MODEL? Y/n " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) break;;
+    esac
+done
 
 # Validate JSON file path
 if [ ! -f "$JSON" ]; then
@@ -98,11 +120,11 @@ echo -e "\e[32m[FINISHED]\e[0m All of blacklist apps are uninstalled"
 
 echo "Starting essetials downloads..."
 
-curl -fL "$(curl fsSL https://api.github.com/repos/koreader/koreader/releases/latest | jq -r '.assets[] | select(.name | endswith(".apk")) | .browser_download_url' | head -n 1)"  -o ./Koreader.apk
-if [ -e ./Koreader.apk ]; then
+curl -fL "$(curl fsSL https://api.github.com/repos/koreader/koreader/releases/latest | jq -r '.assets[] | select(.name | endswith(".apk")) | .browser_download_url' | head -n 1)"  -o /tmp/Koreader.apk
+if [ -e /tmp/Koreader.apk ]; then
   echo "[SUCESS] Downloaded Koreader" && echo "[SUCESS] Downloaded Koreader" >> "$LOG_ACTIONS"
   echo "Installing..."
-  RESULT=$(adb install -r --user 0 ./Koreader.apk < /dev/null 2>&1)
+  RESULT=$(adb install -r --user 0 /tmp/Koreader.apk < /dev/null 2>&1)
   if echo "$RESULT" | grep -q "Success"; then
     echo "[SUCESS] Koreader Installed" &&  echo "[SUCESS] Koreader Installed" >> "$LOG_ACTIONS"
   else
@@ -111,11 +133,11 @@ if [ -e ./Koreader.apk ]; then
     fi
 fi
 
-curl -fL "$(curl -fsSL https://api.github.com/repos/tanujnotes/Olauncher/releases/latest | jq -r '.assets[] | select(.name | endswith(".apk")) | .browser_download_url' | head -n 1)" -o olauncher.apk
-if [ -e ./olauncher.apk ]; then
+curl -fL "$(curl -fsSL https://api.github.com/repos/tanujnotes/Olauncher/releases/latest | jq -r '.assets[] | select(.name | endswith(".apk")) | .browser_download_url' | head -n 1)" -o /tmp/olauncher.apk
+if [ -e /tmp/olauncher.apk ]; then
   echo "[SUCESS] Downloaded Olauncher" && echo "[SUCESS] Downloaded Olauncher" >> "$LOG_ACTIONS"
   echo "Installing..."
-  RESULT=$(adb install -r --user 0 ./olauncher.apk < /dev/null 2>&1)
+  RESULT=$(adb install -r --user 0 /tmp/olauncher.apk < /dev/null 2>&1)
   if echo "$RESULT" | grep -q "Success"; then
     echo "[SUCESS] Koreader Installed" &&  echo "[SUCESS] Koreader Installed" >> "$LOG_ACTIONS"
   else
@@ -123,4 +145,13 @@ if [ -e ./olauncher.apk ]; then
     echo "Error. Process will continue withot Olauncher"
     fi
 fi
+
+while true; do
+  read -p "Do you wish to change the default launcher? Y/n" yn
+    case $yn in
+      [Yy]* ) setDefaultLauncher(); break;;
+      [Nn]* ) break;;
+      * ) setDefaultLauncher; break;;
+    esac
+done
 
