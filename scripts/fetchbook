@@ -1,0 +1,248 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# bookdl.sh - CLI Book Downloader with Multi-source & Language Filtering
+# ==============================================================================
+
+set -e
+
+# Default settings
+FORMAT="epub"
+DEST_DIR="."
+SOURCE="all"
+LANG_CODE="pt"
+AUTO_PICK=false
+QUERY=""
+
+show_help() {
+  cat << EOF
+Usage: $(basename "$0") [OPTIONS] "TITLE, AUTHOR, OR METADATA"
+
+Options:
+  -f, --format FORMAT   File format (epub, pdf, mobi). Default: epub
+  -d, --dir DIRECTORY   Destination directory. Default: current directory (.)
+  -s, --source SOURCE   Search source: 'libgen', 'annas', or 'all'. Default: all
+  -l, --lang LANGUAGE   Language code (pt, en, es). Default: pt
+  -a, --auto            Automatically download first result without menu
+  -h, --help            Show this help screen
+
+Examples:
+  $(basename "$0") "The Hobbit"
+  $(basename "$0") -f pdf -d ~/Books -l en "Dune"
+  $(basename "$0") -s libgen -f epub -l pt "Neuromancer"
+EOF
+  exit 0
+}
+
+# Parse CLI arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -f|--format) FORMAT="$2"; shift 2 ;;
+    -d|--dir) DEST_DIR="$2"; shift 2 ;;
+    -s|--source) SOURCE="$2"; shift 2 ;;
+    -l|--lang) LANG_CODE="$2"; shift 2 ;;
+    -a|--auto) AUTO_PICK=true; shift ;;
+    -h|--help) show_help ;;
+    *) QUERY="$1"; shift ;;
+  esac
+done
+
+if [ -z "$QUERY" ]; then
+  echo "Error: No title or metadata provided."
+  show_help
+fi
+
+mkdir -p "$DEST_DIR"
+
+echo "Searching for: \"$QUERY\" [Language: $LANG_CODE | Format: $FORMAT]..."
+
+# Embedded Python engine for HTTP parsing and JSON formatting
+PYTHON_SCRIPT=$(cat << 'EOF'
+import sys, urllib.request, urllib.parse, re, json
+from html import unescape
+
+query = sys.argv[1]
+lang = sys.argv[2].lower()
+fmt = sys.argv[3].lower()
+source = sys.argv[4].lower()
+
+headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'}
+results = []
+
+def fetch_libgen(q, l, f):
+    url = f"http://libgen.is/search.php?req={urllib.parse.quote(q)}&phrase=1&view=simple&column=def&sort=def"
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            html = resp.read().decode('utf-8', errors='ignore')
+            rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
+            for r in rows[1:]:
+                cols = re.findall(r'<td[^>]*>(.*?)</td>', r, re.DOTALL)
+                if len(cols) >= 10:
+                    author = re.sub(r'<[^>]+>', '', cols[1]).strip()
+                    title = re.sub(r'<[^>]+>', '', cols[2]).strip()
+                    language = re.sub(r'<[^>]+>', '', cols[6]).strip().lower()
+                    extension = re.sub(r'<[^>]+>', '', cols[8]).strip().lower()
+                    
+                    m = re.search(r'href="(http://library\.lol/[^"]+|http://libgen\.rocks/[^"]+)"', cols[9])
+                    if not m:
+                        m = re.search(r'href="([^"]+)"', cols[9])
+                    mirror = m.group(1) if m else ""
+
+                    if l in ['pt', 'por', 'portuguese']:
+                        if not any(x in language for x in ['portuguese', 'por', 'pt']):
+                            continue
+                    elif l in ['en', 'eng', 'english']:
+                        if not any(x in language for x in ['english', 'eng', 'en']):
+                            continue
+                    elif l and l not in language:
+                        continue
+
+                    if f and extension != f:
+                        continue
+
+                    if mirror:
+                        results.append({
+                            'source': 'LibGen',
+                            'title': unescape(title),
+                            'author': unescape(author) or 'Unknown',
+                            'format': extension.upper(),
+                            'link': mirror
+                        })
+    except Exception:
+        pass
+
+def fetch_annas(q, l, f):
+    url = f"https://annas-archive.org/search?lang={l}&ext={f}&q={urllib.parse.quote(q)}"
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            html = resp.read().decode('utf-8', errors='ignore')
+            cards = re.findall(r'href="(/md5/[a-f0-9]+)"[^>]*>(.*?)</a>', html, re.DOTALL)
+            for path, content in cards[:10]:
+                clean_text = re.sub(r'<[^>]+>', ' ', content)
+                clean_text = ' '.join(clean_text.split())
+                if len(clean_text) > 5:
+                    results.append({
+                        'source': "Anna's Archive",
+                        'title': unescape(clean_text[:90]),
+                        'author': 'Various/Archive',
+                        'format': f.upper(),
+                        'link': f"https://annas-archive.org{path}"
+                    })
+    except Exception:
+        pass
+
+if source in ['all', 'libgen']:
+    fetch_libgen(query, lang, fmt)
+if source in ['all', 'annas']:
+    fetch_annas(query, lang, fmt)
+
+print(json.dumps(results))
+EOF
+)
+
+RAW_JSON=$(python3 -c "$PYTHON_SCRIPT" "$QUERY" "$LANG_CODE" "$FORMAT" "$SOURCE")
+NUM_RESULTS=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(len(json.load(sys.stdin)))")
+
+if [ "$NUM_RESULTS" -eq 0 ]; then
+  echo "Error: No books found for \"$QUERY\" in [$FORMAT] format and [$LANG_CODE] language."
+  exit 1
+fi
+
+SELECTED_LINK=""
+SELECTED_TITLE=""
+
+# Auto-pick vs Interactive Menu
+if [ "$AUTO_PICK" = true ] || [ "$NUM_RESULTS" -eq 1 ]; then
+  echo "Downloading first result found..."
+  SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['link'])")
+  SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['title'])")
+else
+  echo -e "\nFound $NUM_RESULTS results:"
+  
+  if command -v fzf &> /dev/null; then
+    # Interactive menu with fzf if installed
+    SELECTED_ITEM=$(echo "$RAW_JSON" | python3 -c "
+import sys, json
+for i, r in enumerate(json.load(sys.stdin)):
+    print(f\"{i+1} | [{r['source']}] {r['title']} - {r['author']} ({r['format']})\")
+" | fzf --prompt="Select book > ")
+
+    if [ -z "$SELECTED_ITEM" ]; then
+      echo "Operation canceled."
+      exit 0
+    fi
+
+    INDEX=$(echo "$SELECTED_ITEM" | cut -d' ' -f1)
+    INDEX=$((INDEX - 1))
+    SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['link'])")
+    SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['title'])")
+  else
+    # Fallback to native Bash select menu
+    options=()
+    while IFS= read -r line; do
+      options+=("$line")
+    done < <(echo "$RAW_JSON" | python3 -c "
+import sys, json
+for r in json.load(sys.stdin):
+    print(f\"[{r['source']}] {r['title']} - {r['author']} ({r['format']})\")
+")
+
+    PS3="Enter option number: "
+    select opt in "${options[@]}"; do
+      if [ -n "$opt" ]; then
+        INDEX=$((REPLY - 1))
+        SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['link'])")
+        SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['title'])")
+        break
+      else
+        echo "Invalid option."
+      fi
+    done
+  fi
+fi
+
+# Resolve mirror direct download URL
+echo -e "\nResolving direct download link..."
+
+DOWNLOAD_SCRIPT=$(cat << 'EOF'
+import sys, urllib.request, re
+
+link = sys.argv[1]
+headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'}
+
+try:
+    req = urllib.request.Request(link, headers=headers)
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        html = resp.read().decode('utf-8', errors='ignore')
+        # Library.lol / LibGen direct mirrors
+        m = re.search(r'href="(https?://[^"]+/(?:main|get)/[^"]+)"', html)
+        if m:
+            print(m.group(1))
+        else:
+            # Anna's Archive direct pattern
+            m2 = re.search(r'href="(https?://[^"]+\.(?:epub|pdf|mobi)[^"]*)"', html, re.IGNORECASE)
+            if m2:
+                print(m2.group(1))
+            else:
+                print(link)
+except Exception:
+    print(link)
+EOF
+)
+
+DIRECT_URL=$(python3 -c "$DOWNLOAD_SCRIPT" "$SELECTED_LINK")
+
+# Format output file name
+SAFE_FILENAME=$(echo "$SELECTED_TITLE" | sed 's/[^a-zA-Z0-9 _-]/_/g' | tr -s '_' | cut -c1-60)
+OUTPUT_FILE="${DEST_DIR}/${SAFE_FILENAME}.${FORMAT}"
+
+echo "Saving to: $OUTPUT_FILE"
+curl -# -L "$DIRECT_URL" -o "$OUTPUT_FILE" --user-agent "Mozilla/5.0"
+
+if [ -f "$OUTPUT_FILE" ] && [ -s "$OUTPUT_FILE" ]; then
+  echo -e "\nDownload completed successfully!"
+else
+  echo -e "\nCould not download directly. Opening mirror link in browser..."
+  xdg-open "$SELECTED_LINK" 2>/dev/null || sensible-browser "$SELECTED_LINK" 2>/dev/null
+fi
