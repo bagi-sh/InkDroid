@@ -34,6 +34,26 @@ setDefaultLauncher() {
   fi
 }
 
+e-InkDisplayConfig() {
+  mapfile -t refreshlist < <(adb shell dumpsys display | grep -oE '(fps|refreshRate)=[0-9]+(\.[0-9]+)?' | sed 's/.*=//' | tr -d '\r' | LC_ALL=C sort -n -u)
+  echo "turning off global animations..."
+  adb shell settings put global window_animation_scale 0
+  adb shell settings put global transition_animation_scale 0
+  adb shell settings put global animator_duration_scale 0
+  echo "limiting refresh rate..."
+  adb shell settings put system peak_refresh_rate ${refreshlist[0]}
+  adb shell settings put system min_refresh_rate ${refreshlist[0]}
+  echo "Which display color profile do you want? Default: 0"
+  while true; do
+    read -p "[0]: Monochromatic display; [1]: Global blue filter only" 01
+    case $yn in
+        [0]* ) adb shell settings put secure acessibility_display_daltonizer_enable 1; adb shell settings put secure acessibility_display_daltonizer 0; break;;
+        [1]* ) adb shell settings put secure night_display_activated 1; adb shell put secure night_display_color_temperature 3000; break;;
+        * ) adb shell settings put secure acessibility_display_daltonizer_enable 1; adb shell settings put secure acessibility_display_daltonizer 0; break;;
+    esac
+  done
+}
+
 installDependencies()
 # Verify if only one device is connected 
 DEVICE_CHECK=$(adb devices | grep -v "List of devices attached" | grep "device$" | wc -l)
@@ -64,10 +84,8 @@ echo " Model:     $MODEL"
 echo " Android:   $ANDROID_VER"
 echo "--------------------------------------------------"
 
-# DO A VERIFICATION HERE (Y/N)
-
 while true; do
-    read -p "Continue script in the $MODEL? Y/n " yn
+  read -p "Continue script in the $MODEL? Y/n " yn
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) exit;;
@@ -89,7 +107,7 @@ echo "---------------------------------" >> "$LOG_ACTIONS"
 
 # --- Execução do Processo de Otimização (Parsing do JSON) ---
 
-echo "Iniciando a varredura e remoção dos pacotes..."
+echo "starting search and debloat apps..."
 
 # O jq extrai os arrays de todas as categorias do JSON e os formata em uma lista plana
 jq -r '.[] | .[]' "$JSON" | while read -r pacote; do
