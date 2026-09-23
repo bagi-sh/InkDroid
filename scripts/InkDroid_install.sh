@@ -258,6 +258,7 @@ configureDisplay() {
   adb shell settings put global window_animation_scale 0
   adb shell settings put global transition_animation_scale 0
   adb shell settings put global animator_duration_scale 0
+  adb shell settings put screen_brightness_mode 0
 
   if [ ${#refreshlist[@]} -gt 0 ] && [ -n "${refreshlist[0]}" ]; then
     echo "limiting refresh rate to ${refreshlist[0]} Hz..."
@@ -294,6 +295,27 @@ promptConfigureDisplay() {
       * ) configureDisplay 0; break;;
     esac
   done
+}
+
+# Aplly optimzed configs to the battery
+apply_Framework_Tweaks(){
+  adb shell settings put global always_finish_activities 1
+  adb shell settings put global low_power 1
+  adb shell settings put global low_power_trigger_level 100
+  adb shell settings put system screen_off_timeout 1800000
+  adb shell settings put global heads_up_notifications_enabled 0
+  adb shell settings put global zen_mode 1
+  adb shell settings put global wifi_scan_always_enabled 0
+  adb shell settings put global ble_scan_always_enabled 0
+  adb shell settings put global auto_sync 0
+  # adb shell settings put global mobile-data 0 
+  adb shell settings put system haptic_feedback_enabled 0
+  adb shell settings put system haptic_feedback_intensity 0
+  adb shell settings put system sound_effects_enabled 0
+  adb shell settings put system lockscreen_sounds_enabled 0
+  adb shell settings put secure voice_interaction_service "" 
+  adb shell settings put secure assistant ""
+  adb shell settings put global ota_disable_automatic_update 1
 }
 
 # Print command line help
