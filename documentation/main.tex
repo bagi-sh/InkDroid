@@ -4,7 +4,7 @@
     oneside,
     a4paper,
     english,
-    brazil
+    brazilian
     ]{abntex2}
 
 % Pacotes essenciais
@@ -120,6 +120,8 @@ This research analyzes the impact of linear consumption patterns in the mobile h
 % --- ELEMENTOS TEXTUAIS ---
 \textual
 
+\input{glossary.tex}
+
 \chapter{INTRODUÇÃO}
 A crise ambiental contemporânea é considerada por muitos o problema de maior relevância da atualidade, sendo essa, muito impulsionada pelo atual padrão de consumo linear da indústria no geral. Esse padrão se mostra ainda mais forte no contexto de hardwares mobile, que são renovados a cada ano, prometendo grandes mudanças, deixando em pouco tempo aparelhos funcionais obsoletos ou "artificialmente incapazes", \citeonline{parnas1994} diz que esse efeito está fundamentalmente ligado ao que ele chama de \textit{software aging} onde a medida que as aplicações se atualizam elas exigem cada vez mais do hardware, ainda que o mesmo seja perfeitamente capaz tornando o software em um "fardo oneroso". Essa prática impulsiona o aumento da geração de resíduos sólidos, em especial, o lixo eletroeletrônico, que possuem metais pesados de difícil decomposição. Segundo o relatório The Global E-waste Monitor \cite{balde2024}, a geração de lixo eletrônico, estimada em 62 bilhões de kg no ano de 2022, cresce cinco vezes mais do que a reciclagem documentada, com apenas 22,3\% dos resíduos coletados adequadamente em 2022.
 
@@ -137,7 +139,7 @@ Somado a isso, o desenvolvimento da pesquisa também ancora-se nos conceitos de 
 
 Finalmente, o projeto possui um forte componente de conveniência e democratização tecnológica. Ao transformar um dispositivo comum, como Multilaser M8 4G da rede estadual, em uma ferramenta educacional fluida, o estudo remove a barreira financeira imposta pelo alto custo de dispositivos especializados como o Kindle. Trata-se de uma prova de conceito de que a Engenharia Verde pode converter um dispositivo que seria trocado e descartado, em um ativo educacional valioso e acessível.
 
-\chapter{METODOLOGIA}
+\chapter{METDOLOGIA}
 A presente pesquisa classifica-se como aplicada e experimental, com abordagem mista para validar a eficácia da ressignificação do hardware. O procedimento técnico central vai utilizar o Android Debug Bridge (ADB), como principal ferramenta, permitindo a comunicação entre a automação e o tablet de forma nativa e segura. Trata-se de uma ferramenta de CLI (\textit{Command Line Interface}) oficial de desenvolvimento disponibilizada pelo Android Open Source Project (AOSP). Operando no modelo cliente-servidor, ela dá acesso ao Shell Unix dos dispositivos Android de forma não invasiva e sem necessidade de acesso root \cite{android2025}. Essa ferramenta possibilita a escrita de um código para realizar alterações profundas nos dispositivos, essas que vão acontecer em 3 camadas principais:
 
 \begin{enumerate}
@@ -171,9 +173,14 @@ Para estruturar o \textit{debloat} sem poluir o código principal com chamadas m
 
 O formato JSON confere flexibilidade ao projeto por sua sintaxe de fácil leitura e modificação, permitindo ao usuário adicionar ou remover \textit{apps} da lista se necessário com facilidade. Sob a perspectiva conceitual, essa modularidade alinha-se aos preceitos do Minimalismo Digital \cite{newport2019}, o qual preconiza que a tecnologia deve ser configurada de forma seletiva e intencional.
 
-Porém, para o script ler e manipular-lo de forma efetiva, foi necessário a integração da ferramenta de linha de comando ''jq", foi implementada em uma estrutura de repetição que percorre toda a lista e executa uma tentativa de desinstalação para cada objetos. Em adição, o \textit{looping} também salva um arquivo de *log* com o resultado de cada um dos comandos, o que permite a auditoria do processo e validação da execução. A intenção e que todas as camadas salvem seus resultados no arquivo de log. 
+Porém, para o script ler e manipular-lo de forma efetiva, foi necessário a integração da ferramenta de linha de comando ''jq", foi implementada em uma estrutura de repetição que percorre toda a lista e executa uma tentativa de desinstalação para cada objetos. Em adição, o \textit{looping} também salva um arquivo de \textit{log} com o resultado de cada um dos comandos, o que permite a auditoria do processo e validação da execução. A intenção e que todas as camadas salvem seus resultados no arquivo de log. 
 
-Ao término do \textit{debloat}, a camada de aplicação já esta quase completa, restam agora a instalação das ferramentas que serão essenciais no uso do produto final. Planeja-se baixar diretamente de lojas open-source como \textit{F-droid}, através de ferramentas como \textit{curl ou wget}, e a possível troca do launcher, visando minimalismo e diminuição dos vetores de distração. Do âmbito da ergonomia cognitiva do usuário, removendo elementos gráficos apelativos e notificações projetadas para reter atenção. 
+Ao término do \textit{debloat}, a camada de aplicação já esta quase completa, restam agora a instalação das ferramentas que serão essenciais no uso do produto final. Instalar ferramentas no android usando o \textit{adb} esta longe de ser uma tarefa complicada, o verdadeiro desafio é saber de onde baixar os pacotes (APKs), já que a play store por exemplo não expõe nenhum tipo de \textit{API}. Para contornar esse desafio, optou-se por utilizar aplicativos open-source disponiveis diretamente dos realeases do github, esse que possui uma \textit{API} acessivel. Do âmbito da ergonomia cognitiva do usuário, trocar o launcher padrão significa remover elementos gráficos apelativos e notificações projetadas para reter atenção.
+
+\section{Intervenção em Nível de Framework} o segundo nível de intervenção foca em configurações especificas do android que nem sempre ficam acessiveis no aplicativo gráfico de configuração ou em outros locais na UI, vamos destrinchar o que são e o que elas fazem, e discutir o motivo de suas aplicações nesse projeto.
+
+\subsection{Display e Sindrome da Visão}
+
 
 \chapter{CONSIDERAÇÕES FINAIS E RESULTADOS ESPERADOS}
 Espera-se demonstrar que os dispositivos legados ainda possuem alto potencial técnico quando desonerados de softwares mal otimizados, podendo ser adaptados para tarefas que não demandam alto desempenho, assim evitando o descarte. O artefato final servirá como prova de conceito para políticas de TI sustentáveis, provando que a engenharia de software consciente pode converter o que seria resíduo eletrônico em um ativo educacional valioso e focado no ser humano.
