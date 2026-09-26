@@ -1,4 +1,5 @@
 # Logs e arquivos temporários
+Notes
 *.log
 adb.txt
 *log
