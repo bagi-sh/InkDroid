@@ -20,7 +20,7 @@
 \usepackage[alf]{abntex2cite}
 
 % Configurações de Capa e Folha de Rosto
-\titulo{: Repurposing de tablets legados via debloat automatizado para leitura focada}
+\titulo{Inkdroid: Repurposing de tablets legados via debloat automatizado para leitura focada}
 \autor{ALISSON GABRIEL DOS SANTOS ALVES}
 \local{Salvador}
 \data{2026}
@@ -51,7 +51,7 @@
 \makeindex
 
 \begin{document}
-\selectlanguage{brazil}
+\selectlanguage{brazilian}
 \frenchspacing
 
 % --- ELEMENTOS PRÉ-TEXTUAIS ---
@@ -88,7 +88,7 @@
 \setlength{\absparsep}{18pt}
 
 \begin{resumo}
-\noindent ALVES, Alisson Gabriel dos Santos. \textbf{: Repurposing de tablets legados via debloat automatizado para leitura focada}. 2026. Trabalho de Conclusão de Curso (TCC) -- Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT, Salvador, 2026.
+\noindent ALVES, Alisson Gabriel dos Santos. \textbf{Inkdroid: Repurposing de tablets legados via debloat automatizado para leitura focada}. 2026. Trabalho de Conclusão de Curso (TCC) -- Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT, Salvador, 2026.
 
 \vspace{\onelineskip}
 
@@ -101,7 +101,7 @@ Analisa o impacto do padrão de consumo linear na indústria de hardware mobile 
 % Abstract
 \begin{resumo}[Abstract]
 \begin{otherlanguage*}{english}
-\noindent ALVES, Alisson Gabriel dos Santos. \textbf{: Repurposing legacy tablets via automated debloat for focused reading}. 2026. Graduation Thesis (TCC) -- Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT, Salvador, 2026.
+\noindent ALVES, Alisson Gabriel dos Santos. \textbf{Inkdroid: Repurposing legacy tablets via automated debloat for focused reading}. 2026. Graduation Thesis (TCC) -- Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT, Salvador, 2026.
 
 \vspace{\onelineskip}
 
@@ -177,13 +177,93 @@ Porém, para o script ler e manipular-lo de forma efetiva, foi necessário a int
 
 Ao término do \textit{debloat}, a camada de aplicação já esta quase completa, restam agora a instalação das ferramentas que serão essenciais no uso do produto final. Instalar ferramentas no android usando o \textit{adb} esta longe de ser uma tarefa complicada, o verdadeiro desafio é saber de onde baixar os pacotes (APKs), já que a play store por exemplo não expõe nenhum tipo de \textit{API}. Para contornar esse desafio, optou-se por utilizar aplicativos open-source disponiveis diretamente dos realeases do github, esse que possui uma \textit{API} acessivel. Do âmbito da ergonomia cognitiva do usuário, trocar o launcher padrão significa remover elementos gráficos apelativos e notificações projetadas para reter atenção.
 
-\section{Intervenção em Nível de Framework} o segundo nível de intervenção foca em configurações especificas do android que nem sempre ficam acessiveis no aplicativo gráfico de configuração ou em outros locais na UI, vamos destrinchar o que são e o que elas fazem, e discutir o motivo de suas aplicações nesse projeto.
+\section{Intervenção em Nível de Framework}
 
-\subsection{Display e Sindrome da Visão}
+Neste capitulo vamos explorar o funcionamento dos Frameworks e processos de gerenciamento do sistema Android, bem como as modificações que o Inkdroid fará no tablet alvo nessas camadas. Entretanto, é importante deixar claro, o que estamos chamando de camada de Framework durante essa pesquisa, é na verdade um grupo de outras quatro camadas menores que serão exploradas nesta etapa, sendo elas compostas por: APIs de sistema, Android Runtime (ART), Daemons de sistema, bibliotecas nativas (em C ou C++) e o HAL
 
+\subsection{Conceituação e Arquitetura de Framework}
 
-\chapter{CONSIDERAÇÕES FINAIS E RESULTADOS ESPERADOS}
+Segundo \cite{tanenbaum2016}, sistemas operacionais foram criados tendo como principal objetivo, serem uma forma de abstração para o desenvolvimento de software, fazendo com que a partir de sua criação, o desenvolvedor de programas comuns, não precisasse mais se preocupar com a complexidade do hardware, permitindo desenvolver sem ter um entendimento avançado de eletrônica, ou saber por exemplo, como gerenciar a voltagem de um chip de memória. Quando nos referimos aos frameworks do sistema, estamos falando sobre várias dessas abstrações organizadas, que, formam uma pilha de software (software stack) contendo APIs, bibliotecas, SDKs, Daemons e etc. além de outras peculiaridades diferentes para cada sistema. 
+
+\subsection{Fluxo de Execução e Pipeline}
+
+Para entendermos como se dá o funcionamento dessas abstrações do sistema android, vamos usar um exemplo simples. Imagine que um desenvolvedor quer que seu aplicativo reproduza um efeito sonoro simples, se ele fizesse isso sem utilizar nenhuma abstração, ele precisaria lidar com diferenças entre vários dispositivos de som diretamente em seu código, mas usando a API do android, tudo que ele precisa fazer é dizer "Sistema operacional, reproduza o som do arquivo soundeffect.mp3 no auto-falante do sistema." essa instrução então passa por todas as camadas até chegar finalmente ao hardware e reproduzir o som de fato.
+
+O primeiro lugar onde esssa instrução passa é na Java API, aqui é onde o sistema vai validar várias informações antes de iniciar o processo pesado, fazendo perguntas como: "todos os serviços do sistema de som foram iniciados corretamente?", depois, essa requisação passa pela JNI (Java Native Interface) que vai instaciar uma classe do cliente de audio (audioserver), que é o daemon responsável por gerenciar serviços de audio \cite{android2025, aosp2024}
+
+O conceito de "classe" não vem ao caso agora, mas nessa situação, você pode pensar nela como uma abstração para tarefas que o audioserver vai executar. Através dela, componentes que rodam em Java ou Kotlin podem interagir com esse processo, que roda em C++ (Linguagem usada na maioria dos Daemons do android) sendo assim, é como se cada tarefa do daemon que componentes do ART ou JVM precisam interagir, tenham sua representação em uma classe.
+
+Agora a situção é: o daemon ja sabe da intenção do aplicativo de reproduzir um som, e a responsabilidade dele é preparar tudo que for necessário para reproduzir-lo. Uma serie de outros processos mais especificos e técnicos acontecem nesse meio tempo, então vamos focar apenas nos que são relevantes para a natureza do Inkdroid. Dentre eles, o primeiro é validação de estado do aparelho.
+
+O daemon é um serviço de sistema e como o padrão de segurança do android é isolar os processos em sandbox, ele roda em uma parte do sistema chamada \textit{Daemon Space} que não consegue acessar o chamado \textit{User Space}, que é o local onde as informações de estado que ele quer estão. Por conta desse isolamento, o audioserver precisa fazer uma requisição IPC via Binder, o barramento nativo de IPC do android, que empacota e envia a mensagem para o AudioService, que é o módulo de audio que roda no User Space. \cite{aosp2024}
+
+O AudioService é quem controla configurações como o volume que o usuário definiu, modo silencioso, sabe qual aplicativo tem o "Audio Focus", quem tem permissão para reproduzir audio agora e etc. O audioserver recebe a resposta e imediatamente passa ela pelas suas próprias politicas e regras, que comparam as informações do User Space com estado dos conectores e determina a rota que os dados vão fazer até o auto-falante.
+
+Depois dessa validação, vem a preparação do dado. No exemplo atual, isso significa preparar o arquivo mp3, que usa tecnicas de compressão de dados, por isso não pode ser reproduzido diretamente e precisa de uma decodificão. isso é feito através do motor de midia Stagefright/Codec2, assim transformando o arquivo mp3 em um PCM (Pulse Code Modulation), que não é nada mais que um formato para armazenar o som, ou melhor, a posição da membrana do auto-falante para cada milissegundo do audio. É o movimento dessa membrana que cria as ondas sonoras.
+
+Entretanto, o PCM gerado ainda não é aquilo que vai ser reproduzido, o daemon ainda vai usar o AudioFlinger para fazer a mixagem, ou seja, juntar todos os sons que vão ser reproduzidos na mesma faixa de tempo, em um único PCM.
+
+O PCM resultante desce mais um nível até o HAL, mais especificamente no módulo de audio do HAL que é fornecido pelo fabricante do SoC. ele traduz todas as instruções das camadas mais altas, em instruções especificas para o hardware, nesse caso, o chip de audio do SoC. ele vai configurar a rota fornecida pelo audioserver para o a saída de audio e fazer system calls para o driver de audio do Linux, o ALSA (Advanced Linux Sound Archtecture), que agora sim pode se comunicar diretamente com o hardware, que nesse caso é o DAC (Digital to Analog Converter), que converte o sinal digital do PCM (zeros e uns) em sinal análogico (Niveis variaveis de energia). Esses sinais são enviados para o auto-falante que finalmente reproduz o som, tudo isso quase instantaneamente. \cite{tanenbaum2016, android2025}
+
+O objetivo desse exemplo é entender o papel de cada um dos componentes de software citados e como eles se integram entre si, além de saber que para cada peça do sistema, existe um pipeline essencialmente idêntico a esse, como por exemplo renderização gráfica, rede internet, bluetooth ou até sinal de celular.
+
+\subsection{Estrategia de Modificação não Invasiva}
+
+Com base na explicação da sessão anterior, e nas observações que \citeonline{yaghmour2013} faz em seu livro, podemos notar que a camada de framework é extremamente complexa, delicada e interconectada além de ser peça central do sistema, sendo assim, modificar suas bibliotecas e executaveis compilados pode induzir inumeros softbricks. Por conta disso, o projeto foi levado a encontrar outra maneira segura de modificar a natureza do funcionamento dos componentes da camada de framework, sem tornar isso um trabalho arduo e perigoso de engenharia reversa, o que levou a ideia de modificar diretamente as regras de negócio e politicas que regem os componentes de software do framework android, mudando o resultado das diferentes validações do sistema através de configurações nativas que ficam muitas vezes ocultas. 
+
+Segundo a documentação oficial \cite{android2025, aosp2024} o sistema android guarda suas politicas e configurações em um banco de dados relacional, feito em SQLite que armazena grande parte das configurações modificaveis do sistema android, em especial da camada de framework e do User Space. o ADB tem comandos especificos para ler e modificar essas configurações, respectivamente: ``adb settings get`` e ``adb settings put``. Esse também é o mesmo comando para trocar o launcher padrão, usado anteriormente, trocando o valor da da celula que dizia qual app abrir ao usar o botão home.
+
+Além do settings db, componentes do sistema como Window Managar e SurfaceFlinger possuem suas proprias politicas e comandos para modificar-las.
+
+\subsection{Display e Sindrome da Visão do Computador}
+
+Sendo a tela o ponto chave de venda, uso e desejo por e-readers dedicados, nesse projeto ela não poderia deixar de ser um ponto de pesquisa e modificação. Entretanto, primeiro precisamos entender o que faz do E-ink uma opção ergonomicamente melhor para longas leituras, e no que as telas LCD pecam, para que possamos tentar resolver esses problemas. No início de seu desenvolvimento, o E-ink tinha como objetivo ser uma tela digital de baixo consumo energetico e que se comportasse visualmente como papel, ela não foi pensada para ser ergonomica ou para mitigar o CVS, isso na verdade foi uma consequência descoberta apenas depois, e se tornou o centro do marketing das empresas que a comercializam. A Associação Americana de Optometria (AOA) define a sindrome da visão do computador como um conjunto de problemas oculares resultantes do uso de telas. Estima-se que a prevalência da CVS entre usuários de tela, ultrapassa números de 70\% mundialmente \cite{sa2016}
+
+No estudo de \citeonline{benedetto2013}, é feita uma comparação entre telas LCD e E-ink, que provam com testes que o número de piscadas por minuto diminui ao usar telas LCD. \citeonline{sa2016} vai além e quantifica essa queda, descobrindo que nas telas LCD, uma pessoa pisca de 5 a 7 vezes durante uma tarefa de concentração como leitura, enquanto em um papel comum a média é de 22 vezes por minuto, isso tem como consequência uma maior evaporação das lágrimas, dando a sensação de olho seco e cansado. 
+
+Em adição, outro agente popularmente conhecido de fadiga e cansaço ocular é a luz azul, porém ao contrário da crença popular, a luz azul não esta diretamente ligada a CVS ou a desconfortos visuais (que são causados na verdade pela exposição a todo tipo de luz artificial de telas quando não há um número normal de piscadas), mas sim ao sono. "A temperatura de cor e a intensidade da luz influenciam diretamente os processos psicológicos não visuais e o ritmo circadiano" \cite{knez2001}. A exposição desenfreada a luz azul portanto, inibe a secreção natural de melatonina, gerando um efeito semelhante a cafeína, afetando a qualidade do sono e gerando estresse psicológico
+
+O que as telas E-ink fazem então para mitigar esses problemas é emitir pouca ou nenhuma luz. Sua tela reflete a luz do ambiente assim como o papel, e sua natureza estática de pouco movimento diminui o estresse dos olhos. Essas caractericas não são possiveis de se reproduzir fielmente em uma tela LCD comum, o que nos obriga a encontrar outros métodos que ajudem a resolver os problemas citados. Em seu estudo, \citeonline{benedetto2013} nos diz exatamente o que precisamos, ele afirma que a fádiga visual em paineis LCDs pode ser mitigada via software, através do ajuste de brilho, aumento do contraste do texto, polaridade e redução da saturação. São essas as principais alterações que o Inkdroid aplica ao tablet usando as configurações do settings.db, e vamos passar por uma de cada vez agora. 
+
+\begin{enumerate}
+  \item \textbf{Movimentos e Animações:} Um dos pontos fores citados para o E-ink ser tão ergônomico é a falta de movimentos e animações. O android é um sistema que esta cheio de transições e animações complexas, e existem inúmeros motivos para retirarmos elas, além da própria ergônomia. As animações foram colocadas no sistema para passar a ideia de fluidez, mas em especifico no tablet alvo dessa pesquisa, elas acabam causando maior overhead, resultando em travamentos ao renderizar-las, além de serem consideradas agentes de distração. Felizmente, o projeto android \cite{android2025} documenta configurações relacionadas a animações do sistema, sendo possivel desativar-las completamente modificando a tabela "global" no settings.db, mais especificamente definindo como 0 as opções "window\_animation\_scale", "transition\_animation\_scale" e "animator\_duration\_scale". Outra alteração relacionada ao movimento da tela é a taxa de atualização. seria incrível se fosse possível diminuir a taxa de atualização sem limites, porém cada cada tela tem seus limites e presets, por isso, o que o script de instalação faz nesse sentido é colocar a menor taxa disponível, que no tablet alvo da pesquisa é de 30hz. Isso não tem grande impacto na ergônomia mas ajuda bastante na autonomia da bateria
+
+  \item \textbf{Cores e Conforto Visual:} Tendo agora um nivel consideravelmente menor de movimento, os agentes de desconforto visual se concentram nas cores e intensidade da luz. para mitigar isso o Inkdroid disponibiliza dois perfis de configuração, o monocromático, que usa um modo especifico para pessoas daltonicas para diminuir consideravelmente o números de cores e estímulos visuais, e um modo que ativa apenas o filtro de luz azul. Essas além desses dois perfis de configuração, a instalação também faz alterações na densidade de pixel e no contraste durante a leitura de texto. Essas alterações são feitas de maneira idêntica as feitas no tópico anterior, com a exceção de que agora são feitas na tabela "secure" e em outros parametros.
+
+\end{enumerate}
+
+Essas, até então, são todas as alterações possíveis de se fazer de maneira segura e não invasiva na tela. Não chega a ser tão confortável quanto uma tela E-ink, mas tem o potencial de melhorar consideravelmente os efeitos de leituras longas se usado em baixo brilho, além de ser estéticamente mais proxima e diminuir consideravelmente travamentos e uso de batéria. Seria possível limitar o brilho do aparelho também, mas durante o desenvolvimento, essa parte foi entendida como algo que o usuário precisa ter controle e ajustar sozinho de acordo com sua prefêrencia pessoal.
+
+\section{Bateria, Autonomia e Foco}
+
+Depois da tela, a proxima coisa que mais gera desejo por um leitor dedicado, é a longa duração da bateria e a ausência de distrações. Muito dessa autonomia, que pode vir a durar dias, vem da própria tela, já que ela é extremente eficiente, mas quando prestamos um olhar mais atento na comparação com um tablet android comum, vemos inumeras coisas que o tablet tem e faz e que os leitores focados não. Essas coisas podem ser responsáveis por drenar a bateria, já que tudo o que demanda processamento, demanda energia. Além disso, todas as funções disputam a atenção do usuário igualmente
+
+A primeira coisa portanto que o Inkdroid faz nesse sentido é ativar a opção "always\_finish\_activities". Como descrito em seu próprio nome, o que ela faz é impedir que qualquer aplicação rode em segundo plano, diminuindo portanto o uso de memória RAM e processamento. A maioria das alterações aqui vão seguir a mesma natureza, então, ao invés de passar por uma de cada vez, vamos agrupar-las. 
+
+\begin{enumerate}
+  
+  \item \textbf{Modo de Economia Permanente:} Como o sistema android não disponibliliza uma forma de underclock ou de travar de forma permanente o modo de economia de bateria, ao invés disso, o que podemos fazer é simplesmente mudar de 15\% para 100\% a ativação automática, mudando a configuração "low\_power\_trigger\_level". Isso garante que a economia de energia seja o padrão, e liga ela novamente sempre que o dispositivo reiniciar, apesar disso o usuário ainda poderá desativar-la facilmente.
+
+  \item \textbf{Conectividade Sem Fio:} A internet e bluetooth são coisas extremamente convenientes no uso de qualquer aparelho, inclusive para um leitor, entretanto o android possui uma peculiaridade de estar sempre buscando por essas conexões em segundo plano. Mudando as opções "wifi\_scan\_always\_enable" e "ble\_scan\_always\_enable" para 0, essas buscas em segundo plano são desativadas, e só acionadas quando o usuário as chama. Somado a isso, também desativamos a opção "auto\_sync", que impede que aplicativos sincronizem contas em segundo plano, e como configuração opcional, durante a instação, o Inkdroid pergunta ao usuário se ele quer desativar a rede mobile de dados movéis "mobile\_data" e manter apenas o Wi-Fi, já que o projeto tem por intenção de ser usado em tablets "abandonados", interpreta-se que esses aparelhos não possuam chip SIM.
+
+  \item \textbf{Sons, Notificações e Vibrações:} O motor de vibração dos dispositivos movéis é algo que nem sempre é levado em consideração quando se fala de autonomia de bateria, mas nesse projeto não tem por que manter ativado. Mesmo que a redução da bateria seja mínima ela ainda existe, e ele ainda pode distrair o usuário de diferentes formas, e, particularmente, não gostaria que meu E-reader vibrasse o tempo todo. Podemos desativar-lo na opção "haptic\_feedback\_enabled", isso desativa as vibrações do sistema, mas outros apps ainda poderiam acionar o haptic feedback, então o que podemos fazer é diminuir a intensidade ("haptic\_feedback\_intensity") para 0. Além disso, as notificações de push (heads\_up\_notifications\_enabled) também e desativado junto com a ativação do "zen\_mode", ou não pertube. Efeitos sonoros meramente estéticos também perdem o espaço durante a instalação.
+
+  \item \textbf{Configurações Extra:} Essas são modificações que julgo difícil de encaixar em uma única catégoria, mas pequenas demais para terem sua própria. Primeiro, o "screen\_off\_timeout", que define o desligamento automático da tela. Nesse caso, foi definido como 1800000 segundos (30 minutos). A segunda alteração é referente ao assistente de voz "Ok Google", que, está a 100\% do tempo perguntando "será que alguém me chamou?" e consumindo processamento. Talvez você tenha interpretado isso como uma simplificação, mas na verdade isso é algo que acontece exatamente desse jeito. Em casos extremos como nos celulares IOS, um chip especializado é responsável por processar entrada de áudio o tempo inteiro, sempre perguntando "Alguém disse 'Eai Siri' no ultimo segundo?". No android entretanto, isso é feito por meio de software com um daemon, mas que ainda sim possui impacto ativo no uso de processamento e memória. Por fim, também desativamos atualizações OTA (Over The Air), para previnir que elas quebrem ou retirem todas as alterações que fizemos até então
+
+\end{enumerate}
+
+Até o momento, essas são todas as alterações feitas sobre a camada de framework. Mais coisas podem vir a ser adicionadas no futuro, mas acredita-se que com essas configurações, possamos tornar o tablet alvo mais minimalista, e conveniente para seu usuário
+
+\section{Lógica de Programação, Features e Ferramentas}
+
+Nas seções anteriores, focamos em entender o sistema android e as decisões que o projeto tomou para aproximar-lo de um E-reader dedicado de forma didática e técnica. Durante essa sessão no entanto, vamos entrar em detalhes sobre o código e outras funções e features do projeto, bem como seu desenvolvimento. 
+
+\chapter{RESULTADOS}
+
+\chapter{CONSIDERAÇÕES FINAIS}
 Espera-se demonstrar que os dispositivos legados ainda possuem alto potencial técnico quando desonerados de softwares mal otimizados, podendo ser adaptados para tarefas que não demandam alto desempenho, assim evitando o descarte. O artefato final servirá como prova de conceito para políticas de TI sustentáveis, provando que a engenharia de software consciente pode converter o que seria resíduo eletrônico em um ativo educacional valioso e focado no ser humano.
+
+\chapter{AGRADECIMENTOS}
 
 % --- ELEMENTOS PÓS-TEXTUAIS ---
 \postextual
