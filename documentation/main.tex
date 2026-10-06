@@ -40,7 +40,7 @@
     linkcolor=black,
     citecolor=black,
     filecolor=black,
-    urlcolor=black,
+    urlcolor=blue,
     bookmarksdepth=4
 }
 \makeatother
@@ -71,14 +71,14 @@
         \hspace{.45\textwidth}
         \begin{minipage}{.5\textwidth}
             \SingleSpacing
-            \imprimirpreambulo\\
+            \imprimirpreambulo\
             \vspace{0.5cm}
-            \textbf{Curso:} Técnico em Informática\\
+            \textbf{Curso:} Técnico em Informática\
             \textbf{Orientador:} \imprimirorientador
         \end{minipage}
     
     \vfill
-    {\large\imprimirlocal}\\
+    {\large\imprimirlocal}\
     {\large Ano \imprimirdata}
 \end{center}
 \end{cleardoublepage}
@@ -145,7 +145,7 @@ A presente pesquisa classifica-se como aplicada e experimental, com abordagem mi
 \begin{enumerate}
     \item \textbf{Nível de Aplicação}: Nesta etapa o script vai, de forma automática, instalar os aplicativos necessários para o pleno funcionamento do dispositivo como um E-reader, e remover processos redundantes ou aplicativos pré-instalados (\textit{bloatwares}), fazendo um \textit{debloat} completo. Desse modo, além de remover redes sociais, apps que prejudicam o \textit{deep work} e atrapalham o foco, também serão removidos, caso o usuário optar, os chamados Google Mobile Services (GMS) que incluem telemetrias intrusivas. Esta ação libera recursos desperdiçados em coisas desnecessárias e constroem a base para as modificações mais profundas.
     
-    \item \textbf{Nível de Framework}: Essa é a fase em que ocorre a manipulação do banco de dados \texttt{settings.db} e do gestor de janelas (\textit{Window Manager} ou WM) para alterar diversas das configurações padrão. Nessa fase, algumas das principais modificações vão ser a aplicação de um filtro de luz azul nativo, simulando E-Inks de E-reader especializados. Essa alteração mostra-se relevante pois, segundo \citeonline{benedetto2013}, as telas E-ink diminuem drasticamente o risco de CSV, e embora a tela continue sendo LCD, a redução da luz azul e a escala de cinza reduzem o brilho e o contraste agressivo, mitigando a CVS, embora não atinja as propriedades físicas de reflexão de luz do papel eletrônico real aumentará o conforto ocular do usuário. A manipulação da densidade de pixels (DPI) e da escala de cinza também será aplicada visando otimizar a renderização de fontes, reduzindo a carga cognitiva e visual durante a leitura \cite{sa2016, android2025}.
+    \item \textbf{Nível de Framework}: Essa é a fase em que ocorre a manipulação do banco de dados texttt{settings.db} e do gestor de janelas (\textit{Window Manager} ou WM) para alterar diversas das configurações padrão. Nessa fase, algumas das principais modificações vão ser a aplicação de um filtro de luz azul nativo, simulando E-Inks de E-reader especializados. Essa alteração mostra-se relevante pois, segundo \citeonline{benedetto2013}, as telas E-ink diminuem drasticamente o risco de CSV, e embora a tela continue sendo LCD, a redução da luz azul e a escala de cinza reduzem o brilho e o contraste agressivo, mitigando a CVS, embora não atinja as propriedades físicas de reflexão de luz do papel eletrônico real aumentará o conforto ocular do usuário. A manipulação da densidade de pixels (DPI) e da escala de cinza também será aplicada visando otimizar a renderização de fontes, reduzindo a carga cognitiva e visual durante a leitura \cite{sa2016, android2025}.
     
     \item \textbf{Nível de Kernel}: Por fim, essa é a parte de maior dificuldade, mas que vai aplicar as maiores diferenças práticas. Aqui, a automação vai aplicar técnicas de \textit{underclock} (limitação da frequência do processador) e redução da taxa de atualização da tela via Surface Flinger, para tornar a tela do aparelho mais semelhante ao padrão da indústria, além de ajudar com a eficiência energética.
 \end{enumerate}
@@ -162,14 +162,14 @@ Em termos funcionais, o ADB opera em uma arquitetura de cliente-servidor \cite{t
 
 No entanto, por conceder acesso ao \textit{shell} \textit{Unix}\footnote{Unix foi um dos primeiros e mais importantes sistemas operacionais, estabelecendo padrões usados até hoje inclusive no Android, Linux e MacOS.} do celular, a abertura desse protocolo pode se tornar um vetor de invasão preocupante sem as devidas proteções. Para mitigar tais riscos, o sistema Android implementa medidas de segurança rigorosas fundamentadas em permissões de usuário, sandboxes e na autenticação por chaves de criptografia assimétrica RSA. No ecossistema Android cada um dos aplicativos roda em um ambiente isolado e tem um identificador de usuário único e exclusivo (UID) com permissões diferentes. Isso garante que, por padrão, nenhum programa tenha acesso a dados dos outros, nem ao sistema. Embora o Android, diferente de outros sistemas, não disponibilize um usuário root (administrador) por padrão, os comandos do ADB são executados por um usuário especial com permissões elevadas chamado ''shell". Esse usuário pode gerenciar permissões de outros, ler \textit{logs}\footnote{Logs são registros do que acontece em tempo de execução de uma aplicação, usado para monitoramento e diagnosticos} de sistema, alterar configurações internas e desinstalar e instalar programas.
 
-Para mitigar acessos não autorizados a esse usuário privilegiado, o protocolo utiliza de a criptografia assimétrica. Até a versão 4.2.2 do Android bastava ativar a depuração e qualquer máquina poderia executar comandos no \textit{shell}, criando uma vulnerabilidade como a adulteração de aparelhos furtados, ou ataques por meio de estações de carregamento maliciosas (\textit{juice jacking}) em locais públicos. Para corrigir isso o Google implementou uma autentificação por chave RSA, que funciona com uma chave pública (\texttt{adbkey.pub}) e uma privada (\texttt{adbkey}). Quando você conecta um computador, o celular pergunta se deve dar permissão para aquele computador, e, ao tocar em ''Sempre permitir a partir desse computador", uma cópia da chave pública é salva no celular para validar as conexões futuras e garantir a integridade da automação sem violar os protocolos de segurança nativos do sistema. 
+Para mitigar acessos não autorizados a esse usuário privilegiado, o protocolo utiliza de a criptografia assimétrica. Até a versão 4.2.2 do Android bastava ativar a depuração e qualquer máquina poderia executar comandos no \textit{shell}, criando uma vulnerabilidade como a adulteração de aparelhos furtados, ou ataques por meio de estações de carregamento maliciosas (\textit{juice jacking}) em locais públicos. Para corrigir isso o Google implementou uma autentificação por chave RSA, que funciona com uma chave pública (texttt{adbkey.pub}) e uma privada (texttt{adbkey}). Quando você conecta um computador, o celular pergunta se deve dar permissão para aquele computador, e, ao tocar em ''Sempre permitir a partir desse computador", uma cópia da chave pública é salva no celular para validar as conexões futuras e garantir a integridade da automação sem violar os protocolos de segurança nativos do sistema. 
 
 \subsection{Lógica de Automação e Processamento de Bloatwares}
 Consolidados o ambiente de desenvolvimento e repositório Git, o desenvolvimento da automação inicia-se através de uma verificação inteligente dos aparelhos servidores conectados. Essa medida visa assegurar que o \textit{script} execute apenas quando houver exatamente um tablet conectado ao barramento USB, evitando possíveis conflitos entre os comandos, assim como previne que a automação rode sem nenhum dispositivo conectado.
 
 Validada a conexão, a próxima fase seria a desoneração do sistema via remoção de softwares prescindíveis (debloat). A desinstalação de pacotes do dispositivo não se restringe a uma otimização superficial, mas constitui uma estratégia para conter o envelhecimento de software (software aging). Conforme fundamentado por Parnas \cite{parnas1994}, o envelhecimento de software ocorre quando o programa se torna um ''fardo oneroso" devido ao acumulo de atualizações e serviços contínuos, esses que são voltados para o hardware mais novo, mas também são empurrados para o dispositivo legado, demandando ainda mais recursos computacionais. Ao eliminar o excesso de processos, a automação restaura a fluidez do aparelho e diminui os agentes de distração, permitindo a execução de tarefas simples como a leitura, serem mais confortáveis e principalmente convenientes. 
 
-Para estruturar o \textit{debloat} sem poluir o código principal com chamadas massantes, foi adotado uma abordagem declarativa baseada no arquivo de configuração \texttt{blacklist.json}. Esse arquivo lista os nomes exatos de pacotes de rede sociais, ferramentas do \textit{Google Mobile Services} e demais \textit{bloatwares} identificados como prejudiciais ao foco ou ao desempenho do sistema. A escolha da remoção do GMS fundamenta-se na eficiência energética: estudos de mapeamento sistemático indicam que aplicativos e serviços que operam em segundo plano são principais responsáveis pela drenagem de energia em dispositivos Android \cite{monteiro2023}. A eliminação desse tipo de tarefa, previne que o dispositivo acorde da hibernação por motivos irrelevantes, maximizando a autonomia em textit{idle}.
+Para estruturar o \textit{debloat} sem poluir o código principal com chamadas massantes, foi adotado uma abordagem declarativa baseada no arquivo de configuração texttt{blacklist.json}. Esse arquivo lista os nomes exatos de pacotes de rede sociais, ferramentas do \textit{Google Mobile Services} e demais \textit{bloatwares} identificados como prejudiciais ao foco ou ao desempenho do sistema. A escolha da remoção do GMS fundamenta-se na eficiência energética: estudos de mapeamento sistemático indicam que aplicativos e serviços que operam em segundo plano são principais responsáveis pela drenagem de energia em dispositivos Android \cite{monteiro2023}. A eliminação desse tipo de tarefa, previne que o dispositivo acorde da hibernação por motivos irrelevantes, maximizando a autonomia em textit{idle}.
 
 O formato JSON confere flexibilidade ao projeto por sua sintaxe de fácil leitura e modificação, permitindo ao usuário adicionar ou remover \textit{apps} da lista se necessário com facilidade. Sob a perspectiva conceitual, essa modularidade alinha-se aos preceitos do Minimalismo Digital \cite{newport2019}, o qual preconiza que a tecnologia deve ser configurada de forma seletiva e intencional.
 
@@ -254,9 +254,125 @@ A primeira coisa portanto que o Inkdroid faz nesse sentido é ativar a opção "
 
 Até o momento, essas são todas as alterações feitas sobre a camada de framework. Mais coisas podem vir a ser adicionadas no futuro, mas acredita-se que com essas configurações, possamos tornar o tablet alvo mais minimalista, e conveniente para seu usuário
 
-\section{Lógica de Programação, Features e Ferramentas}
 
-Nas seções anteriores, focamos em entender o sistema android e as decisões que o projeto tomou para aproximar-lo de um E-reader dedicado de forma didática e técnica. Durante essa sessão no entanto, vamos entrar em detalhes sobre o código e outras funções e features do projeto, bem como seu desenvolvimento. 
+\section{Lógica de Programação, Arquitetura e Ferramentas do InkDroid}
+
+Tendo analisado a arquitetura do sistema e as alterações no nível de \textit{framework} na seção anterior, detalham-se aqui a estrutura lógica do código-fonte, as rotinas de automação em \textit{shell script} e o funcionamento das principais ferramentas desenvolvidas na CLI do Inkdroid.
+
+\subsection{Evolução do Script, Modularidade e Modos de Execução}
+
+O desenvolvimento da ferramenta de instalação do Inkdroid evoluiu para uma arquitetura modular orientada a funções em Bash, o que facilita o reaproveitamento de rotinas, a manutenção e a extensibilidade do código. A automação suporta execução interativa e não interativa por meio de interpretação de argumentos de linha de comando (\textit{CLI flags}). Através da função \texttt{parseArguments()}, processam-se etapas específicas (como \texttt{-{-}only-debloat}, \texttt{-{-}only-apps} ou \texttt{-{-}only-display}), a omissão de dependências (\texttt{-{-}skip-deps}) e a confirmação automática (\texttt{-y} ou \texttt{-{-}yes}). O controle do fluxo de execução é orquestrado pela função \texttt{main()}, que invoca condicionalmente cada subrotina de acordo com os parâmetros fornecidos.
+
+\subsection{Verificação de Segurança e Preparação do Ambiente}
+
+O fluxo de execução inicia-se pela função \texttt{installDependencies()}, que identifica o gerenciador de pacotes do sistema hospedeiro Linux (\texttt{apt-get}, \texttt{dnf}, \texttt{pacman} ou \texttt{zypper}) e garante a presença de ferramentas essenciais de manipulação, como \texttt{android-tools}, \texttt{jq}, \texttt{curl} e \texttt{bc}, isso garante que todos os componentes necessários para a execução estejam instalados, evitando assim uma interrupção inesperada. Em seguida, a função \texttt{checkDevice()} consulta os dispositivos via comunicação ADB e contabiliza os aparelhos detectados em modo de depuração USB, interrompendo a execução de comandos caso nenhum ou múltiplos dispositivos sejam encontrados de forma simultânea. Quando identificado um único aparelho compatível, a função extrai propriedades sistêmicas (\texttt{ro.product.manufacturer}, \texttt{ro.product.model}, \texttt{ro.build.version.release}) e invoca a rotina \texttt{confirmDevice()} para solicitar a validação de segurança por parte do usuário, garantido sempre que o usuário saiba o que esta acontecendo na execução e aonde.
+
+\subsection{Inicialização de Logs, Leitura da Blacklist e Debloat Automático}
+
+Validada a conexão, a rotina \texttt{initLog()} verifica a configuração no arquivo \texttt{blacklist.json} e cria o documento de auditoria \texttt{debloatlog.txt}, que registra no cabeçalho o modelo do dispositivo e a data de execução, assim em caso de erros, pode-se verificar o que aconteceu. O fluxo de desinstalação apoia-se em duas funções sequenciais. A primeira, \texttt{parseBlacklist()}, extrai os identificadores de pacotes utilizando \texttt{jq} ou um interpretador Python 3 como segunda opção (\textit{fallback}). A segunda, \texttt{debloatPackages()}, processa essa lista em um ciclo de repetição, executando a seguinte instrução: \texttt{adb shell pm uninstall -k -{-}user 0 "\$pacote"}. Esta lógica garante que os aplicativos sejam desinstalados exclusivamente no espaço do usuário principal, processando e registrando em log os retornos do sistema (\texttt{Success}, \texttt{not installed} ou falhas) em tempo real.
+
+\subsection{Download, Instalação de Aplicações e Definição do Launcher Padrão}
+
+O processo de instalação de dependências externas apoia-se primariamente na função \texttt{getReleaseApkUrl()}, que realiza requisições à API REST do GitHub via \texttt{curl} e processa os metadados JSON para extrair dinamicamente a URL do ativo (\textit{asset}) APK mais recente. As funções de implantação gerenciam o pacote da seguinte forma:
+
+Os metadados são interpretados para extrair exatamente a versão mais recente dos dois apps, o que permite o download e transferência para \texttt{/tmp/Koreader.apk}, Um diretório de arquivos temporários no computador, onde ele fica temporariamente até ser instalado por meio da instrução \texttt{adb install -r -{-}user 0}.
+
+Para isolar o ambiente, a função \texttt{setDefaultLauncher()} aplica o comando \texttt{adb shell cmd role add-role-holder android.app.role.HOME app.olauncher}, forçando a substituição da interface padrão via RoleManager do Android. Esse passo restringe notificações flutuantes e estímulos gráficos, baseando-se na filosofia do Minimalismo Digital \cite{newport2019}.
+
+\subsection{Otimizações Ergonômicas do Display via Código}
+
+Para implementar os perfis de mitigação visual estabelecidos anteriormente, o script utiliza a função \texttt{configureDisplay()}, que automatiza as injeções de parâmetros no banco de dados \texttt{settings.db}. A supressão das animações globais do sistema é realizada forçando os valores \texttt{window\_animation\_scale}, \texttt{transition\_animation\_scale} e \texttt{animator\_duration\_scale} para zero. Em seguida, o algoritmo processa a saída do serviço nativo via \texttt{dumpsys display} para isolar a menor taxa de atualização suportada pelo \textit{hardware}, injetando limitadores correspondentes nas chaves \texttt{peak\_refresh\_rate} e \texttt{min\_refresh\_rate}. A execução dos perfis ocorre por meio dos seguintes ajustes:
+
+\begin{itemize}
+    \item \textbf{Perfil Monocromático:} Manipula variáveis de acessibilidade injetando \texttt{accessibility\_display\_daltonizer\_enabled 1} e definindo o índice de escala de cor com \texttt{accessibility\_display\_daltonizer 0}.
+    \item \textbf{Filtro de Luz Azul:} Altera a emissão do painel configurando \texttt{night\_display\_activated 1} e estabelecendo a temperatura de cor em \texttt{night\_display\_color\_temperature 3000}.
+\end{itemize}
+
+\subsection{Ajustes Sistêmicos de Bateria e Funcionalidades da CLI}
+
+A implementação das políticas de economia energética e restrição de conexões é orquestrada pela função \texttt{apply\_Framework\_Tweaks()}. A subrotina processa a injeção em lote diretamente nas tabelas \texttt{global}, \texttt{secure} e \texttt{system} do \texttt{settings.db}. É este módulo do código que ativa o encerramento de atividades em segundo plano (\texttt{always\_finish\_activities 1}), eleva permanentemente o limitador de economia (\texttt{low\_power\_trigger\_level 100}), estende o tempo de bloqueio de tela para trinta minutos (\texttt{screen\_off\_timeout 1800000}) e desativa chaves de rastreamento contínuo (\texttt{wifi\_scan\_always\_enabled}, \texttt{haptic\_feedback\_enabled}, \texttt{zen\_mode}).
+
+O projeto disponibiliza adicionalmente a interface de linha de comando \texttt{ink}, projetada para operar como um utilitário CLI interativo global com os seguintes subcomandos estendidos:
+
+\begin{itemize}
+    \item \texttt{ink status}: Aciona a função \texttt{cmdStatus()} para consultar dinamicamente propriedades sistêmicas via \texttt{getprop}, capturar a bateria via \texttt{dumpsys battery}, e extrair a densidade e resolução de tela com \texttt{wm density} e \texttt{wm size}.
+    \item \texttt{ink push <arquivo>}: Executa a rotina \texttt{cmdPush()} para transferir e-books (.epub ou .pdf) para o diretório \texttt{/sdcard/Books/} via \texttt{adb push}. Após a transferência, o script emite programaticamente um sinal (\textit{broadcast}) ao \texttt{MEDIA\_SCANNER} do Android, forçando a atualização indexada do KOReader.
+    \item \texttt{ink display <profile>}: Invoca a função \texttt{cmdDisplay()}, processando argumentos textuais no terminal para aplicar, em tempo real, os modos \texttt{monochrome}, \texttt{blue} ou realizar o \texttt{reset} da exibição.
+\end{itemize}
+
+\subsection{Arquitetura de Reversibilidade (\texttt{InkDroid\_uninstall.sh})}
+
+Para conformidade com os princípios de governança, o script de desinstalação reverte o estado do sistema ao padrão de fábrica do ecossistema do dispositivo, sem necessáriamente formata-lo, o que faria o usuário perder seus arquivos. O processo lê os mesmos arquivos de configuração JSON para reabilitar os pacotes previamente desativados via:
+\begin{center}
+    \texttt{adb shell cmd package install-existing <package\_name>}
+\end{center}
+Restaura também os parâmetros de densidade de tela originais e remove as aplicações e modificações introduzidas pelo projeto.
+
+\subsection*{O Utilitário fetchbook E Resiliência de Rede}
+
+O utilitário \texttt{fetchbook} atua como a camada de aquisição de conteúdo do Inkdroid. Projetado originalmente como um simples cliente de busca para repositórios abertos, o script passou por uma reformulação arquitetural profunda devido a transformações na infraestrutura da internet.
+
+\subsection{Necessidade do Refatoramento de Rede}
+
+A primeira versão do utilitário enfrentava degradação operacional severa causada por dois fatores principais:
+\begin{enumerate}
+    \item \textbf{Apreensão de Domínios (\textit{Domain Seizures}):} A instabilidade de domínios públicos de bibliotecas abertas causava falhas imediatas de resolução de DNS.
+    \item \textbf{Bloqueios da Cloudflare e Desafios JS/CAPTCHA:} A implementação massiva de proteções contra bots e requisições automatizadas inviabilizou a raspagem de dados (\textit{scraping}) via requisições HTTP diretas por \texttt{curl}.
+\end{enumerate}
+
+A Tabela~\ref{tab:arquitetura} resume a transição de arquitetura implementada na ferramenta para garantir alta disponibilidade:
+
+\begin{table}[h!]
+    \centering
+    \caption{Comparativo Arquitetural entre a Versão Legada e a Nova Abordagem Multicamada}
+    \label{tab:arquitetura}
+    \vspace{0.5em}
+    \small
+    \begin{tabularx}{\textwidth}{l X X}
+        \toprule
+        \textbf{Vetor de Análise} & \textbf{Arquitetura Legada} & \textbf{Nova Arquitetura Multicamada} \\
+        \midrule
+        Resolução de Fontes & Endpoints HTTP fixos / Espelhos únicos & Provedores encadeados com fallback automático \\
+        Parsing de Dados & Expressões regulares (\texttt{grep}/\texttt{sed}) em HTML & Parsing JSON nativo e estruturado via Python \\
+        Distribuição de Conteúdo & Download HTTP direto com dependência de host & Redes descentralizadas (Gateways IPFS) \\
+        Tratamento de Desafios & Falha genérica em bloqueios de borda & Redirecionamento a APIs públicas e protocolos P2P \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\subsection*{Arquitetura Multicamada de Busca}
+
+Para assegurar o provimento contínuo de dados sem interrupções, o novo \texttt{fetchbook} estrutura a busca em três níveis hierárquicos de alta resiliência:
+
+\begin{enumerate}
+    \item \textbf{Camada Primária (Project Gutenberg API):} Prioriza obras em domínio público com metadados estruturados e garantias de estabilidade de servidor.
+    \item \textbf{Camada Secundária (Open Library):} Atua como ponte para catalogação internacional e identificação de metadados via ISBN/OLID.
+    \item \textbf{Camada Terciária e Fallback Descentralizado (LibGen / Gateways IPFS):} Em caso de indisponibilidade das camadas primárias ou de títulos específicos, o sistema recorre ao ecossistema LibGen. Se os espelhos HTTP tradicionais responderem com bloqueios de borda (e.g., código \texttt{403 Forbidden} ou desafio Cloudflare), o script extrai o hash IPFS do documento e efetua o download através de múltiplos gateways IPFS públicos (e.g., \texttt{ipfs.io}, \texttt{dweb.link}, \texttt{cloudflare-ipfs.com}).
+\end{enumerate}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/fluxgram.jpg}
+  \caption{A Figura ilustra o fluxo condicional de resiliência e fallback executado pelo utilitário \texttt{fetchbook}.}
+  \label{fig:fluxogram-fetch}
+\end{figure}
+
+\subsection{Integração Híbrida Bash-Python}
+
+Embora a estrutura principal do \texttt{fetchbook} permaneça em Bash para manter a compatibilidade com o ambiente de terminal Unix da ferramenta ink, a manipulação de dados complexos foi transferida para um interpretador Python inline.
+
+O script executa blocos Python via \texttt{python3 -c} para realizar o parsing das estruturas JSON retornadas pelas APIs REST. Esta abordagem elimina a fragilidade de expressões regulares no tratamento de strings codificadas em UTF-8, sanitiza os títulos dos livros para evitar injeção de comandos no shell e gerencia a lógica de seleção de Gateways IPFS quando uma falha HTTP é detectada.
+
+\subsection*{Transferência Automatizada para o Dispositivo (\texttt{pushToDevice})}
+
+Após a conclusão bem-sucedida do download e validação da integridade do arquivo \texttt{.epub} ou \texttt{.pdf}, o script aciona a função \texttt{pushToDevice}:
+
+\begin{enumerate}
+    \item Executa a verificação de estado do daemon ADB.
+    \item Mapeia o diretório de destino configurado no dispositivo (por padrão, \texttt{/sdcard/Books/} ou o diretório de biblioteca do KOReader).
+    \item Transfere o arquivo via \texttt{adb push <local\_file\_path> <remote\_directory>}.
+    \item Emite um sinal de atualização do armazenamento de mídia (\texttt{android.intent.action.MEDIA\_SCANNER\_SCAN\_FILE}) para que a nova obra seja indexada imediatamente pela biblioteca do leitor digital sem a necessidade de reiniciar o aplicativo de leitura, caso aberto.
+\end{enumerate}
 
 \chapter{RESULTADOS}
 
@@ -270,5 +386,3 @@ Espera-se demonstrar que os dispositivos legados ainda possuem alto potencial t�
 \bibliography{referencias}
 
 \end{document}
-
-
