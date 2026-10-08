@@ -48,7 +48,7 @@
     
     \item[\textbf{HAL (\textit{Hardware Abstraction Layer})}] Camada de Abstração de Hardware que faz a ponte entre o \textit{framework} do Android e os \textit{drivers} do Kernel Linux. 
     
-    \item[\textbf{IPC (\\textit{Inter-Process Communication})}] Comunicação entre processos; mecanismo que permite a troca segura de dados e chamadas entre diferentes processos no sistema (como a arquitetura Binder). 
+    \item[\textbf{IPC (\textit{Inter-Process Communication})}] Comunicação entre processos; mecanismo que permite a troca segura de dados e chamadas entre diferentes processos no sistema (como a arquitetura Binder). 
     
     \item[\textbf{JSON (\textit{JavaScript Object Notation})}] Formato leve e estruturado para troca e armazenamento de dados em pares de chave-valor. 
     
@@ -73,5 +73,55 @@
     \item[\textbf{UI (\textit{User Interface})}] Interface do usuário; conjunto de componentes visuais através dos quais o usuário interage com o sistema. 
     
     \item[\textbf{Underclocking}] Redução proposital da frequência de operação do processador com o objetivo de diminuir o consumo de bateria e a dissipação térmica. 
-    
-    \end{description}
+
+    \item[\textbf{ALSA (\textit{Advanced Linux Sound Architecture})}] Arquitetura de som e conjunto de drivers do Kernel Linux responsável por gerenciar e se comunicar diretamente com os controladores físicos de áudio do dispositivo.
+
+    \item[\textbf{AudioFlinger}] Serviço interno do ecossistema de áudio do Android responsável pela mixagem digital, consolidando múltiplos fluxos sonoros concorrentes em uma única faixa PCM antes do envio à HAL.
+
+    \item[\textbf{AudioServer}] Daemon nativo escrito em C++ que executa no Daemon Space, responsável por processar e gerenciar requisições e políticas de áudio do sistema.
+
+     \item[\textbf{AudioService}] Módulo executado no User Space que gerencia configurações de alto nível do usuário, tais como volume, modo silencioso e permissões de foco de reprodução (\textit{Audio Focus}).
+
+     \item[\textbf{Binder}] Barramento de comunicação interprocessos (\textit{IPC}) nativo do Android que empacota mensagens e valida privilégios de segurança e isolamento de processos (\textit{sandboxing}) entre o Daemon Space e o User Space.
+
+     \item[\textbf{Broadcast}] Mecanismo de transmissão assíncrona de sinais do Android utilizado pela automação para notificar subsistemas do sistema operacional — como o disparo do \textit{MEDIA\_SCANNER} para indexar novos e-books sem reiniciar o aplicativo leitor.
+
+     \item[\textbf{DAC (\textit{Digital to Analog Converter})}] Conversor Digital-Analógico; circuito eletrônico encarregado de transformar o sinal digital modulado (PCM) em variações de sinal elétrico analógico enviadas ao alto-falante.
+
+     \item[\textbf{Doze Mode}] Mecanismo nativo de economia energética do Android que restringe o consumo de bateria e suspende atividades e varreduras de rede quando a tela permanece desligada.
+
+     \item[\textbf{Green IT (\textit{Tecnologia da Informação Verde})}] Abordagem da engenharia que promove a sustentabilidade digital, o reuso de equipamentos legados e a redução da pegada ecológica e do lixo eletrônico.
+
+     \item[\textbf{Hibernação Doméstica}] Fenômeno em que aparelhos eletrônicos funcionais retêm-se acumulados nas residências após a perda de utilidade primária, sem serem descartados ou reciclados adequadamente.
+
+     \item[\textbf{IPFS (\textit{InterPlanetary File System})}] Protocolo descentralizado de armazenamento e compartilhamento ponto a ponto (P2P), utilizado pela ferramenta de busca para contornar bloqueios e obter livros por meio de \textit{gateways} públicos.
+
+     \item[\textbf{JNI (\textit{Java Native Interface})}] Mecanismo de ponte de programação que permite que rotinas em linguagens de alto nível (Java/Kotlin) façam chamadas a bibliotecas e daemons compilados em C/C++.
+
+     \item[\textbf{Juice Jacking}] Vetor de ataque cibernético em que dispositivos móveis são comprometidos ou têm dados extraídos ao serem plugados em portas de carregamento USB públicas desprotegidas.
+
+     \item[\textbf{LCD (\textit{Liquid Crystal Display})}] Tecnologia de tela transmissiva retroiluminada com lâmpadas ou LEDs que projeta luz contínua diretamente nos olhos do usuário, apresentando maiores índices de fadiga visual em comparação ao papel ou ao \textit{E-ink}.
+
+     \item[\textbf{OTA (\textit{Over-The-Air})}] Mecanismo de atualização remota e sem fio de pacotes e do sistema operacional distribuído pelos fabricantes.
+
+     \item[\textbf{PCM (\textit{Pulse Code Modulation})}] Modulação por Código de Pulsos; formato digital não compactado que armazena as amostras sonoras decodificadas antes da conversão para sinais elétricos.
+
+     \item[\textbf{Repurposing (\textit{Ressignificação de Hardware})}] Prática de engenharia de software voltada a adaptar dispositivos móveis considerados obsoletos para funções especializadas e dedicadas (como um \textit{E-reader}).
+
+     \item[\textbf{REST (\textit{Representational State Transfer})}] Padrão de arquitetura de comunicação em rede utilizado pelo utilitário do projeto para requisitar metadados de obras em formato JSON em APIs abertas (como a do Project Gutenberg).
+
+     \item[\textbf{RSA}] Algoritmo de criptografia assimétrica baseado em chaves pública e privada utilizado pelo protocolo ADB para validar a autorização de depuração entre a máquina hospedeira e o tablet.
+
+     \item[\textbf{Sandbox}] Mecanismo de segurança do Android baseado no Linux que isola os processos de cada aplicativo em um ambiente restrito e independente.
+
+     \item[\textbf{Scraping (\textit{Web Scraping})}] Técnica de extração automatizada de dados e raspagem de páginas web em HTML, substituída no projeto por APIs estruturadas e redes distribuídas para evitar desafios de bloqueio.
+
+     \item[\textbf{Stagefright / Codec2}] Subsistema multimídia do Android responsável pela decodificação e processamento de formatos de mídia comprimidos.
+
+     \item[\textbf{Throughput}] Métrica quantitativa de desempenho que afere a taxa de vazão ou o volume efetivo de tarefas processadas pelo sistema por unidade de tempo.
+
+     \item[\textbf{UID (\textit{User Identifier})}] Identificador de usuário exclusivo atribuído pelo sistema a cada aplicativo instalado, garantindo o controle rígido de privilégios de acesso.
+
+     \item[\textbf{Window Manager (\textit{WM})}] Serviço de gerenciamento de exibição do sistema que controla a disposição das janelas e a densidade de renderização da tela (\textit{wm density}).
+
+\end{description}

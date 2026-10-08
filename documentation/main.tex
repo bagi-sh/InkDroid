@@ -84,9 +84,24 @@
 \end{cleardoublepage}
 \makeatother
 \cleardoublepage
+
 % Resumo
 \setlength{\absparsep}{18pt}
 
+\begin{agradecimentos}
+\noindent{Agradeço em primeiro lugar ao meu orientador, Prof. Gilberto Monteiro, pela paciência, aconselhamentos e suporte que prestou a mim e aos meus colegas, e que permitiram que eu sempre tivesse uma direção e caminho para fazer um bom trabalho.}
+
+\noindent{A minha mãe, Sra. Valdeci, por sempre me apoiar e por ser o alicerce fundamental em todas as etapas, incentivando meus estudos e sempre exigindo que eu desse meu melhor.}
+
+\noindent{Aos meus colegas e amigos, pelo companheirismo nas disciplinas, a troca de experiências e dicas que sempre me ajudaram, as dicussões e opiniões e por me ouvirem quando queria treinar minhas apresentações e falas.}
+
+\noindent{Ao meu ex-tutor e amigo Pedro Francisco, e todos do Maria Felipa Lab, onde tive diversas experiências que me acompanharam e ajudaram durante a elaboração desse projeto.}
+
+\noindent{E a minha querida melhor amiga Bianca, pelos ultimos 5 anos em que sempre esteve comigo em todos os momentos bons e ruins, e sempre acreditou no meu potencial.}
+
+\noindent{A todos que, direta ou indiretamente, colaboraram para realização deste trabalho, manifesto minha sincera gratidão.}
+
+\end{agradecimentos}
 \begin{resumo}
 \noindent ALVES, Alisson Gabriel dos Santos. \textbf{Inkdroid: Repurposing de tablets legados via debloat automatizado para leitura focada}. 2026. Trabalho de Conclusão de Curso (TCC) -- Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT, Salvador, 2026.
 
@@ -119,8 +134,6 @@ This research analyzes the impact of linear consumption patterns in the mobile h
 
 % --- ELEMENTOS TEXTUAIS ---
 \textual
-
-\input{glossary.tex}
 
 \chapter{INTRODUÇÃO}
 A crise ambiental contemporânea é considerada por muitos o problema de maior relevância da atualidade, sendo essa, muito impulsionada pelo atual padrão de consumo linear da indústria no geral. Esse padrão se mostra ainda mais forte no contexto de hardwares mobile, que são renovados a cada ano, prometendo grandes mudanças, deixando em pouco tempo aparelhos funcionais obsoletos ou "artificialmente incapazes", \citeonline{parnas1994} diz que esse efeito está fundamentalmente ligado ao que ele chama de \textit{software aging} onde a medida que as aplicações se atualizam elas exigem cada vez mais do hardware, ainda que o mesmo seja perfeitamente capaz tornando o software em um "fardo oneroso". Essa prática impulsiona o aumento da geração de resíduos sólidos, em especial, o lixo eletroeletrônico, que possuem metais pesados de difícil decomposição. Segundo o relatório The Global E-waste Monitor \cite{balde2024}, a geração de lixo eletrônico, estimada em 62 bilhões de kg no ano de 2022, cresce cinco vezes mais do que a reciclagem documentada, com apenas 22,3\% dos resíduos coletados adequadamente em 2022.
@@ -365,24 +378,110 @@ O script executa blocos Python via \texttt{python3 -c} para realizar o parsing d
 
 \subsection*{Transferência Automatizada para o Dispositivo (\texttt{pushToDevice})}
 
-Após a conclusão bem-sucedida do download e validação da integridade do arquivo \texttt{.epub} ou \texttt{.pdf}, o script aciona a função \texttt{pushToDevice}:
+Após a conclusão bem-sucedida do download e validação da integridade do arquivo \texttt{.epub} ou \texttt{.pdf}, o script aciona a função \texttt{pushToDevice} Executa a verificação de estado do daemon ADB, mapeia o diretório de destino configurado no dispositivo (por padrão, \texttt{/sdcard/Books/} ou o diretório de biblioteca do KOReader), transfere o arquivo via \texttt{adb push <local\_file\_path> <remote\_directory>}, Emite um sinal de atualização do armazenamento de mídia (\texttt{android.intent.action.MEDIA\_SCANNER\_SCAN\_FILE}) para que a nova obra seja indexada imediatamente pela biblioteca do leitor digital sem a necessidade de reiniciar o aplicativo de leitura, caso aberto.
+
+\chapter{RESULTADOS E DISCUSSÃO}
+
+\section{Consolidação da Primeira Versão Estável}
+
+Após sucessivos ciclos de testes e refatorações, o conjunto de ferramentas do InkDroid alcançou o estado de sua primeira versão estável (v1.0), consolidando-se como um utilitário funcional para a ressignificação de tablets Android legados. Inicialmente concebido como uma sequência linear e rígida de comandos imperativos em terminal, o projeto evoluiu para uma arquitetura modular estruturada em \texttt{Shell Script (Bash)} e \texttt{Python}, organizada em funções independentes e reutilizáveis.
+
+Essa reestruturação viabilizou a criação do utilitário de linha de comando "\textit{ink}", que disponibiliza fluxos de execução interativos e não interativos através de parâmetros formais de linha de comando (\textit{flags}). O script de instalação principal (InkDroid\_install.sh) passou a permitir a execução seletiva de rotinas específicas, como -{-}only-debloat, -{-}only-apps ou -{-}only-display, além da automação completa via confirmação automática com -y.
+
+A estabilidade da ferramenta foi assegurada pela inclusão de mecanismos de validação preventiva de hardware e ambiente, e testes práticos, feito no modelo proposto desde o início, o tablet Multilaser M8 4G. A rotina checkDevice() passou a exigir que apenas um dispositivo esteja conectado e devidamente autorizado via Depuração USB antes de disparar qualquer intervenção. Caso nenhum aparelho ou múltiplos terminais sejam detectados, a execução é interrompida com códigos de erro claros, prevenindo a aplicação acidental de comandos em terminais incorretos. Complementarmente, a integração de mecanismos de fallback como o processamento de listas em Python quando o utilitário jq não se encontra disponível no sistema hospedeiro conferiu robustez à execução em diferentes distribuições Linux.
+
+Entretanto, o Shell Script em Bash, não roda nativamente no sistema do Windows, o que limita a ferramenta para apenas MacOS e Linux, os quais seguem as regras e padrões \textit{POSIX}. Isso obriga usuários de windows a utilizarem opções como o \textit{WSL}
+
+\section{Objetivos Alcançados}
+Tomando como base os objetivos definidos na pesquisa e a implementação técnica realizada no tablet Multilaser M8 4G, a solução cumpriu com êxito as metas projetadas para os níveis de aplicação e de framework:
 
 \begin{enumerate}
-    \item Executa a verificação de estado do daemon ADB.
-    \item Mapeia o diretório de destino configurado no dispositivo (por padrão, \texttt{/sdcard/Books/} ou o diretório de biblioteca do KOReader).
-    \item Transfere o arquivo via \texttt{adb push <local\_file\_path> <remote\_directory>}.
-    \item Emite um sinal de atualização do armazenamento de mídia (\texttt{android.intent.action.MEDIA\_SCANNER\_SCAN\_FILE}) para que a nova obra seja indexada imediatamente pela biblioteca do leitor digital sem a necessidade de reiniciar o aplicativo de leitura, caso aberto.
+
+  \item \texttt{Desoneração Sistêmica via Debloat Automatizado (Nível de Aplicação):} A automação implementou a remoção declarativa e não invasiva de pacotes catalogados no arquivo blacklist.json, mitigando os efeitos do envelhecimento de software (\textit{software aging}). Através da instrução \texttt{pm uninstall -k --user 0}, a ferramenta desinstala redes sociais, jogos pré-instalados e os serviços intrusivos do \textit{Google Mobile Services (GMS)} exclusivamente no espaço do usuário primário. Essa limpeza eliminou telemetrias de fundo que drenavam ciclos de processamento e memória RAM, registrando todo o histórico de execuções com carimbo temporal no arquivo de auditoria.
+  \item \texttt{Transformação em Ambiente de Leitura e Fluxo de Uso:} O sistema automatizou a transferência e instalação dos aplicativos dedicados à leitura (KOReader) e substituiu o gerenciador de tela inicial padrão pelo Olauncher por meio da API RoleManager do Android. Essa troca de interface estabeleceu um ambiente minimalista baseado estritamente em tipografia, eliminando notificações e distrações visuais de acordo com os preceitos do Minimalismo Digital de \citeonline{newport2019}. O ecossistema foi complementado pela rotina ink push, capaz de transferir e-books diretamente para a pasta `/sdcard/Books/ do aparelho e acionar via transmissão de sinal broadcast nativo para indexação imediata no leitor.
+
+  \item \texttt{Ergonomia Visual e Simulação de E-ink:} Para conter os fatores associados à Síndrome da Visão do Computador (CVS) decorrentes do uso de telas LCD retroiluminadas, o Inkdroid injetou parâmetros diretamente no banco relacional settings.db e no gestor de janelas. A ferramenta desativou completamente a escala de animações do sistema, diminuindo consideravelmente travamentos gráficos da GPU legada. O script configurou a taxa de atualização para a menor frequência suportada pelo painel (30 Hz) e estruturou perfis ergonômicos acionáveis via terminal: a conversão monocromática em escala de cinza através do daltonizador de acessibilidade e a atenuação de luz azul noturna.
+
+  \item \texttt{Preservação Energética e Contenção de Processos:} Em conformidade com a literatura técnica que aponta os processos em segundo plano e a conectividade como os maiores causadores de consumo em repouso, a automação ativou a destruição imediata de atividades em segundo plano. O perfil de economia foi fixado em nível máximo, o tempo de bloqueio de tela foi ampliado para 30 minutos a fim de evitar cortes durante leituras densas, e varreduras ocultas de Wi-Fi, Bluetooth BLE, motores de vibração háptica e atualizações remotas OTA foram completamente suprimidas.
+
+  \item \texttt{Arquitetura de Reversibilidade:} A conformidade com a segurança do usuário foi garantida pelo utilitário, que lê o arquivo de configurações para reinstalar os pacotes desativados através do comando \textit{cmd package install-existing}, reverte todas as configurações de framework, e retorna o launcher padrão restaurando o tablet ao estado de fábrica sem necessidade de formatação de partições nem perda de arquivos pessoais
+
 \end{enumerate}
 
-\chapter{RESULTADOS}
+\section{Limitações e Desafios de Intervenção em Nível de Kernel}
+
+Apesar da previsão metodológica inicial de intervir sobre a frequência dos núcleos do processador e aplicar governadores de energia específicos no nível de Kernel, essas alterações \texttt{não foram executadas} nesta primeira versão estável da ferramenta. Essa decisão técnica fundamentou-se em restrições arquiteturais intrínsecas ao ecossistema Android e no modelo de segurança adotado pelo projeto:
+
+Para alterar parâmetros de hardware em tempo de execução no Linux, tais como a escrita nos arquivos virtuais do subsistema sysfs \textit{ /sys/devices/system/cpu/cpu*/cpufreq/}, é imperativo possuir acesso de root ou desbloquear o bootloader para gravar uma imagem customizada de Kernel. Como o InkDroid estabeleceu o compromisso de operar de maneira estritamente não invasiva, baseando-se unicamente nas permissões nativas concedidas pelo usuário shell da interface ADB, a manipulação direta do escalonador de frequência do processador é bloqueada pelas políticas de segurança do SELinux e pelas permissões do sistema.
+
+Outro desafio que precisaria ser superado, é que em sistemas móveis, as rotinas de gerenciamento de frequência e voltagem são profundamente dependentes da arquitetura do chip (System-on-Chip). Diferentes fabricantes (como MediaTek, Exynos e Qualcomm) implementam controladores de clock, faixas térmicas e nós de arquivos proprietários. A tentativa de automatizar rotinas de underclock por meio de scripts genéricos em nível de Kernel resultaria em elevado risco de travamento crítico (kernel panic), falhas de inicialização (bootloops) ou até a inutilização permanente do hardware (hard brick).
+
+existem formas de contornar esses desafios, porém a complexidade de automação e tempo de pesquisa também se tornam impeditivas. Tornar a intervenção de Kernel automática, segura e agnóstica ao fabricante exigiria o desenvolvimento e a compilação de módulos de Kernel sob medida para a placa-mãe do Multilaser M8 4G. Esse nível de engenharia reversa de baixo nível demandaria um ciclo de pesquisa extenso, o que comprometeria a portabilidade, a reprodutibilidade e a estabilidade imediata exigidas para a entrega da solução no tempo do projeto.
+
+Dessa forma, optou-se por concentrar os esforços de conservação de energia no nível de Framework, forçando a suspensão agressiva de processos, limitando a taxa de atualização gráfica e impondo o modo econômico permanente, estratégia que demonstrou alta estabilidade e dispensou a violação da segurança do sistema.
+
+O que também pode ser implementado é o uso do módulo de customização de kernel para android chamado KernelSU. Apesar de exigir root, ele da ao usuário, a possibilidade de fazer undervolt, underclock e etc. entratanto, tudo que o ink poderia automatizar seria sua instalação, e exigiria que o tablet já tivesse root. 
 
 \chapter{CONSIDERAÇÕES FINAIS}
-Espera-se demonstrar que os dispositivos legados ainda possuem alto potencial técnico quando desonerados de softwares mal otimizados, podendo ser adaptados para tarefas que não demandam alto desempenho, assim evitando o descarte. O artefato final servirá como prova de conceito para políticas de TI sustentáveis, provando que a engenharia de software consciente pode converter o que seria resíduo eletrônico em um ativo educacional valioso e focado no ser humano.
 
-\chapter{AGRADECIMENTOS}
+O desenvolvimento do InkDroid comprovou a viabilidade técnica de reutilizar dispositivos móveis considerados obsoletos através de intervenções conscientes de engenharia de software. Ao atuar sobre o tablet Multilaser M8 4G da rede pública estadual da Bahia, o projeto demonstrou que aparelhos descartados ou retidos na "hibernação doméstica" não apresentam incapacidade física real, mas sim uma sobrecarga artificial imposta pelo acúmulo de softwares mal otimizados, serviços de telemetria e interfaces projetadas para capturar compulsivamente a atenção.
+
+Os objetivos delineados na pesquisa foram amplamente cumpridos no âmbito das camadas de aplicação e framework. A criação de uma interface de linha de comando robusta, orientada a funções e modular permitiu a realização de um debloat radical e seguro, a implantação de uma suíte de leitura focada e o ajuste de parâmetros ergonômicos que amenizam os desconfortos visuais característicos da Síndrome da Visão do Computador. Ao mesmo tempo, a pesquisa mapeou as fronteiras e limitações operacionais da plataforma Android, evidenciando as barreiras de privilégios que tornam a automação em nível de Kernel inviável sem concessões ao modelo de segurança e à portabilidade da ferramenta.
+
+Como contribuição prática e social, o InkDroid consolida uma prova de conceito alinhada às práticas de Tecnologia da Informação Verde (Green IT) e à economia circular. Ao estender o ciclo de vida útil de hardwares educacionais legados e convertê-los em leitores de livros digitais funcionais, a solução oferece uma alternativa contra o descarte prematuro e a geração de resíduos eletroeletrônicos (e-waste), democratizando o acesso a ferramentas de estudo e promovendo o trabalho focado (Deep Work) sem custos adicionais aos estudantes e à sociedade.
+
+\texttt{Para trabalhos futuros, planeja-se:}
+
+\begin{enumerate}
+
+  \item Aprofundar a investigação das intervenções em nível de Kernel em ambientes controlados com acesso root, analisando a viabilidade de compilação de kernels mínimos com governadores estáticos de baixa frequência;
+
+  \item Realizar ensaios experimentais quantitativos de consumo energético utilizando analisadores físicos de corrente ou ferramentas como BatteryStats, mensurando em Joules a autonomia ganha antes e depois do processo de debloat;
+
+  \item Conduzir testes com usuários aplicando metodologias de avaliação ergonômica e taxas de piscar de olhos para quantificar o conforto visual obtido pela simulação monocromática em comparação ao painel colorido padrão.
+
+\end{enumerate}
 
 % --- ELEMENTOS PÓS-TEXTUAIS ---
 \postextual
 \bibliography{referencias}
 
+\input{glossary.tex}
+
+\chapter{APÊNDICE}
+\begin{apendice}
+\label{apendice:github}
+
+Este apêndice disponibiliza o acesso público, as diretrizes de governança e a estrutura organizacional do repositório de código-fonte aberto (\textit{open-source}) desenvolvido no âmbito deste Trabalho de Conclusão de Curso.
+
+\section*{Identificação e Acesso ao Repositório}
+
+O ecossistema de scripts de automação, ferramentas de linha de comando (CLI) e arquivos de configuração que compõem o \textbf{InkDroid} encontram-se hospedados na plataforma GitHub:
+
+\begin{itemize}
+    \item \textbf{Título do Projeto:} InkDroid: Otimização e Ressignificação de Tablets Android Legados via ADB
+    \item \textbf{Autor e Mantenedor:} Alisson Gabriel dos Santos Alves
+    \item \textbf{URL Oficial de Acesso:} \url{https://github.com/bagi-sh/InkDroid}
+    \item \textbf{Ramo Padrão (\textit{Default Branch}):} \texttt{main}
+    \item \textbf{Licença de Software:} MIT
+\end{itemize}
+
+\section*{Instruções de Clonagem e Execução}
+
+Para fins de replicação e auditoria dos experimentos descritos nesta pesquisa, o repositório pode ser clonado em qualquer distribuição Linux por meio do utilitário Git:
+
+\begin{verbatim}
+# 1. Clonagem do repositório oficial
+git clone https://github.com/bagi-sh/InkDroid.git
+
+# 2. Navegação até o diretório do projeto
+cd InkDroid
+
+# 3. Concessão de permissões de execução
+chmod +x ./*
+
+# 4. Execução interativa da automação
+./ink setup
+\end{verbatim}
+\end{apendice}
 \end{document}
