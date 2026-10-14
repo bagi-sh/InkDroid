@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="100%" height="100%" fill="none">
+  <!-- Academic Bugdroid - Conclusão, ABNT e Formatura -->
+  <ellipse cx="120" cy="230" rx="70" ry="8" fill="#121316" fill-opacity="0.3"/>
+
+  <!-- Pernas -->
+  <rect x="78" y="175" width="18" height="42" rx="9" fill="#3DDC84"/>
+  <rect x="124" y="175" width="18" height="42" rx="9" fill="#3DDC84"/>
+
+  <!-- Corpo -->
+  <path d="M65 110 H155 V170 C155 180 147 188 137 188 H83 C73 188 65 180 65 170 Z" fill="#3DDC84"/>
+
+  <!-- Braços segurando o livro aberto -->
+  <rect x="44" y="120" width="16" height="45" rx="8" fill="#3DDC84" transform="rotate(30 44 120)"/>
+  <rect x="178" y="128" width="16" height="45" rx="8" fill="#3DDC84" transform="rotate(-30 178 128)"/>
+
+  <!-- Livro Aberto nas mãos -->
+  <g transform="translate(65, 115)">
+    <!-- Capa do Livro -->
+    <path d="M5 25 Q55 15 55 5 L55 35 Q55 45 5 55 Z" fill="#1A1C1E" stroke="#3DDC84" stroke-width="2"/>
+    <path d="M105 25 Q55 15 55 5 L55 35 Q55 45 105 55 Z" fill="#1A1C1E" stroke="#3DDC84" stroke-width="2"/>
+    <!-- Páginas -->
+    <path d="M8 23 Q55 14 55 6 L55 33 Q55 42 8 51 Z" fill="#E2E6EA"/>
+    <path d="M102 23 Q55 14 55 6 L55 33 Q55 42 102 51 Z" fill="#E2E6EA"/>
+    <!-- Linhas de texto simuladas -->
+    <line x1="16" y1="18" x2="46" y2="15" stroke="#8A938B" stroke-width="1.5"/>
+    <line x1="16" y1="24" x2="44" y2="21" stroke="#8A938B" stroke-width="1.5"/>
+    <line x1="16" y1="30" x2="48" y2="27" stroke="#8A938B" stroke-width="1.5"/>
+    <line x1="64" y1="15" x2="94" y2="18" stroke="#8A938B" stroke-width="1.5"/>
+    <line x1="66" y1="21" x2="94" y2="24" stroke="#8A938B" stroke-width="1.5"/>
+    <line x1="62" y1="27" x2="94" y2="30" stroke="#8A938B" stroke-width="1.5"/>
+  </g>
+
+  <!-- Cabeça -->
+  <path d="M65 96 C65 68 85 46 110 46 C135 46 155 68 155 96 Z" fill="#3DDC84"/>
+  <line x1="87" y1="52" x2="73" y2="28" stroke="#3DDC84" stroke-width="5" stroke-linecap="round"/>
+  <line x1="133" y1="52" x2="147" y2="28" stroke="#3DDC84" stroke-width="5" stroke-linecap="round"/>
+  <!-- Olhos com expressão feliz/focada -->
+  <path d="M82 76 Q88 70 94 76" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M126 76 Q132 70 138 76" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+  <!-- Capelo de Formatura Acadêmico -->
+  <g transform="translate(60, 20)">
+    <!-- Chapéu Losango -->
+    <polygon points="50,0 100,16 50,32 0,16" fill="#1A1C1E" stroke="#3DDC84" stroke-width="2"/>
+    <!-- Base na cabeça -->
+    <rect x="25" y="24" width="50" height="14" rx="4" fill="#1A1C1E" stroke="#3DDC84" stroke-width="1.5"/>
+    <!-- Ponto central e Borla dourada -->
+    <circle cx="50" cy="16" r="3" fill="#F9AB00"/>
+    <path d="M50 16 Q80 20 85 38" stroke="#F9AB00" stroke-width="2.5" fill="none"/>
+    <circle cx="85" cy="40" r="3" fill="#F9AB00"/>
+  </g>
+</svg>

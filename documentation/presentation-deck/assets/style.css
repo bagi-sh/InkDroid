@@ -1,0 +1,654 @@
+/* ==========================================================================
+   INKDROID PRESENTATION DECK - GOOGLE KEYNOTE & MATERIAL YOU M3 DESIGN SYSTEM
+   Fidelidade ao MATERIAL_DESIGN.md - HCT 60-30-10, Formas Variadas & Bugdroids Livres
+   ========================================================================== */
+
+:root {
+  /* HCT Palette - Dominância Verde Orgânico Profundo */
+  --m3-seed-color: #3DDC84;
+
+  /* 60% Dominante (Fundos e Superfícies T_{6-12}) */
+  --m3-surface: #031208;
+  --m3-surface-dim: #020A05;
+  --m3-surface-bright: #082414;
+  --m3-background: #031208;
+  --m3-on-surface: #E8F7EC;
+  --m3-on-surface-variant: #B0C9B8;
+
+  /* 20% - 30% Estrutural (Containers e Superfícies Elevadas T_{14-26}) */
+  --m3-surface-container-lowest: #05180D;
+  --m3-surface-container-low: #082112;
+  --m3-surface-container: #0E351F;
+  --m3-surface-container-high: #15462A;
+  --m3-surface-container-highest: #1D5837;
+  --m3-surface-variant: #113B23;
+  --m3-outline: #2E6B48;
+  --m3-outline-variant: #1B4C30;
+
+  /* 10% Acento Focal (Verde Android Vibrante T_{75-90}) */
+  --m3-primary: #3DDC84;
+  --m3-on-primary: #00391A;
+  --m3-primary-container: #005429;
+  --m3-on-primary-container: #80E89E;
+
+  --m3-secondary: #BCE3C7;
+  --m3-on-secondary: #1F3627;
+  --m3-secondary-container: #35543F;
+
+  --m3-tertiary: #A6D4DE;
+  --m3-on-tertiary: #07363E;
+
+  --m3-amber: #F9AB00;
+  --m3-amber-container: #523B00;
+  --m3-danger: #FF5252;
+  --m3-danger-container: #4D0000;
+
+  /* Curvas Bézier Cúbicas Oficiais do Google M3 */
+  --m3-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --m3-easing-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  --m3-easing-accelerate: cubic-bezier(0.3, 0.0, 0.8, 0.15);
+  --m3-duration-short: 200ms;
+  --m3-duration-medium: 400ms;
+  --m3-duration-long: 650ms;
+}
+
+[data-theme="light"] {
+  --m3-surface: #F2FAF4;
+  --m3-surface-dim: #E1EFE4;
+  --m3-surface-bright: #FFFFFF;
+  --m3-background: #F4FAF5;
+  --m3-on-surface: #0E2415;
+  --m3-on-surface-variant: #2D4736;
+
+  --m3-surface-container-lowest: #FFFFFF;
+  --m3-surface-container-low: #EBF5EE;
+  --m3-surface-container: #E0EFE4;
+  --m3-surface-container-high: #D5E9DA;
+  --m3-surface-container-highest: #CAE2D0;
+  --m3-surface-variant: #D2E7D7;
+  --m3-outline: #5B8568;
+  --m3-outline-variant: #A4C5AF;
+
+  --m3-primary: #006D37;
+  --m3-on-primary: #FFFFFF;
+  --m3-primary-container: #80E89E;
+  --m3-on-primary-container: #00210D;
+
+  --m3-secondary: #386646;
+  --m3-on-secondary: #FFFFFF;
+  --m3-secondary-container: #BCE3C7;
+
+  --m3-tertiary: #006874;
+  --m3-on-tertiary: #FFFFFF;
+
+  --m3-amber: #855400;
+  --m3-amber-container: #FFE085;
+  --m3-danger: #B3261E;
+  --m3-danger-container: #FFDAD6;
+}
+
+[data-theme="light"] .bento-card,
+[data-theme="light"] .m3-squircle {
+  box-shadow: 0 4px 16px rgba(14, 36, 21, 0.08);
+}
+
+[data-theme="light"] .bento-card:hover {
+  box-shadow: 0 8px 24px rgba(14, 36, 21, 0.14);
+}
+
+[data-theme="light"] .bugdroid-backdrop {
+  opacity: 0.12;
+  filter: contrast(130%) brightness(85%);
+}
+
+[data-theme="light"] .m3-orbit-ring {
+  border-color: rgba(0, 109, 55, 0.25);
+}
+
+/* ==========================================================================
+   Base e Reset para Widescreen 100vh
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Google Sans Flex", Helvetica, Arial, sans-serif;
+  background-color: var(--m3-surface);
+  color: var(--m3-on-surface);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* Master Slide Viewport Container com Scroll Snap */
+.deck-viewport {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.deck-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   Estrutura do Slide (100vh com Aproveitamento Total do Espaço)
+   ========================================================================== */
+.deck-slide {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5vh 3.5vw 86px 3.5vw;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 12%, var(--m3-surface-bright) 0%, var(--m3-surface) 65%, var(--m3-surface-dim) 100%);
+}
+
+/* Malha orgânica de fundo */
+.deck-slide::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 55vw;
+  height: 55vh;
+  background: radial-gradient(ellipse, rgba(61, 220, 132, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   Header do Slide (Tipografia Display Grande e Visível de Longe)
+   ========================================================================== */
+.slide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+}
+
+.slide-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.slide-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--m3-primary-container);
+  color: var(--m3-on-primary-container);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.slide-title {
+  font-size: clamp(2rem, 3.2vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  color: var(--m3-on-surface);
+  line-height: 1.1;
+}
+
+.slide-title strong {
+  color: var(--m3-primary);
+}
+
+.slide-category {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--m3-on-surface-variant);
+  background: var(--m3-surface-container);
+  border: 1px solid var(--m3-outline-variant);
+  padding: 6px 16px;
+  border-radius: 9999px;
+}
+
+/* ==========================================================================
+   Área Principal do Slide (Flexível & Preenchida)
+   ========================================================================== */
+.slide-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  min-height: 0;
+}
+
+/* Layout Split: Texto Flutuante Aberto à Esquerda + Visual à Direita */
+.split-keynote {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 40px;
+  align-items: center;
+  height: 100%;
+}
+
+/* Texto Flutuante Aberto (Sem caixas ou bordas em volta!) */
+.floating-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  z-index: 3;
+}
+
+.floating-lead {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--m3-on-surface);
+}
+
+.floating-paragraph {
+  font-size: clamp(1.15rem, 1.4vw, 1.45rem);
+  line-height: 1.6;
+  color: var(--m3-on-surface-variant);
+}
+
+/* Bullets Grandes e Conectados */
+.hero-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.hero-bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: clamp(1.1rem, 1.35vw, 1.4rem);
+  line-height: 1.45;
+  color: var(--m3-on-surface);
+}
+
+.hero-bullet-item::before {
+  content: "✦";
+  color: var(--m3-primary);
+  font-size: 1.3rem;
+  margin-top: 1px;
+}
+
+/* Números Colossais de Destaque */
+.colossal-metric {
+  font-size: clamp(4.8rem, 8vw, 8.2rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--m3-primary);
+  margin-bottom: 8px;
+}
+
+.colossal-metric.amber {
+  color: var(--m3-amber);
+}
+
+.colossal-unit {
+  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+  font-weight: 800;
+  color: var(--m3-on-surface-variant);
+  margin-left: 6px;
+}
+
+/* ==========================================================================
+   Formas Variadas do Material Design 3 (MATERIAL_DESIGN.md)
+   ========================================================================== */
+
+/* 1. Estrela / Flor M3 de 4 pontas */
+.m3-flower-4 {
+  clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
+  background: var(--m3-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 2. Forma Floral / Bolha Orgânica (Bean/Blob) */
+.m3-blob {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  background: var(--m3-surface-container-high);
+  border: 1px solid var(--m3-outline);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  animation: blobMorph 16s ease-in-out infinite alternate;
+}
+
+@keyframes blobMorph {
+  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 40% 60% 70% 30% / 50% 60% 30% 60%; }
+  100% { border-radius: 50% 50% 40% 60% / 40% 40% 60% 50%; }
+}
+
+/* 2.1 Estrela Floral M3 de 8 Pontas */
+.m3-flower-8 {
+  clip-path: polygon(50% 0%, 63% 13%, 85% 15%, 87% 37%, 100% 50%, 87% 63%, 85% 85%, 63% 87%, 50% 100%, 37% 87%, 15% 85%, 13% 63%, 0% 50%, 13% 37%, 15% 15%, 37% 13%);
+  background: var(--m3-surface-container-high);
+  border: 1px solid var(--m3-outline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinSlow 40s linear infinite;
+}
+
+/* 2.2 Anel Orbital Tracejado M3 */
+.m3-orbit-ring {
+  position: absolute;
+  border: 2px dashed rgba(61, 220, 132, 0.22);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: spinSlowReverse 36s linear infinite;
+}
+
+/* 2.3 Superelipse com Morfismo de Cantos (Squircle Morph) */
+.m3-squircle-morph {
+  border-radius: 48px 18px 48px 18px;
+  background: var(--m3-surface-container-high);
+  border: 1px solid var(--m3-outline);
+  animation: squircleMorph 14s ease-in-out infinite alternate;
+}
+
+@keyframes squircleMorph {
+  0% { border-radius: 48px 18px 48px 18px; }
+  50% { border-radius: 24px 56px 24px 56px; }
+  100% { border-radius: 56px 24px 56px 24px; }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinSlowReverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+/* 3. Superelipse / Squircle (G2 Continuity) */
+.m3-squircle {
+  border-radius: 48px;
+  background: var(--m3-surface-container);
+  border: 1px solid var(--m3-outline-variant);
+  padding: 28px 32px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* 4. Cantos Assimétricos Expressivos */
+.m3-asymmetric-a {
+  border-radius: 56px 16px 56px 16px;
+}
+
+.m3-asymmetric-b {
+  border-radius: 16px 56px 16px 56px;
+}
+
+.m3-asymmetric-c {
+  border-radius: 64px 64px 20px 64px;
+}
+
+/* 5. Pílula Gigante */
+.m3-pill {
+  border-radius: 9999px;
+  padding: 14px 28px;
+  background: var(--m3-surface-container);
+  border: 1px solid var(--m3-outline-variant);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   O Mascote Bugdroid Interagindo Livremente (Fora dos Cards!)
+   ========================================================================== */
+
+/* Mascote debruçado sobre o card (mãos na borda, tronco saindo para cima) */
+.bugdroid-peeking-top {
+  position: absolute;
+  top: -65px;
+  right: 28px;
+  width: 145px;
+  height: 145px;
+  z-index: 10;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+  animation: bugdroidBob 4s ease-in-out infinite alternate;
+}
+
+/* Mascote flutuando livre na lateral */
+.bugdroid-floating-side {
+  position: absolute;
+  right: 10px;
+  bottom: 12px;
+  width: 220px;
+  height: 220px;
+  z-index: 5;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6));
+  animation: bugdroidFloat 5s ease-in-out infinite alternate;
+}
+
+/* Mascote empoleirado sobre número gigante ou terminal */
+.bugdroid-perched {
+  position: absolute;
+  top: -45px;
+  left: 30px;
+  width: 130px;
+  height: 130px;
+  z-index: 10;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
+}
+
+/* Mascote monumental atrás do texto com opacidade sutil (marca d'água viva) */
+.bugdroid-backdrop {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%) scale(1.3);
+  width: 380px;
+  height: 380px;
+  opacity: 0.16;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes bugdroidFloat {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-14px) rotate(3deg); }
+}
+
+@keyframes bugdroidBob {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-8px); }
+}
+
+/* ==========================================================================
+   Grades Bento Grid Refinadas & Modulares
+   ========================================================================== */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+}
+
+.bento-card {
+  background: var(--m3-surface-container);
+  border: 1px solid var(--m3-outline-variant);
+  border-radius: 28px;
+  padding: 26px 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: transform var(--m3-duration-medium) var(--m3-easing-emphasized),
+              border-color var(--m3-duration-medium) var(--m3-easing-emphasized),
+              box-shadow var(--m3-duration-medium) var(--m3-easing-emphasized);
+}
+
+.bento-card:hover {
+  transform: translateY(-4px) scale(1.008);
+  border-color: var(--m3-primary);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.col-12 { grid-column: span 12; }
+.col-8  { grid-column: span 8; }
+.col-7  { grid-column: span 7; }
+.col-6  { grid-column: span 6; }
+.col-5  { grid-column: span 5; }
+.col-4  { grid-column: span 4; }
+
+/* Terminal Widescreen */
+.bento-terminal {
+  background: #040E07;
+  border: 1px solid var(--m3-outline);
+  border-radius: 20px;
+  padding: 18px 24px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #D4ECD9;
+  position: relative;
+}
+
+.bento-terminal .prompt {
+  color: var(--m3-primary);
+  font-weight: bold;
+}
+
+/* Simulador do Tablet M8 */
+.tablet-frame-m3 {
+  width: 270px;
+  height: 410px;
+  background: #121814;
+  border: 8px solid #233429;
+  border-radius: 36px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(61, 220, 132, 0.4);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: filter var(--m3-duration-medium) var(--m3-easing-emphasized);
+}
+
+.tablet-frame-m3.mode-monochrome {
+  filter: grayscale(100%) contrast(110%);
+}
+
+.tablet-frame-m3.mode-blue {
+  filter: sepia(40%) hue-rotate(-20deg) brightness(95%);
+}
+
+.tablet-frame-m3.mode-default {
+  filter: none;
+}
+
+.tablet-screen-content {
+  flex: 1;
+  background: #09130D;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: monospace;
+}
+
+/* Dock Flutuante de Controle do Keynote (com auto-hide e timeout) */
+.keynote-dock {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translate(-50%, 24px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--m3-surface-container-high);
+  border: 1px solid var(--m3-outline);
+  padding: 8px 20px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--m3-easing-emphasized),
+              transform 300ms var(--m3-easing-emphasized);
+}
+
+.keynote-dock.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.dock-btn {
+  background: var(--m3-surface-container-high);
+  color: var(--m3-on-surface);
+  border: 1px solid var(--m3-outline-variant);
+  padding: 9px 18px;
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--m3-duration-short) var(--m3-easing-emphasized);
+}
+
+.dock-btn:hover {
+  background: var(--m3-primary);
+  color: var(--m3-on-primary);
+  transform: scale(1.05);
+  border-color: var(--m3-primary);
+}
+
+.dock-counter {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--m3-primary);
+  font-family: monospace;
+  padding: 0 10px;
+  min-width: 110px;
+  text-align: center;
+}
+
+.keynote-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--m3-primary), #80E89E);
+  width: 5%;
+  z-index: 1000;
+  transition: width 200ms ease-out;
+}

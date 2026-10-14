@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="100%" height="100%" fill="none">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <!-- Sombra no chão -->
+  <ellipse cx="100" cy="208" rx="55" ry="7" fill="#041208" fill-opacity="0.6"/>
+  <!-- Pernas -->
+  <rect x="74" y="155" width="16" height="38" rx="8" fill="#3DDC84"/>
+  <rect x="110" y="155" width="16" height="38" rx="8" fill="#3DDC84"/>
+  <!-- Corpo -->
+  <path d="M58 98 H142 V152 C142 161 135 168 126 168 H74 C65 168 58 161 58 152 Z" fill="#3DDC84"/>
+  <!-- Cabeça -->
+  <path d="M58 86 C58 60 76 40 100 40 C124 40 142 60 142 86 Z" fill="#3DDC84"/>
+  <!-- Antenas -->
+  <line x1="78" y1="46" x2="66" y2="24" stroke="#3DDC84" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="122" y1="46" x2="134" y2="24" stroke="#3DDC84" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Olhos -->
+  <circle cx="79" cy="66" r="4.5" fill="#FFFFFF"/>
+  <circle cx="121" cy="66" r="4.5" fill="#FFFFFF"/>
+  <!-- Acessórios e Braços Específicos -->
+  
+      <rect x="36" y="102" width="14" height="46" rx="7" fill="#3DDC84"/>
+      <rect x="150" y="102" width="14" height="46" rx="7" fill="#3DDC84"/>
+      <!-- Óculos e Olho Piscando (CVS) -->
+      <g transform="translate(70, 58)">
+        <circle cx="12" cy="10" r="10" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+        <circle cx="48" cy="10" r="10" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+        <line x1="22" y1="10" x2="38" y2="10" stroke="#FFFFFF" stroke-width="2.5"/>
+      </g>
+      <g transform="translate(80, 115)">
+        <rect x="0" y="0" width="40" height="30" rx="5" fill="#0E331F" stroke="#3DDC84" stroke-width="1.5"/>
+        <text x="20" y="14" fill="#3DDC84" font-size="9" font-weight="900" text-anchor="middle">22 vs 5</text>
+        <text x="20" y="24" fill="#80E89E" font-size="7" font-weight="700" text-anchor="middle">BLINKS/M</text>
+      </g>
+    
+</svg>

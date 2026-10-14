@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" width="100%" height="100%" fill="none">
+  <!-- Inspector Bugdroid - Métricas e Estatísticas -->
+  <ellipse cx="110" cy="230" rx="65" ry="8" fill="#121316" fill-opacity="0.3"/>
+
+  <!-- Pernas -->
+  <rect x="70" y="175" width="18" height="42" rx="9" fill="#3DDC84"/>
+  <rect x="106" y="175" width="18" height="42" rx="9" fill="#3DDC84"/>
+
+  <!-- Corpo -->
+  <path d="M55 110 H140 V170 C140 180 132 188 122 188 H73 C63 188 55 180 55 170 Z" fill="#3DDC84"/>
+
+  <!-- Braço Direito (Apontando para a prancheta/dados) -->
+  <g transform="rotate(-15 140 120)">
+    <rect x="135" y="110" width="16" height="48" rx="8" fill="#3DDC84"/>
+    <!-- Dedo indicador estendido -->
+    <circle cx="143" cy="162" r="6" fill="#3DDC84"/>
+    <rect x="140" y="160" width="16" height="8" rx="4" fill="#3DDC84"/>
+  </g>
+
+  <!-- Cabeça inclinada prestando atenção -->
+  <g transform="rotate(-6 95 90)">
+    <path d="M55 96 C55 68 73 46 97 46 C122 46 140 68 140 96 Z" fill="#3DDC84"/>
+    <line x1="75" y1="52" x2="61" y2="28" stroke="#3DDC84" stroke-width="5" stroke-linecap="round"/>
+    <line x1="120" y1="52" x2="134" y2="28" stroke="#3DDC84" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="77" cy="74" r="5" fill="#FFFFFF"/>
+    <circle cx="119" cy="74" r="5" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Prancheta com Gráficos / Dados na mão esquerda -->
+  <g transform="translate(15, 105) rotate(6)">
+    <!-- Braço Esquerdo segurando -->
+    <rect x="25" y="10" width="16" height="45" rx="8" fill="#3DDC84"/>
+    <!-- Prancheta -->
+    <rect x="0" y="0" width="46" height="62" rx="6" fill="#202225" stroke="#3DDC84" stroke-width="2"/>
+    <rect x="15" y="-4" width="16" height="8" rx="2" fill="#3DDC84"/>
+    <!-- Gráfico de barras na prancheta -->
+    <rect x="6" y="44" width="6" height="12" rx="2" fill="#3DDC84"/>
+    <rect x="16" y="34" width="6" height="22" rx="2" fill="#3DDC84"/>
+    <rect x="26" y="24" width="6" height="32" rx="2" fill="#3DDC84"/>
+    <rect x="36" y="16" width="6" height="40" rx="2" fill="#80E89E"/>
+    <!-- Linhas de anotações -->
+    <line x1="8" y1="10" x2="38" y2="10" stroke="#8A938B" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Lupa ou Tag Flutuante "62B kg" -->
+  <g transform="translate(145, 45)">
+    <circle cx="20" cy="20" r="18" fill="#1A1C1E" stroke="#3DDC84" stroke-width="2"/>
+    <text x="20" y="24" fill="#3DDC84" font-family="system-ui, sans-serif" font-size="11" font-weight="900" text-anchor="middle">DATA</text>
+    <line x1="33" y1="33" x2="44" y2="44" stroke="#3DDC84" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>
