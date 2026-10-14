@@ -13,6 +13,7 @@ DO_APPS=true
 DO_LAUNCHER=true
 DO_DISPLAY=true
 AUTO_CONFIRM=false
+DO_TWEAKS=true
 
 # Install required host dependencies if missing
 installDependencies() {
@@ -78,6 +79,11 @@ confirmDevice() {
   done
 }
 
+isPackageInstalled() {
+  local pkg="$1"
+  adb shell pm list packages --user 0 2>/dev/null | grep -q "^package:${pkg}$"
+}
+
 # Initialize report log
 initLog() {
   if [ ! -f "$JSON" ]; then
@@ -91,18 +97,43 @@ initLog() {
   echo "---------------------------------" >> "$LOG_ACTIONS"
 }
 
+# Ensures base alternative app stores are present on the device
+ensureBaseStores() {
+  echo "Checking core app stores (F-Droid & Aurora Store)..."
+ if ! isPackageInstalled "org.slavsquat.openboard" && ! isPackageInstalled "com.google.android.inputmethod.latin"; then
+    echo "[INFO] No keyboard detected. Installing OpenBoard..."
+    installOpenBoard
+  elif isPackageInstalled "org.slavsquat.openboard"; then
+    echo -e "\e[32m[OK] OpenBoard is already installed.\e[0m"
+  fi
+
+  if ! isPackageInstalled "org.fdroid.fdroid"; then
+    echo "[INFO] F-Droid not found. Installing base store..."
+    installFDroid
+  else
+    echo -e "\e[32m[OK] F-Droid is already installed.\e[0m"
+  fi
+
+  if ! isPackageInstalled "com.aurora.store"; then
+    echo "[INFO] Aurora Store not found. Installing base store..."
+    installAuroraStore
+  else
+    echo -e "\e[32m[OK] Aurora Store is already installed.\e[0m"
+  fi
+}
+
 # Extract packages list from JSON using jq or python3 fallback
 parseBlacklist() {
   if command -v jq >/dev/null 2>&1; then
-    jq -r '.[] | .[]' "$JSON"
+    jq -r 'to_entries[] | .key as $cat | .value[] | "\($cat):\(.)"' "$JSON"
   elif command -v python3 >/dev/null 2>&1; then
     python3 -c "
 import json
 with open('$JSON') as f:
     data = json.load(f)
-for items in data.values():
+for cat, items in data.items():
     for pkg in items:
-        print(pkg)
+        print(f'{cat}:{pkg}')
 "
   else
     echo "Error: Neither jq nor python3 available to parse $JSON" >&2
@@ -112,10 +143,33 @@ for items in data.values():
 
 # Uninstall bloatware packages for user 0
 debloatPackages() {
-  echo "starting search and debloat apps..."
+  echo "Starting search and debloat apps..."
 
-  parseBlacklist | while read -r pacote; do
+  # Validação de segurança sobre as lojas
+  local has_fdroid=false
+  local has_aurora=false
+  local allow_google_debloat=false
+
+  isPackageInstalled "org.fdroid.fdroid" && has_fdroid=true
+  isPackageInstalled "com.aurora.store" && has_aurora=true
+
+  if [ "$has_fdroid" = true ] && [ "$has_aurora" = true ]; then
+    allow_google_debloat=true
+    echo -e "\e[32m[SAFE] F-Droid and Aurora Store verified. Google Services debloat enabled.\e[0m"
+  else
+    echo -e "\e[33m[WARNING] F-Droid or Aurora Store missing. Skipping 'google_services' category to prevent soft-brick.\e[0m"
+    echo "[WARN] Skipped Google Services debloat (F-Droid: $has_fdroid, Aurora: $has_aurora)" >> "$LOG_ACTIONS"
+  fi
+
+  parseBlacklist | while IFS=":" read -r categoria pacote; do
     [ -z "$pacote" ] && continue
+
+    # Trava de segurança para a categoria google_services
+    if [ "$categoria" = "google_services" ] && [ "$allow_google_debloat" = false ]; then
+      echo -e "Processing: $pacote ... \e[33m[SKIPPED (No Alternative Store)]\e[0m"
+      echo "[SKIP] Skipped $pacote due to missing alternative stores" >> "$LOG_ACTIONS"
+      continue
+    fi
 
     echo -n "Processing: $pacote ... "
     RESULT=$(adb shell pm uninstall -k --user 0 "$pacote" < /dev/null 2>&1 || true)
@@ -133,7 +187,7 @@ debloatPackages() {
   done
 
   echo "--------------------------------------------------"
-  echo -e "\e[32m[FINISHED]\e[0m All of blacklist apps are uninstalled"
+  echo -e "\e[32m[FINISHED]\e[0m Debloat process completed"
 }
 
 # Query latest release asset URL from GitHub
@@ -163,6 +217,38 @@ print(matched[0] if matched else (urls[0] if urls else ''))
   fi
 }
 
+installOpenBoard() {
+  echo "Downloading OpenBoard Keyboard..."
+  local url
+  url=$(getReleaseApkUrl "openboard-team/openboard")
+
+  if [ -n "$url" ]; then
+    curl -fL "$url" -o /tmp/OpenBoard.apk
+  fi
+
+  if [ -s /tmp/OpenBoard.apk ]; then
+    echo "[SUCCESS] Downloaded OpenBoard"
+    echo "[SUCCESS] Downloaded OpenBoard" >> "$LOG_ACTIONS"
+    echo "Installing and setting as default IME..."
+    RESULT=$(adb install -r --user 0 /tmp/OpenBoard.apk < /dev/null 2>&1 || true)
+    
+    if echo "$RESULT" | grep -q "Success"; then
+      echo "[SUCCESS] OpenBoard Installed"
+      echo "[SUCCESS] OpenBoard Installed" >> "$LOG_ACTIONS"
+      
+      # Enable and activate OpenBoard IME via ADB
+      adb shell ime enable org.slavsquat.openboard/.LatinIME >/dev/null 2>&1 || true
+      adb shell ime set org.slavsquat.openboard/.LatinIME >/dev/null 2>&1 || true
+      echo -e "\e[32m[OK] OpenBoard set as default keyboard.\e[0m"
+    else
+      echo "[ERROR] Something went wrong on OpenBoard Installation" >> "$LOG_ACTIONS"
+      echo "Error. Process will continue without OpenBoard"
+    fi
+  else
+    echo "Warning: could not download OpenBoard, continuing..."
+  fi
+}
+
 # Download and install KOReader
 installKOReader() {
   echo "Downloading KOReader..."
@@ -188,6 +274,90 @@ installKOReader() {
     fi
   else
     echo "Warning: could not download KOReader, continuing..."
+  fi
+}
+
+# Download and install F-Droid
+installFDroid() {
+  echo "Downloading F-Droid..."
+  local url
+  url=$(getReleaseApkUrl "f-droid/fdroidclient")
+
+  if [ -n "$url" ]; then
+    curl -fL "$url" -o /tmp/FDroid.apk
+  fi
+
+  if [ -s /tmp/FDroid.apk ]; then
+    echo "[SUCCESS] Downloaded F-Droid"
+    echo "[SUCCESS] Downloaded F-Droid" >> "$LOG_ACTIONS"
+    echo "Installing..."
+    RESULT=$(adb install -r --user 0 /tmp/FDroid.apk < /dev/null 2>&1 || true)
+    if echo "$RESULT" | grep -q "Success"; then
+      echo "[SUCCESS] F-Droid Installed"
+      echo "[SUCCESS] F-Droid Installed" >> "$LOG_ACTIONS"
+    else
+      echo "[ERROR] Something went wrong on F-Droid Installation" >> "$LOG_ACTIONS"
+      echo "Error. Process will continue without F-Droid"
+    fi
+  else
+    echo "Warning: could not download F-Droid, continuing..."
+  fi
+}
+
+# Download and install Aurora Store
+installAuroraStore() {
+  echo "Downloading Aurora Store..."
+  local url
+  url=$(getReleaseApkUrl "AuroraOSS/AuroraStore")
+
+  if [ -n "$url" ]; then
+    curl -fL "$url" -o /tmp/AuroraStore.apk
+  fi
+
+  if [ -s /tmp/AuroraStore.apk ]; then
+    echo "[SUCCESS] Downloaded Aurora Store"
+    echo "[SUCCESS] Downloaded Aurora Store" >> "$LOG_ACTIONS"
+    echo "Installing..."
+    RESULT=$(adb install -r --user 0 /tmp/AuroraStore.apk < /dev/null 2>&1 || true)
+    if echo "$RESULT" | grep -q "Success"; then
+      echo "[SUCCESS] Aurora Store Installed"
+      echo "[SUCCESS] Aurora Store Installed" >> "$LOG_ACTIONS"
+    else
+      echo "[ERROR] Something went wrong on Aurora Store Installation" >> "$LOG_ACTIONS"
+      echo "Error. Process will continue without Aurora Store"
+    fi
+  else
+    echo "Warning: could not download Aurora Store, continuing..."
+  fi
+}
+
+# Download and install Mihon
+installMihon() {
+  echo "Downloading Mihon..."
+  local url
+  # Tenta primeiro a build para arquiteturas de 32 bits (comum em tablets legados) ou genérica
+  url=$(getReleaseApkUrl "mihonapp/mihon" "armv7")
+  [ -z "$url" ] && url=$(getReleaseApkUrl "mihonapp/mihon" "universal")
+  [ -z "$url" ] && url=$(getReleaseApkUrl "mihonapp/mihon")
+
+  if [ -n "$url" ]; then
+    curl -fL "$url" -o /tmp/Mihon.apk
+  fi
+
+  if [ -s /tmp/Mihon.apk ]; then
+    echo "[SUCCESS] Downloaded Mihon"
+    echo "[SUCCESS] Downloaded Mihon" >> "$LOG_ACTIONS"
+    echo "Installing..."
+    RESULT=$(adb install -r --user 0 /tmp/Mihon.apk < /dev/null 2>&1 || true)
+    if echo "$RESULT" | grep -q "Success"; then
+      echo "[SUCCESS] Mihon Installed"
+      echo "[SUCCESS] Mihon Installed" >> "$LOG_ACTIONS"
+    else
+      echo "[ERROR] Something went wrong on Mihon Installation" >> "$LOG_ACTIONS"
+      echo "Error. Process will continue without Mihon"
+    fi
+  else
+    echo "Warning: could not download Mihon, continuing..."
   fi
 }
 
@@ -258,7 +428,7 @@ configureDisplay() {
   adb shell settings put global window_animation_scale 0
   adb shell settings put global transition_animation_scale 0
   adb shell settings put global animator_duration_scale 0
-  adb shell settings put screen_brightness_mode 0
+  # adb shell settings put screen_brightness_mode 0
 
   if [ ${#refreshlist[@]} -gt 0 ] && [ -n "${refreshlist[0]}" ]; then
     echo "limiting refresh rate to ${refreshlist[0]} Hz..."
@@ -276,6 +446,7 @@ configureDisplay() {
     adb shell settings put secure accessibility_display_daltonizer 0
     adb shell settings put secure acessibility_display_daltonizer_enable 1 >/dev/null 2>&1 || true
     adb shell settings put secure acessibility_display_daltonizer 0 >/dev/null 2>&1 || true
+    adb shell settings put secure night_display_activated 1
   fi
 }
 
@@ -298,7 +469,10 @@ promptConfigureDisplay() {
 }
 
 # Aplly optimzed configs to the battery
-apply_Framework_Tweaks(){
+applyFrameworkTweaks() {
+  echo "Applying framework tweaks and power settings..."
+
+  # Ajustes diretos (Globais, Sistema e Segurança)
   adb shell settings put global always_finish_activities 1
   adb shell settings put global low_power 1
   adb shell settings put global low_power_trigger_level 100
@@ -308,14 +482,45 @@ apply_Framework_Tweaks(){
   adb shell settings put global wifi_scan_always_enabled 0
   adb shell settings put global ble_scan_always_enabled 0
   adb shell settings put global auto_sync 0
-  # adb shell settings put global mobile-data 0 
   adb shell settings put system haptic_feedback_enabled 0
   adb shell settings put system haptic_feedback_intensity 0
   adb shell settings put system sound_effects_enabled 0
   adb shell settings put system lockscreen_sounds_enabled 0
-  adb shell settings put secure voice_interaction_service "" 
-  adb shell settings put secure assistant ""
-  adb shell settings put global ota_disable_automatic_update 1
+  adb shell settings put secure voice_interaction_service \"\"
+  adb shell settings put secure assistant \"\"
+
+  echo "[SUCCESS] Base framework tweaks applied."
+  echo "[SUCCESS] Base framework tweaks applied." >> "$LOG_ACTIONS"
+
+  # Validação interativa para configurações sensíveis
+  echo "--------------------------------------------------"
+  echo "Interactive validation for optional settings:"
+
+  # 1. Validação de Dados Móveis
+  read -p "Do you want to disable Mobile Data? (y/N): " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    adb shell settings put global mobile_data 0
+    echo -e "\e[32m[APPLIED] Mobile data disabled.\e[0m"
+    echo "[SUCCESS] Mobile data disabled." >> "$LOG_ACTIONS"
+  else
+    echo -e "\e[33m[SKIPPED] Mobile data status preserved.\e[0m"
+    echo "[INFO] Mobile data tweak skipped by user." >> "$LOG_ACTIONS"
+  fi
+
+  # 2. Validação de Atualizações Automáticas OTA
+  read -p "Do you want to disable Automatic OTA Updates? (y/N): " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    adb shell settings put global ota_disable_automatic_update 1
+    echo -e "\e[32m[APPLIED] Automatic OTA updates disabled.\e[0m"
+    echo "[SUCCESS] Automatic OTA updates disabled." >> "$LOG_ACTIONS"
+  else
+    echo -e "\e[33m[SKIPPED] OTA automatic updates preserved.\e[0m"
+    echo "[INFO] OTA update tweak skipped by user." >> "$LOG_ACTIONS"
+  fi
+
+  echo "--------------------------------------------------"
 }
 
 # Print command line help
@@ -381,16 +586,36 @@ main() {
   confirmDevice
   initLog
 
+  ensureBaseStores
+
   [ "$DO_DEBLOAT" = true ] && debloatPackages
 
-  if [ "$DO_APPS" = true ]; then
-    echo "Starting essentials downloads..."
-    installKOReader
-    installOlauncher
+if [ "$DO_APPS" = true ]; then
+    echo "Starting optional reader apps installation..."
+    
+    if ! isPackageInstalled "org.koreader.launcher"; then
+      installKOReader
+    else
+      echo -e "\e[32m[OK] KOReader is already installed.\e[0m"
+    fi
+
+    if ! isPackageInstalled "app.mihon"; then
+      installMihon
+    else
+      echo -e "\e[32m[OK] Mihon is already installed.\e[0m"
+    fi
+
+    if ! isPackageInstalled "app.olauncher"; then
+      installOlauncher
+    else
+      echo -e "\e[32m[OK] Olauncher is already installed.\e[0m"
+    fi
   fi
 
   [ "$DO_LAUNCHER" = true ] && promptSetDefaultLauncher
   [ "$DO_DISPLAY" = true ] && promptConfigureDisplay
+  [ "$DO_TWEAKS" = true ] && applyFrameworkTweaks
+
 }
 
 # Execute main only if not sourced
