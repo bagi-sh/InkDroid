@@ -439,7 +439,7 @@ configureDisplay() {
   if [ "$profile" -eq 1 ]; then
     echo "Activating global blue light filter..."
     adb shell settings put secure night_display_activated 1
-    adb shell settings put secure night_display_color_temperature 3000
+    adb shell settings put secure night_display_color_temperature 2096
   else
     echo "Activating monochromatic display..."
     adb shell settings put secure accessibility_display_daltonizer_enabled 1
@@ -447,6 +447,7 @@ configureDisplay() {
     adb shell settings put secure acessibility_display_daltonizer_enable 1 >/dev/null 2>&1 || true
     adb shell settings put secure acessibility_display_daltonizer 0 >/dev/null 2>&1 || true
     adb shell settings put secure night_display_activated 1
+    adb shell settings put secure night_display_color_temperature 2096
   fi
 }
 
