@@ -46,12 +46,14 @@ checkDevice() {
     MODEL=$(adb shell getprop ro.product.model | tr -d '\r')
     ANDROID_VER=$(adb shell getprop ro.build.version.release | tr -d '\r')
     VENDOR=$(adb shell getprop ro.product.manufacturer | tr -d '\r')
+    DEVICE_ABI=$(adb shell getprop ro.product.cpu.abi | tr -d '\r')
 
     echo -e "\e[32m[CONNECTED]\e[0m Device Detected without problems!"
     echo "--------------------------------------------------"
     echo " Vendor:    $VENDOR"
     echo " Model:     $MODEL"
     echo " Android:   $ANDROID_VER"
+    echo " Arch/ABI:  $DEVICE_ABI"
     echo "--------------------------------------------------"
   elif [ "$count" -gt 1 ]; then
     echo "Error: More than one device connected, please keep only one"
@@ -92,7 +94,7 @@ initLog() {
   fi
 
   echo "=== SCRIPT REPORT ===" > "$LOG_ACTIONS"
-  echo "DEVICE: $VENDOR $MODEL (Android $ANDROID_VER)" >> "$LOG_ACTIONS"
+  echo "DEVICE: $VENDOR $MODEL (Android $ANDROID_VER, Arch: $DEVICE_ABI)" >> "$LOG_ACTIONS"
   echo "DATE: $(date)" >> "$LOG_ACTIONS"
   echo "---------------------------------" >> "$LOG_ACTIONS"
 }
@@ -217,10 +219,52 @@ print(matched[0] if matched else (urls[0] if urls else ''))
   fi
 }
 
+# Query latest release asset URL tailored to device architecture
+getAppApkUrl() {
+  local repo="$1"
+  local url=""
+
+  case "$DEVICE_ABI" in
+    *arm64* | *aarch64*)
+      case "$repo" in
+        "koreader/koreader")
+          url=$(getReleaseApkUrl "$repo" "arm64") ;;
+        *)
+          url=$(getReleaseApkUrl "$repo" "arm64-v8a") ;;
+      esac
+      ;;
+    *armeabi* | *armv7* | *arm*)
+      case "$repo" in
+        "koreader/koreader")
+          url=$(getReleaseApkUrl "$repo" "-arm-")
+          [ -z "$url" ] && url=$(getReleaseApkUrl "$repo" "arm") ;;
+        "mihonapp/mihon")
+          url=$(getReleaseApkUrl "$repo" "armeabi-v7a")
+          [ -z "$url" ] && url=$(getReleaseApkUrl "$repo" "armv7") ;;
+        *)
+          url=$(getReleaseApkUrl "$repo" "armeabi-v7a") ;;
+      esac
+      ;;
+    *x86_64*)
+      url=$(getReleaseApkUrl "$repo" "x86_64")
+      [ -z "$url" ] && url=$(getReleaseApkUrl "$repo" "x86")
+      ;;
+    *x86*)
+      url=$(getReleaseApkUrl "$repo" "x86")
+      ;;
+  esac
+
+  # Fallback to universal APK or first available APK if arch-specific build not found
+  [ -z "$url" ] && url=$(getReleaseApkUrl "$repo" "universal")
+  [ -z "$url" ] && url=$(getReleaseApkUrl "$repo")
+
+  echo "$url"
+}
+
 installOpenBoard() {
   echo "Downloading OpenBoard Keyboard..."
   local url
-  url=$(getReleaseApkUrl "openboard-team/openboard")
+  url=$(getAppApkUrl "openboard-team/openboard")
 
   if [ -n "$url" ]; then
     curl -fL "$url" -o /tmp/OpenBoard.apk
@@ -255,10 +299,9 @@ installOpenBoard() {
 
 # Download and install KOReader
 installKOReader() {
-  echo "Downloading KOReader..."
+  echo "Downloading KOReader (ABI: ${DEVICE_ABI:-auto})..."
   local url
-  url=$(getReleaseApkUrl "koreader/koreader" "arm")
-  [ -z "$url" ] && url=$(getReleaseApkUrl "koreader/koreader")
+  url=$(getAppApkUrl "koreader/koreader")
 
   if [ -n "$url" ]; then
     curl -fL "$url" -o /tmp/Koreader.apk
@@ -285,7 +328,7 @@ installKOReader() {
 installFDroid() {
   echo "Downloading F-Droid..."
   local url
-  url=$(getReleaseApkUrl "f-droid/fdroidclient")
+  url=$(getAppApkUrl "f-droid/fdroidclient")
 
   if [ -n "$url" ]; then
     curl -fL "$url" -o /tmp/FDroid.apk
@@ -312,7 +355,7 @@ installFDroid() {
 installAuroraStore() {
   echo "Downloading Aurora Store..."
   local url
-  url=$(getReleaseApkUrl "AuroraOSS/AuroraStore")
+  url=$(getAppApkUrl "AuroraOSS/AuroraStore")
 
   if [ -n "$url" ]; then
     curl -fL "$url" -o /tmp/AuroraStore.apk
@@ -337,12 +380,9 @@ installAuroraStore() {
 
 # Download and install Mihon
 installMihon() {
-  echo "Downloading Mihon..."
+  echo "Downloading Mihon (ABI: ${DEVICE_ABI:-auto})..."
   local url
-  # Tenta primeiro a build para arquiteturas de 32 bits (comum em tablets legados) ou genérica
-  url=$(getReleaseApkUrl "mihonapp/mihon" "armv7")
-  [ -z "$url" ] && url=$(getReleaseApkUrl "mihonapp/mihon" "universal")
-  [ -z "$url" ] && url=$(getReleaseApkUrl "mihonapp/mihon")
+  url=$(getAppApkUrl "mihonapp/mihon")
 
   if [ -n "$url" ]; then
     curl -fL "$url" -o /tmp/Mihon.apk
@@ -367,12 +407,9 @@ installMihon() {
 
 # Download and install LNReader
 installLNReader() {
-  echo "Downloading LNReader..."
+  echo "Downloading LNReader (ABI: ${DEVICE_ABI:-auto})..."
   local url
-  url=$(getReleaseApkUrl "lnreader/lnreader" "arm64-v8a")
-  [ -z "$url" ] && url=$(getReleaseApkUrl "lnreader/lnreader" "armeabi-v7a")
-  [ -z "$url" ] && url=$(getReleaseApkUrl "lnreader/lnreader" "universal")
-  [ -z "$url" ] && url=$(getReleaseApkUrl "lnreader/lnreader")
+  url=$(getAppApkUrl "lnreader/lnreader")
 
   if [ -n "$url" ]; then
     curl -fL "$url" -o /tmp/LNReader.apk
@@ -399,7 +436,7 @@ installLNReader() {
 installOlauncher() {
   echo "Downloading Olauncher..."
   local url
-  url=$(getReleaseApkUrl "tanujnotes/Olauncher")
+  url=$(getAppApkUrl "tanujnotes/Olauncher")
 
   if [ -n "$url" ]; then
     curl -fL "$url" -o /tmp/olauncher.apk

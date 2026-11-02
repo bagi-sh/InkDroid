@@ -22,12 +22,14 @@ checkDevice() {
     MODEL=$(adb shell getprop ro.product.model | tr -d '\r')
     ANDROID_VER=$(adb shell getprop ro.build.version.release | tr -d '\r')
     VENDOR=$(adb shell getprop ro.product.manufacturer | tr -d '\r')
+    DEVICE_ABI=$(adb shell getprop ro.product.cpu.abi | tr -d '\r')
 
     echo -e "\e[32m[CONNECTED]\e[0m Device Detected without problems!"
     echo "--------------------------------------------------"
     echo " Vendor:    $VENDOR"
     echo " Model:     $MODEL"
     echo " Android:   $ANDROID_VER"
+    echo " Arch/ABI:  $DEVICE_ABI"
     echo "--------------------------------------------------"
   elif [ "$count" -gt 1 ]; then
     echo "Error: More than one device connected, please keep only one"
@@ -63,7 +65,7 @@ initLog() {
   fi
 
   echo "=== RESTORATION REPORT ===" > "$LOG_ACTIONS"
-  echo "DEVICE: $VENDOR $MODEL (Android $ANDROID_VER)" >> "$LOG_ACTIONS"
+  echo "DEVICE: $VENDOR $MODEL (Android $ANDROID_VER, Arch: $DEVICE_ABI)" >> "$LOG_ACTIONS"
   echo "DATE: $(date)" >> "$LOG_ACTIONS"
   echo "---------------------------------" >> "$LOG_ACTIONS"
 }
