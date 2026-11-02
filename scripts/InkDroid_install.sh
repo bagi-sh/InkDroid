@@ -365,6 +365,36 @@ installMihon() {
   fi
 }
 
+# Download and install LNReader
+installLNReader() {
+  echo "Downloading LNReader..."
+  local url
+  url=$(getReleaseApkUrl "lnreader/lnreader" "arm64-v8a")
+  [ -z "$url" ] && url=$(getReleaseApkUrl "lnreader/lnreader" "armeabi-v7a")
+  [ -z "$url" ] && url=$(getReleaseApkUrl "lnreader/lnreader" "universal")
+  [ -z "$url" ] && url=$(getReleaseApkUrl "lnreader/lnreader")
+
+  if [ -n "$url" ]; then
+    curl -fL "$url" -o /tmp/LNReader.apk
+  fi
+
+  if [ -s /tmp/LNReader.apk ]; then
+    echo "[SUCCESS] Downloaded LNReader"
+    echo "[SUCCESS] Downloaded LNReader" >> "$LOG_ACTIONS"
+    echo "Installing..."
+    RESULT=$(adb install -r --user 0 /tmp/LNReader.apk < /dev/null 2>&1 || true)
+    if echo "$RESULT" | grep -q "Success"; then
+      echo "[SUCCESS] LNReader Installed"
+      echo "[SUCCESS] LNReader Installed" >> "$LOG_ACTIONS"
+    else
+      echo "[ERROR] Something went wrong on LNReader Installation" >> "$LOG_ACTIONS"
+      echo "Error. Process will continue without LNReader"
+    fi
+  else
+    echo "Warning: could not download LNReader, continuing..."
+  fi
+}
+
 # Download and install Olauncher
 installOlauncher() {
   echo "Downloading Olauncher..."
@@ -549,7 +579,7 @@ Usage: InkDroid_install.sh [OPTIONS]
 
 Options:
   --only-debloat    Run only package debloating
-  --only-apps       Run only reader apps installation (KOReader, Mihon, Olauncher)
+  --only-apps       Run only reader apps installation (KOReader, Mihon, LNReader, Olauncher)
   --only-launcher   Run only default launcher configuration
   --only-display    Run only e-ink display configuration
   --only-framework  Run only framework and power tweaks
@@ -628,6 +658,12 @@ if [ "$DO_APPS" = true ]; then
       installMihon
     else
       echo -e "\e[32m[OK] Mihon is already installed.\e[0m"
+    fi
+
+    if ! isPackageInstalled "com.rajarsheechatterjee.LNReader"; then
+      installLNReader
+    else
+      echo -e "\e[32m[OK] LNReader is already installed.\e[0m"
     fi
 
     if ! isPackageInstalled "app.olauncher"; then

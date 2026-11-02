@@ -135,6 +135,10 @@ removeApps() {
   adb shell pm uninstall eu.kanade.tachiyomi >/dev/null 2>&1 || true
   echo "[SUCCESS] Removed Mihon" >> "$LOG_ACTIONS"
 
+  echo "Removing LNReader..."
+  adb shell pm uninstall com.rajarsheechatterjee.LNReader >/dev/null 2>&1 || true
+  echo "[SUCCESS] Removed LNReader" >> "$LOG_ACTIONS"
+
   echo "Removing OpenBoard..."
   adb shell pm uninstall org.dslul.openboard.inputmethod.latin >/dev/null 2>&1 || true
   adb shell pm uninstall org.slavsquat.openboard >/dev/null 2>&1 || true
