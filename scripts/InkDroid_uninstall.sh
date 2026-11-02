@@ -9,6 +9,7 @@ JSON="$REPO/dependences/blacklist.json"
 DO_PACKAGES=true
 DO_APPS=true
 DO_DISPLAY=true
+DO_FRAMEWORK=true
 AUTO_CONFIRM=false
 
 # Verify and identify connected Android device
@@ -112,10 +113,13 @@ restorePackages() {
   echo -e "\e[32m[FINISHED]\e[0m Packages restoration finished"
 }
 
-# Remove installed e-reader apps and clear custom launcher role
+# Remove installed e-reader apps, stores and clear custom roles
 removeApps() {
   echo "Resetting default launcher..."
   adb shell cmd role clear-role-holders android.app.role.HOME >/dev/null 2>&1 || true
+
+  echo "Resetting default keyboard IME..."
+  adb shell ime reset >/dev/null 2>&1 || true
 
   echo "Removing KOReader..."
   adb shell pm uninstall org.koreader.launcher >/dev/null 2>&1 || true
@@ -126,16 +130,37 @@ removeApps() {
   adb shell pm uninstall app.olauncher >/dev/null 2>&1 || true
   echo "[SUCCESS] Removed Olauncher" >> "$LOG_ACTIONS"
 
+  echo "Removing Mihon..."
+  adb shell pm uninstall app.mihon >/dev/null 2>&1 || true
+  adb shell pm uninstall eu.kanade.tachiyomi >/dev/null 2>&1 || true
+  echo "[SUCCESS] Removed Mihon" >> "$LOG_ACTIONS"
+
+  echo "Removing OpenBoard..."
+  adb shell pm uninstall org.dslul.openboard.inputmethod.latin >/dev/null 2>&1 || true
+  adb shell pm uninstall org.slavsquat.openboard >/dev/null 2>&1 || true
+  echo "[SUCCESS] Removed OpenBoard" >> "$LOG_ACTIONS"
+
+  echo "Removing F-Droid..."
+  adb shell pm uninstall org.fdroid.fdroid >/dev/null 2>&1 || true
+  echo "[SUCCESS] Removed F-Droid" >> "$LOG_ACTIONS"
+
+  echo "Removing Aurora Store..."
+  adb shell pm uninstall com.aurora.store >/dev/null 2>&1 || true
+  echo "[SUCCESS] Removed Aurora Store" >> "$LOG_ACTIONS"
+
   echo "--------------------------------------------------"
-  echo -e "\e[32m[FINISHED]\e[0m Installed e-reader apps removed"
+  echo -e "\e[32m[FINISHED]\e[0m Installed e-reader apps and stores removed"
 }
 
 # Restore default animation scales, refresh rate and color profile
 restoreDisplay() {
   echo "Restoring animation scales..."
-  adb shell settings put global window_animation_scale 1
-  adb shell settings put global transition_animation_scale 1
-  adb shell settings put global animator_duration_scale 1
+  adb shell settings put global window_animation_scale 1 >/dev/null 2>&1 || true
+  adb shell settings put global transition_animation_scale 1 >/dev/null 2>&1 || true
+  adb shell settings put global animator_duration_scale 1 >/dev/null 2>&1 || true
+
+  echo "Restoring brightness mode..."
+  adb shell settings put system screen_brightness_mode 1 >/dev/null 2>&1 || true
 
   echo "Resetting refresh rate limits..."
   adb shell settings delete system peak_refresh_rate >/dev/null 2>&1 || true
@@ -153,6 +178,32 @@ restoreDisplay() {
   echo -e "\e[32m[FINISHED]\e[0m Display settings restored to defaults"
 }
 
+# Restore framework and battery optimizations to system defaults
+restoreFrameworkTweaks() {
+  echo "Restoring framework tweaks and power settings..."
+
+  adb shell settings put global always_finish_activities 0 >/dev/null 2>&1 || true
+  adb shell settings put global low_power 0 >/dev/null 2>&1 || true
+  adb shell settings put global low_power_trigger_level 0 >/dev/null 2>&1 || true
+  adb shell settings put system screen_off_timeout 60000 >/dev/null 2>&1 || true
+  adb shell settings put global heads_up_notifications_enabled 1 >/dev/null 2>&1 || true
+  adb shell settings put global zen_mode 0 >/dev/null 2>&1 || true
+  adb shell settings put global wifi_scan_always_enabled 1 >/dev/null 2>&1 || true
+  adb shell settings put global ble_scan_always_enabled 1 >/dev/null 2>&1 || true
+  adb shell settings put global auto_sync 1 >/dev/null 2>&1 || true
+  adb shell settings put system haptic_feedback_enabled 1 >/dev/null 2>&1 || true
+  adb shell settings put system sound_effects_enabled 1 >/dev/null 2>&1 || true
+  adb shell settings put system lockscreen_sounds_enabled 1 >/dev/null 2>&1 || true
+  adb shell settings delete secure voice_interaction_service >/dev/null 2>&1 || true
+  adb shell settings delete secure assistant >/dev/null 2>&1 || true
+  adb shell settings put global mobile_data 1 >/dev/null 2>&1 || true
+  adb shell settings put global ota_disable_automatic_update 0 >/dev/null 2>&1 || true
+
+  echo "[SUCCESS] Base framework tweaks restored to defaults." >> "$LOG_ACTIONS"
+  echo "--------------------------------------------------"
+  echo -e "\e[32m[FINISHED]\e[0m Framework tweaks and power settings restored"
+}
+
 # Print command line help
 showHelp() {
   cat << 'EOF'
@@ -160,11 +211,13 @@ Usage: InkDroid_uninstall.sh [OPTIONS]
 
 Options:
   --only-packages   Restore only debloated packages from blacklist
-  --only-apps       Remove only installed apps (KOReader and Olauncher)
+  --only-apps       Remove only installed apps and stores
   --only-display    Restore only default display and animation settings
+  --only-framework  Restore only default framework and battery settings
   --skip-packages   Skip restoring debloated packages
   --skip-apps       Skip removing installed apps
   --skip-display    Skip restoring display settings
+  --skip-framework  Skip restoring framework settings
   -y, --yes         Non-interactive mode (auto-confirm prompts)
   -h, --help        Show this help message
 EOF
@@ -176,17 +229,21 @@ parseArguments() {
   while [ $# -gt 0 ]; do
     case "$1" in
       --only-packages)
-        DO_APPS=false; DO_DISPLAY=false; DO_PACKAGES=true; shift ;;
+        DO_APPS=false; DO_DISPLAY=false; DO_FRAMEWORK=false; DO_PACKAGES=true; shift ;;
       --only-apps)
-        DO_PACKAGES=false; DO_DISPLAY=false; DO_APPS=true; shift ;;
+        DO_PACKAGES=false; DO_DISPLAY=false; DO_FRAMEWORK=false; DO_APPS=true; shift ;;
       --only-display)
-        DO_PACKAGES=false; DO_APPS=false; DO_DISPLAY=true; shift ;;
+        DO_PACKAGES=false; DO_APPS=false; DO_FRAMEWORK=false; DO_DISPLAY=true; shift ;;
+      --only-framework|--only-tweaks)
+        DO_PACKAGES=false; DO_APPS=false; DO_DISPLAY=false; DO_FRAMEWORK=true; shift ;;
       --skip-packages)
         DO_PACKAGES=false; shift ;;
       --skip-apps)
         DO_APPS=false; shift ;;
       --skip-display)
         DO_DISPLAY=false; shift ;;
+      --skip-framework|--skip-tweaks)
+        DO_FRAMEWORK=false; shift ;;
       -y|--yes)
         AUTO_CONFIRM=true; shift ;;
       -h|--help)
@@ -209,6 +266,7 @@ main() {
   [ "$DO_PACKAGES" = true ] && restorePackages
   [ "$DO_APPS" = true ] && removeApps
   [ "$DO_DISPLAY" = true ] && restoreDisplay
+  [ "$DO_FRAMEWORK" = true ] && restoreFrameworkTweaks
 }
 
 # Execute main only if not sourced

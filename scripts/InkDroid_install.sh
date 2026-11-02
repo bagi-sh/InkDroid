@@ -100,10 +100,10 @@ initLog() {
 # Ensures base alternative app stores are present on the device
 ensureBaseStores() {
   echo "Checking core app stores (F-Droid & Aurora Store)..."
- if ! isPackageInstalled "org.slavsquat.openboard" && ! isPackageInstalled "com.google.android.inputmethod.latin"; then
+  if ! isPackageInstalled "org.slavsquat.openboard" && ! isPackageInstalled "org.dslul.openboard.inputmethod.latin" && ! isPackageInstalled "com.google.android.inputmethod.latin"; then
     echo "[INFO] No keyboard detected. Installing OpenBoard..."
     installOpenBoard
-  elif isPackageInstalled "org.slavsquat.openboard"; then
+  elif isPackageInstalled "org.slavsquat.openboard" || isPackageInstalled "org.dslul.openboard.inputmethod.latin"; then
     echo -e "\e[32m[OK] OpenBoard is already installed.\e[0m"
   fi
 
@@ -237,7 +237,11 @@ installOpenBoard() {
       echo "[SUCCESS] OpenBoard Installed" >> "$LOG_ACTIONS"
       
       # Enable and activate OpenBoard IME via ADB
+      adb shell ime enable org.dslul.openboard.inputmethod.latin/.LatinIME >/dev/null 2>&1 || true
+      adb shell ime enable org.dslul.openboard.inputmethod.latin/com.android.inputmethod.latin.LatinIME >/dev/null 2>&1 || true
       adb shell ime enable org.slavsquat.openboard/.LatinIME >/dev/null 2>&1 || true
+      adb shell ime set org.dslul.openboard.inputmethod.latin/.LatinIME >/dev/null 2>&1 || \
+      adb shell ime set org.dslul.openboard.inputmethod.latin/com.android.inputmethod.latin.LatinIME >/dev/null 2>&1 || \
       adb shell ime set org.slavsquat.openboard/.LatinIME >/dev/null 2>&1 || true
       echo -e "\e[32m[OK] OpenBoard set as default keyboard.\e[0m"
     else
@@ -428,26 +432,26 @@ configureDisplay() {
   adb shell settings put global window_animation_scale 0
   adb shell settings put global transition_animation_scale 0
   adb shell settings put global animator_duration_scale 0
-  # adb shell settings put screen_brightness_mode 0
+  adb shell settings put system screen_brightness_mode 0 >/dev/null 2>&1 || true
 
   if [ ${#refreshlist[@]} -gt 0 ] && [ -n "${refreshlist[0]}" ]; then
     echo "limiting refresh rate to ${refreshlist[0]} Hz..."
-    adb shell settings put system peak_refresh_rate "${refreshlist[0]}"
-    adb shell settings put system min_refresh_rate "${refreshlist[0]}"
+    adb shell settings put system peak_refresh_rate "${refreshlist[0]}" >/dev/null 2>&1 || true
+    adb shell settings put system min_refresh_rate "${refreshlist[0]}" >/dev/null 2>&1 || true
   fi
 
   if [ "$profile" -eq 1 ]; then
     echo "Activating global blue light filter..."
-    adb shell settings put secure night_display_activated 1
-    adb shell settings put secure night_display_color_temperature 2096
+    adb shell settings put secure night_display_activated 1 >/dev/null 2>&1 || true
+    adb shell settings put secure night_display_color_temperature 3000 >/dev/null 2>&1 || true
   else
     echo "Activating monochromatic display..."
-    adb shell settings put secure accessibility_display_daltonizer_enabled 1
-    adb shell settings put secure accessibility_display_daltonizer 0
+    adb shell settings put secure accessibility_display_daltonizer_enabled 1 >/dev/null 2>&1 || true
+    adb shell settings put secure accessibility_display_daltonizer 0 >/dev/null 2>&1 || true
     adb shell settings put secure acessibility_display_daltonizer_enable 1 >/dev/null 2>&1 || true
     adb shell settings put secure acessibility_display_daltonizer 0 >/dev/null 2>&1 || true
-    adb shell settings put secure night_display_activated 1
-    adb shell settings put secure night_display_color_temperature 2096
+    adb shell settings put secure night_display_activated 1 >/dev/null 2>&1 || true
+    adb shell settings put secure night_display_color_temperature 3000 >/dev/null 2>&1 || true
   fi
 }
 
@@ -469,26 +473,26 @@ promptConfigureDisplay() {
   done
 }
 
-# Aplly optimzed configs to the battery
+# Apply optimzed configs to the battery
 applyFrameworkTweaks() {
   echo "Applying framework tweaks and power settings..."
 
   # Ajustes diretos (Globais, Sistema e Segurança)
-  adb shell settings put global always_finish_activities 1
-  adb shell settings put global low_power 1
-  adb shell settings put global low_power_trigger_level 100
-  adb shell settings put system screen_off_timeout 1800000
-  adb shell settings put global heads_up_notifications_enabled 0
-  adb shell settings put global zen_mode 1
-  adb shell settings put global wifi_scan_always_enabled 0
-  adb shell settings put global ble_scan_always_enabled 0
-  adb shell settings put global auto_sync 0
-  adb shell settings put system haptic_feedback_enabled 0
-  adb shell settings put system haptic_feedback_intensity 0
-  adb shell settings put system sound_effects_enabled 0
-  adb shell settings put system lockscreen_sounds_enabled 0
-  adb shell settings put secure voice_interaction_service \"\"
-  adb shell settings put secure assistant \"\"
+  adb shell settings put global always_finish_activities 1 >/dev/null 2>&1 || true
+  adb shell settings put global low_power 1 >/dev/null 2>&1 || true
+  adb shell settings put global low_power_trigger_level 100 >/dev/null 2>&1 || true
+  adb shell settings put system screen_off_timeout 1800000 >/dev/null 2>&1 || true
+  adb shell settings put global heads_up_notifications_enabled 0 >/dev/null 2>&1 || true
+  adb shell settings put global zen_mode 1 >/dev/null 2>&1 || true
+  adb shell settings put global wifi_scan_always_enabled 0 >/dev/null 2>&1 || true
+  adb shell settings put global ble_scan_always_enabled 0 >/dev/null 2>&1 || true
+  adb shell settings put global auto_sync 0 >/dev/null 2>&1 || true
+  adb shell settings put system haptic_feedback_enabled 0 >/dev/null 2>&1 || true
+  adb shell settings put system haptic_feedback_intensity 0 >/dev/null 2>&1 || true
+  adb shell settings put system sound_effects_enabled 0 >/dev/null 2>&1 || true
+  adb shell settings put system lockscreen_sounds_enabled 0 >/dev/null 2>&1 || true
+  adb shell settings delete secure voice_interaction_service >/dev/null 2>&1 || true
+  adb shell settings delete secure assistant >/dev/null 2>&1 || true
 
   echo "[SUCCESS] Base framework tweaks applied."
   echo "[SUCCESS] Base framework tweaks applied." >> "$LOG_ACTIONS"
@@ -498,10 +502,17 @@ applyFrameworkTweaks() {
   echo "Interactive validation for optional settings:"
 
   # 1. Validação de Dados Móveis
-  read -p "Do you want to disable Mobile Data? (y/N): " -n 1 -r
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    adb shell settings put global mobile_data 0
+  local disable_mobile=false
+  if [ "$AUTO_CONFIRM" = true ]; then
+    disable_mobile=false
+  else
+    read -p "Do you want to disable Mobile Data? (y/N): " -n 1 -r
+    echo
+    [[ $REPLY =~ ^[Yy]$ ]] && disable_mobile=true
+  fi
+
+  if [ "$disable_mobile" = true ]; then
+    adb shell settings put global mobile_data 0 >/dev/null 2>&1 || true
     echo -e "\e[32m[APPLIED] Mobile data disabled.\e[0m"
     echo "[SUCCESS] Mobile data disabled." >> "$LOG_ACTIONS"
   else
@@ -510,10 +521,17 @@ applyFrameworkTweaks() {
   fi
 
   # 2. Validação de Atualizações Automáticas OTA
-  read -p "Do you want to disable Automatic OTA Updates? (y/N): " -n 1 -r
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    adb shell settings put global ota_disable_automatic_update 1
+  local disable_ota=false
+  if [ "$AUTO_CONFIRM" = true ]; then
+    disable_ota=false
+  else
+    read -p "Do you want to disable Automatic OTA Updates? (y/N): " -n 1 -r
+    echo
+    [[ $REPLY =~ ^[Yy]$ ]] && disable_ota=true
+  fi
+
+  if [ "$disable_ota" = true ]; then
+    adb shell settings put global ota_disable_automatic_update 1 >/dev/null 2>&1 || true
     echo -e "\e[32m[APPLIED] Automatic OTA updates disabled.\e[0m"
     echo "[SUCCESS] Automatic OTA updates disabled." >> "$LOG_ACTIONS"
   else
@@ -531,14 +549,16 @@ Usage: InkDroid_install.sh [OPTIONS]
 
 Options:
   --only-debloat    Run only package debloating
-  --only-apps       Run only KOReader and Olauncher installation
+  --only-apps       Run only reader apps installation (KOReader, Mihon, Olauncher)
   --only-launcher   Run only default launcher configuration
   --only-display    Run only e-ink display configuration
+  --only-framework  Run only framework and power tweaks
   --skip-deps       Skip installing host dependencies
   --skip-debloat    Skip debloating packages
-  --skip-apps       Skip installing KOReader and Olauncher
+  --skip-apps       Skip installing apps
   --skip-launcher   Skip setting default launcher
   --skip-display    Skip e-ink display configuration
+  --skip-framework  Skip framework and power tweaks
   -y, --yes         Non-interactive mode (auto-confirm prompts)
   -h, --help        Show this help message
 EOF
@@ -550,13 +570,15 @@ parseArguments() {
   while [ $# -gt 0 ]; do
     case "$1" in
       --only-debloat)
-        DO_DEPS=false; DO_APPS=false; DO_LAUNCHER=false; DO_DISPLAY=false; DO_DEBLOAT=true; shift ;;
+        DO_DEPS=false; DO_APPS=false; DO_LAUNCHER=false; DO_DISPLAY=false; DO_TWEAKS=false; DO_DEBLOAT=true; shift ;;
       --only-apps)
-        DO_DEPS=false; DO_DEBLOAT=false; DO_LAUNCHER=false; DO_DISPLAY=false; DO_APPS=true; shift ;;
+        DO_DEPS=false; DO_DEBLOAT=false; DO_LAUNCHER=false; DO_DISPLAY=false; DO_TWEAKS=false; DO_APPS=true; shift ;;
       --only-launcher)
-        DO_DEPS=false; DO_DEBLOAT=false; DO_APPS=false; DO_DISPLAY=false; DO_LAUNCHER=true; shift ;;
+        DO_DEPS=false; DO_DEBLOAT=false; DO_APPS=false; DO_DISPLAY=false; DO_TWEAKS=false; DO_LAUNCHER=true; shift ;;
       --only-display)
-        DO_DEPS=false; DO_DEBLOAT=false; DO_APPS=false; DO_LAUNCHER=false; DO_DISPLAY=true; shift ;;
+        DO_DEPS=false; DO_DEBLOAT=false; DO_APPS=false; DO_LAUNCHER=false; DO_TWEAKS=false; DO_DISPLAY=true; shift ;;
+      --only-framework|--only-tweaks)
+        DO_DEPS=false; DO_DEBLOAT=false; DO_APPS=false; DO_LAUNCHER=false; DO_DISPLAY=false; DO_TWEAKS=true; shift ;;
       --skip-deps)
         DO_DEPS=false; shift ;;
       --skip-debloat)
@@ -567,6 +589,8 @@ parseArguments() {
         DO_LAUNCHER=false; shift ;;
       --skip-display)
         DO_DISPLAY=false; shift ;;
+      --skip-framework|--skip-tweaks)
+        DO_TWEAKS=false; shift ;;
       -y|--yes)
         AUTO_CONFIRM=true; shift ;;
       -h|--help)
@@ -600,7 +624,7 @@ if [ "$DO_APPS" = true ]; then
       echo -e "\e[32m[OK] KOReader is already installed.\e[0m"
     fi
 
-    if ! isPackageInstalled "app.mihon"; then
+    if ! isPackageInstalled "app.mihon" && ! isPackageInstalled "eu.kanade.tachiyomi"; then
       installMihon
     else
       echo -e "\e[32m[OK] Mihon is already installed.\e[0m"
