@@ -3,274 +3,269 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InkDroid | Google Keynote M3 - Apresentação do TCC</title>
-  <meta name="description" content="Apresentação de 30 minutos do Trabalho de Conclusão de Curso: InkDroid - Repurposing de tablets legados via debloat automatizado para leitura focada. Autor: Alisson Gabriel dos Santos Alves. CEAAT 2026.">
+  <title>Inkdroid: Repurposing de tablets legados via debloat automatizado para leitura focada</title>
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-  <!-- Barra de Progresso do Keynote -->
-  <div id="keynote-progress" class="keynote-progress"></div>
+  <!-- Fundo Animado Material You: Lava Lamp Canvas com Mutação Polar Dinâmica -->
+  <canvas id="m3-lava-lamp"></canvas>
 
-  <!-- Viewport com Scroll-Snap Vertical Widescreen (100vh) -->
-  <div id="deck-viewport" class="deck-viewport">
+  <!-- Barra de Progresso Ondulada M3 Expressive (Android 14) -->
+  <div class="m3-wavy-progress-container" aria-hidden="true">
+    <div class="m3-wavy-track">
+      <div class="m3-wavy-fill" id="m3-wavy-fill">
+        <svg class="m3-wavy-svg" xmlns="http://www.w3.org/2000/svg">
+          <path id="m3-wavy-path" fill="none" stroke="var(--m3-primary)" stroke-width="3.5" stroke-linecap="round"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Dialog M3 em Nível Raiz com Container Transform (Física Orgânica) -->
+  <div id="m3-modal-overlay" class="m3-modal-overlay" aria-hidden="true">
+    <div class="m3-modal-backdrop" id="m3-modal-backdrop"></div>
+    <div class="m3-modal-dialog" id="m3-modal-dialog" role="dialog" aria-modal="true">
+      <button class="m3-modal-close" id="m3-modal-close" aria-label="Fechar Detalhes">✕</button>
+      <div class="m3-dialog-collapsed" id="m3-dialog-collapsed"></div>
+      <div class="m3-dialog-expanded" id="m3-dialog-expanded"></div>
+    </div>
+  </div>
+
+  <!-- Master Slide Viewport Container com Suporte a Keynote Snap e Scroll Livre -->
+  <div class="deck-viewport" id="deck-viewport">
 
     <!-- ====================================================================
-         SLIDE 01: CAPA MONUMENTAL KEYNOTE (SPLIT & SELO FLORAL M3)
+         SLIDE 01: CAPA OFICIAL
          ==================================================================== -->
     <section class="deck-slide" id="slide-01">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">TCC • Defesa Oral Oficial</span>
-          <h1 class="slide-title"><strong>InkDroid:</strong> Ressignificação de Hardware</h1>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <h1 class="slide-title"><strong>Inkdroid:</strong> Repurposing de Tablets Legados</h1>
         </div>
         <span class="slide-category">CEAAT • Salvador/BA — 2026</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
-          <!-- Texto Flutuante Aberto (Sem Caixa!) -->
           <div class="floating-hero-text">
+            <span class="slide-tag">Trabalho de Conclusão de Curso (TCC)</span>
             <h2 class="floating-lead" style="font-size: clamp(2rem, 3.2vw, 3.2rem);">
-              Repurposing de tablets legados via debloat automatizado para leitura focada
+              Ressignificação de hardware via debloat automatizado para leitura focada.
             </h2>
             <p class="floating-paragraph">
-              Desenvolvimento de uma ferramenta não-invasiva baseada no Android Debug Bridge (ADB), capaz de converter potenciais resíduos eletrônicos escolares em leitores digitais fluidos, mitigando a Síndrome da Visão do Computador (CVS) e promovendo o <em>Deep Work</em>.
+              Uma abordagem prática de Green IT e Economia Circular para resgatar tablets da rede pública contra a obsolescência de software.
             </p>
-            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px;">
-              <span class="m3-pill" style="font-weight: 800;">
-                <span style="color: var(--m3-primary);">●</span> Alisson Gabriel dos Santos Alves
-              </span>
-              <span class="m3-pill" style="font-weight: 800;">
-                <span style="color: var(--m3-amber);">●</span> Orientador: Prof. Gilberto Monteiro
-              </span>
-              <span class="m3-pill">Multilaser M8 4G (Rede Estadual)</span>
+            <div style="margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap;">
+              <span class="m3-chip">Sem Root</span>
+              <span class="m3-chip">Sem Risco de Bricking</span>
+              <span class="m3-chip">100% Reversível</span>
+              <span class="m3-chip">Licença MIT</span>
             </div>
           </div>
 
-          <!-- Elemento Escultural M3 com Bugdroid Flutuante -->
-          <div style="position: relative; display: flex; align-items: center; justify-content: center; height: 100%;">
-            <div class="m3-blob" style="width: 380px; height: 380px;">
-              <div class="m3-flower-4" style="width: 240px; height: 240px; opacity: 0.85;"></div>
-            </div>
-            <!-- Mascote Flutuando Livre na Frente da Forma Orgânica -->
-            <img src="assets/bugdroid-01-hero.svg" alt="Bugdroid acenando" class="bugdroid-floating-side" style="right: 50px; bottom: 40px; width: 280px; height: 280px;">
+          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+            <div class="m3-flower-4" style="width: 320px; height: 320px; position: absolute; opacity: 0.16; animation: spinInfinite 28s linear infinite;"></div>
+            <img src="assets/bugdroid-01-hero.svg" alt="Bugdroid acenando alegremente" style="width: 290px; height: 290px; object-fit: contain; position: relative; z-index: 2;">
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 02: A CRISE DO LIXO ELETRÔNICO (MÉTRICAS COLOSSAIS LIVRES)
+         SLIDE 02: A MISSÃO & IDENTIFICAÇÃO INSTITUCIONAL
          ==================================================================== -->
     <section class="deck-slide" id="slide-02">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">01. Contexto Global</span>
-          <h2 class="slide-title">A Crise do Lixo Eletrônico: <strong>Consumo Linear</strong></h2>
-        </div>
-        <span class="slide-category">The Global E-waste Monitor (2024)</span>
+        <h2 class="slide-title">Identificação & <strong>Contexto Institucional</strong></h2>
+        <span class="slide-category">Dados Acadêmicos Oficiais</span>
       </header>
 
       <div class="slide-main-content">
-        <!-- Layout Livre com Números Colossais no Espaço -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; height: 100%;">
-          
-          <div class="m3-squircle m3-asymmetric-a" style="position: relative; padding: 40px;">
-            <!-- Bugdroid debruçado sobre a borda superior do card -->
-            <img src="assets/bugdroid-02-ewaste.svg" alt="Bugdroid e-waste" class="bugdroid-peeking-top">
-            
-            <span class="slide-tag" style="background: var(--m3-primary-container);">Volume Anual Descartado</span>
-            <div class="colossal-metric"><span data-counter-target="62">62</span><span class="colossal-unit">Bilhões de kg</span></div>
-            <p class="floating-paragraph">
-              Gerados anualmente no planeta. Metais pesados de alta toxicidade descartados prematuramente por obsolescência induzida de software.
-            </p>
-            <div style="margin-top: 14px; font-size: 0.85rem; color: var(--m3-outline);">Fonte: Baldé et al. (ITU / UNITAR, 2024)</div>
+        <div class="split-keynote">
+          <div class="floating-hero-text">
+            <span class="slide-tag">Curso Técnico em Informática</span>
+            <h2 class="floating-lead">
+              Democratizar o acesso à literatura científica e escolar resgatando tablets públicos.
+            </h2>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item">
+                <span><strong>Instituição:</strong> Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira - CEAAT.</span>
+              </li>
+              <li class="hero-bullet-item">
+                <span><strong>Autor:</strong> Alisson Gabriel dos Santos Alves.</span>
+              </li>
+              <li class="hero-bullet-item">
+                <span><strong>Orientador:</strong> Prof. Gilberto Monteiro.</span>
+              </li>
+              <li class="hero-bullet-item">
+                <span><strong>Objeto de Estudo:</strong> Tablet Multilaser M8 4G distribuído pela Secretaria da Educação da Bahia (SEC-BA).</span>
+              </li>
+            </ul>
           </div>
 
-          <!-- Métrica de Reciclagem Livre no Espaço com Forma Floral -->
-          <div style="position: relative; padding: 20px;">
-            <div class="colossal-metric amber"><span data-counter-target="22.3">22.3</span><span class="colossal-unit">% reciclados</span></div>
-            <h3 class="floating-lead" style="color: var(--m3-amber); margin-bottom: 12px;">O Abismo da Reciclagem Global</h3>
-            <p class="floating-paragraph">
-              A geração de lixo eletrônico cresce <strong>5 vezes mais rápido</strong> do que a capacidade documentada de reciclagem. O padrão de consumo linear descarta hardware perfeitamente íntegro.
-            </p>
-            <div style="margin-top: 20px; display: flex; gap: 12px;">
-              <span class="m3-pill" style="background: var(--m3-amber-container); color: var(--m3-amber);">Crescimento 5x > Reciclagem</span>
-              <span class="m3-pill">Green IT como Resposta</span>
+          <div style="display: flex; justify-content: center; align-items: center; position: relative;">
+            <div class="m3-squircle m3-asymmetric-a" style="padding: 34px; text-align: center; border: 1px solid var(--m3-outline);">
+              <img src="assets/bugdroid-academic.svg" alt="Bugdroid acadêmico com óculos" style="width: 200px; height: 200px; margin-bottom: 14px;">
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--m3-primary);">CEAAT &bull; TCC 2026</div>
+              <p style="font-size: 0.95rem; color: var(--m3-on-surface-variant); margin-top: 6px;">
+                Colégio Estadual de Aplicação de Tempo Integral Anísio Teixeira &bull; Salvador/BA
+              </p>
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 03: SOFTWARE AGING & INCAPACIDADE ARTIFICIAL
+         SLIDE 03: O MAR DE LIXO ELETRÔNICO
          ==================================================================== -->
     <section class="deck-slide" id="slide-03">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">02. Teoria Computacional</span>
-          <h2 class="slide-title">Software Aging: <strong>O Fardo Oneroso</strong></h2>
+        <h2 class="slide-title">A Crise do Lixo Eletrônico: <strong>Consumo Linear</strong></h2>
+        <span class="slide-category">The Global E-waste Monitor (Baldé et al., 2024)</span>
+      </header>
+
+      <div class="slide-main-content">
+        <div class="split-keynote">
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              O modelo de consumo linear induz o descarte precoce de silício perfeitamente íntegro.
+            </h2>
+            <p class="floating-paragraph">
+              A renovação anual de hardware mobile promete mudanças contínuas, transformando em pouco tempo aparelhos funcionais em resíduos descartados prematuramente.
+            </p>
+            <div style="display: flex; gap: 14px; margin-top: 10px;">
+              <div class="m3-chip">Metais Pesados</div>
+              <div class="m3-chip">Chumbo & Mercúrio</div>
+              <div class="m3-chip">Crescimento 5x > Reciclagem</div>
+            </div>
+          </div>
+
+          <div class="m3-squircle m3-asymmetric-a" style="position: relative; padding: 38px;">
+            <img src="assets/bugdroid-02-ewaste.svg" alt="Bugdroid e-waste" class="bugdroid-peeking-top">
+            <span class="slide-tag" style="background: var(--m3-primary-container);">Geração Anual de Lixo</span>
+            <div class="colossal-metric"><span data-counter-target="62">62</span><span class="colossal-unit">Bilhões de kg</span></div>
+            <p class="floating-paragraph">
+              Estimados globalmente em 2022. Apenas <strong>22,3%</strong> desses resíduos contaram com coleta e reciclagem devidamente documentadas.
+            </p>
+            <div style="margin-top: 14px; font-size: 0.85rem; color: var(--m3-outline);">Fonte: Baldé et al. (The Global E-waste Monitor / ITU / UNITAR, 2024)</div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 04: SOFTWARE AGING (PARNAS)
+         ==================================================================== -->
+    <section class="deck-slide" id="slide-04">
+      <header class="slide-header">
+        <h2 class="slide-title">Software Aging: <strong>O Fardo Oneroso</strong></h2>
         <span class="slide-category">David L. Parnas (1994)</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
-          <!-- Texto Flutuante Aberto com Citação Histórica -->
-          <div class="floating-hero-text">
-            <div style="font-size: 1.1rem; font-weight: 800; color: var(--m3-primary); text-transform: uppercase; letter-spacing: 0.1em;">
-              A Teoria do Envelhecimento de Software
-            </div>
-            <h2 class="floating-lead">
-              "Programas, como pessoas, envelhecem. Não por desgaste de peças, mas pelas mudanças cumulativas que os tornam um fardo oneroso."
-            </h2>
-            <ul class="hero-bullets">
-              <li class="hero-bullet-item">
-                <span><strong>Incapacidade Artificial:</strong> O aparelho não perdeu poder de processamento; foi sufocado por camadas de software modernas.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><strong>Evolução do Android Runtime (ART):</strong> Compilação e serviços desenhados para SoCs de ponta sufocam núcleos legados.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><strong>Engenharia de Ressignificação:</strong> Ao remover processos parasitas, o hardware renasce com fluidez total.</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Squircle Assimétrico com Bugdroid Debruçado -->
-          <div class="m3-squircle m3-asymmetric-b" style="position: relative; height: 80%; display: flex; flex-direction: column; justify-content: center;">
-            <img src="assets/bugdroid-03-aging.svg" alt="Bugdroid com engrenagens de software aging" class="bugdroid-peeking-top" style="left: 30px;">
-            <div style="font-size: 1.3rem; font-weight: 800; margin-bottom: 12px;">Sobrecarga Contínua do GMS</div>
-            <p class="floating-paragraph" style="font-size: 1.1rem;">
-              O Google Mobile Services (GMS) adiciona dezenas de daemons e rotinas de telemetria contínua. Em tablets de entrada, até 70% do processamento ocioso é consumido apenas para sustentar o próprio sistema operacional.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         SLIDE 04: O PARADOXO DA HIBERNAÇÃO DOMÉSTICA NO BRASIL
-         ==================================================================== -->
-    <section class="deck-slide" id="slide-04">
-      <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">03. Panorama Nacional</span>
-          <h2 class="slide-title">O Paradoxo da <strong>Hibernação Doméstica</strong></h2>
-        </div>
-        <span class="slide-category">ABREE (2024)</span>
-      </header>
-
-      <div class="slide-main-content">
-        <div style="display: grid; grid-template-columns: 0.9fr 1.3fr; gap: 40px; align-items: center; height: 100%;">
-          
-          <!-- Bolha Orgânica com Métrica 85% -->
-          <div class="m3-blob" style="height: 380px; position: relative;">
-            <img src="assets/bugdroid-04-drawer.svg" alt="Bugdroid abrindo gaveta" class="bugdroid-perched" style="top: -20px; left: 40px; width: 150px; height: 150px;">
-            <div style="text-align: center; z-index: 2;">
-              <div class="colossal-metric" style="font-size: 7rem; margin-bottom: 0;"><span data-counter-target="85">85</span>%</div>
-              <div style="font-size: 1.25rem; font-weight: 800;">dos Lares Brasileiros</div>
-              <div style="font-size: 0.95rem; color: var(--m3-on-surface-variant); margin-top: 4px;">Guardam eletrônicos obsoletos em gavetas</div>
-            </div>
-          </div>
-
-          <!-- Texto Flutuante Aberto -->
           <div class="floating-hero-text">
             <h2 class="floating-lead">
-              O Brasil é o maior gerador de lixo eletrônico da América Latina.
+              "Programas envelhecem devido à incapacidade de adaptação ao acúmulo de serviços."
             </h2>
             <p class="floating-paragraph">
-              O destino típico de tablets antigos não é o lixão nem a reciclagem química, mas sim o esquecimento doméstico. Milhões de telas, baterias e circuitos 100% funcionais tornam-se sucata inerte.
+              O silício físico não sofre desgaste de performance. O envelhecimento decorre do software inflado <em>(software aging)</em>, cujas atualizações são desenhadas para hardwares mais novos e empurradas para o aparelho legado.
             </p>
-            <ul class="hero-bullets">
-              <li class="hero-bullet-item">
-                <span><strong>Desvalorização de Mercado:</strong> Aparelhos antigos não compensam a revenda comercial.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><strong>Solução InkDroid:</strong> Reativar tablets escolares parados e transformá-los em ferramentas de estudo livre de distrações.</span>
-              </li>
-            </ul>
+            <div style="margin-top: 8px;">
+              <span class="m3-chip">Fardo Oneroso</span>
+              <span class="m3-chip">Incapacidade de Adaptação</span>
+              <span class="m3-chip">Obsolescência Artificial</span>
+            </div>
           </div>
 
+          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+            <div class="m3-squircle m3-asymmetric-b" style="padding: 34px; border: 1px solid var(--m3-outline); text-align: center;">
+              <img src="assets/bugdroid-03-aging.svg" alt="Bugdroid idoso pensativo" style="width: 220px; height: 220px; object-fit: contain; margin-bottom: 12px;">
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--m3-primary);">A Degradação de Software</div>
+              <p style="font-size: 0.95rem; color: var(--m3-on-surface-variant); margin-top: 6px;">
+                Serviços contínuos em segundo plano esgotam os ciclos de clock e a memória RAM de aparelhos perfeitamente funcionais.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 05: ERGONOMIA VISUAL & SÍNDROME CVS
+         SLIDE 05: SÍNDROME DA VISÃO DO COMPUTADOR (CVS)
          ==================================================================== -->
     <section class="deck-slide" id="slide-05">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">04. Saúde Ocular</span>
-          <h2 class="slide-title">Síndrome da Visão do Computador <strong>(CVS)</strong></h2>
-        </div>
-        <span class="slide-category">Benedetto (2013) & Sá (2016)</span>
+        <h2 class="slide-title">Síndrome da Visão: <strong>O Fardo Ocular</strong></h2>
+        <span class="slide-category">Benedetto et al. (2013) & Sá et al. (2016)</span>
       </header>
 
       <div class="slide-main-content">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; height: 100%; position: relative;">
-          
-          <!-- Bugdroid Flutuando no Meio dos Dois Blocos -->
-          <img src="assets/bugdroid-05-optometry.svg" alt="Bugdroid com óculos" class="bugdroid-floating-side" style="left: 46%; top: 5%; width: 170px; height: 170px; z-index: 10;">
-
-          <!-- Bloco Esquerdo: Prevalência 70% -->
-          <div class="m3-squircle m3-asymmetric-c" style="padding: 36px;">
-            <div class="colossal-metric"><span data-counter-target="70">70</span><span class="colossal-unit">%+</span></div>
-            <h3 class="floating-lead" style="font-size: 1.5rem;">Prevalência Mundial de CVS</h3>
-            <p class="floating-paragraph" style="font-size: 1.1rem;">
-              Fadiga visual, cefaleia e olhos ressecados atingem a esmagadora maioria dos usuários de telas devido ao contraste agressivo e emissão luminosa contínua.
+        <div class="split-keynote">
+          <div class="m3-squircle m3-asymmetric-a" style="position: relative; padding: 36px;">
+            <img src="assets/bugdroid-05-optometry.svg" alt="Bugdroid oftalmologia" class="bugdroid-peeking-top">
+            <span class="slide-tag" style="background: var(--m3-danger-container); color: #FFCDD2;">Prevalência Global de CVS</span>
+            <div class="colossal-metric" style="color: var(--m3-danger);"><span data-counter-target="70">70</span><span class="colossal-unit">% dos Usuários</span></div>
+            <p class="floating-paragraph">
+              Atingidos por ressecamento e fadiga visual decorrentes do uso contínuo de telas digitais (Associação Americana de Optometria / Sá et al., 2016).
             </p>
-            <div style="margin-top: 10px; font-size: 0.8rem; color: var(--m3-outline);">Sá, E. C. Faculdade de Saúde Pública (USP, 2016)</div>
+            <div style="margin-top: 14px; font-size: 0.85rem; color: var(--m3-outline);">Estudos: Benedetto et al. (2013) / Knez (2001)</div>
           </div>
 
-          <!-- Bloco Direito: 22 vs 5 Piscadas -->
-          <div class="m3-squircle m3-asymmetric-a" style="padding: 36px;">
-            <div class="colossal-metric amber"><span data-counter-target="22">22</span> <span class="colossal-unit">vs</span> <span data-counter-target="5">5</span></div>
-            <h3 class="floating-lead" style="font-size: 1.5rem; color: var(--m3-amber);">Piscadas por Minuto (Papel vs LCD)</h3>
-            <p class="floating-paragraph" style="font-size: 1.1rem;">
-              Em telas LCD convencionais, a taxa de piscar cai até 77% durante tarefas concentradas, acelerando a evaporação do filme lacrimal ocular.
-            </p>
-            <div style="margin-top: 10px; font-size: 0.8rem; color: var(--m3-outline);">Benedetto et al. PLOS ONE (2013)</div>
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              A taxa de piscamento despenca em telas LCD retroiluminadas.
+            </h2>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item">
+                <span><strong>Queda Drástica:</strong> A frequência de piscadas cai de 22 piscadas/min no papel para apenas 5 a 7 em telas LCD (Sá et al., 2016).</span>
+              </li>
+              <li class="hero-bullet-item">
+                <span><strong>Filme Lacrimal:</strong> Essa redução acelera a evaporação da lágrima, provocando ardência e cansaço visual (Benedetto et al., 2013).</span>
+              </li>
+              <li class="hero-bullet-item">
+                <span><strong>Inibição de Melatonina:</strong> A emissão noturna de luz azul desregula os ritmos circadianos e prejudica o sono (Knez, 2001).</span>
+              </li>
+            </ul>
           </div>
-
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 06: ECONOMIA DA ATENÇÃO & DEEP WORK
+         SLIDE 06: MINIMALISMO DIGITAL & DEEP WORK
          ==================================================================== -->
     <section class="deck-slide" id="slide-06">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">05. Ergonomia Cognitiva</span>
-          <h2 class="slide-title">Economia da Atenção & <strong>Deep Work</strong></h2>
-        </div>
+        <h2 class="slide-title">Minimalismo Digital & <strong>Deep Work</strong></h2>
         <span class="slide-category">Cal Newport (2019)</span>
       </header>
 
       <div class="slide-main-content">
-        <!-- Layout Totalmente Aberto: Tipografia Flutuante Gigante -->
-        <div style="position: relative; max-width: 1200px; margin: 0 auto; width: 100%;">
-          <!-- Bugdroid Monumental como Marca d'Água Viva Atrás do Texto -->
-          <img src="assets/bugdroid-06-zen.svg" alt="Bugdroid meditando" class="bugdroid-backdrop">
-
+        <div class="split-keynote">
           <div class="floating-hero-text">
-            <span class="slide-tag" style="background: var(--m3-primary-container);">A Fragmentação do Foco</span>
-            <h2 class="floating-lead" style="font-size: clamp(2rem, 3.4vw, 3.4rem); line-height: 1.2;">
-              Dispositivos multiuso foram desenhados para capturar atenção, não para sustentar reflexão profunda.
+            <h2 class="floating-lead">
+              A leitura profunda requer a erradicação de distrações visuais e notificações.
             </h2>
-            <p class="floating-paragraph" style="font-size: 1.35rem; max-width: 900px;">
-              Cada notificação, animação elástica e badge colorida dispara micro-interrupções que destroem o estado de <em>Deep Work</em>. A proposta do InkDroid é o <strong>Minimalismo Radical</strong>: uma interface estritamente tipográfica, preto e branco, dedicada exclusivamente à leitura.
+            <p class="floating-paragraph">
+              Tablets comerciais operam como máquinas de publicidade com ícones saturados e notificações contínuas. O InkDroid restabelece a quietude tipográfica essencial para o estudo concentrado <em>(Deep Work)</em>.
             </p>
-            <div style="display: flex; gap: 16px; margin-top: 16px;">
-              <span class="m3-pill" style="font-size: 1.05rem;">0 Notificações Flutuantes</span>
-              <span class="m3-pill" style="font-size: 1.05rem;">Interface Tipográfica Pura</span>
-              <span class="m3-pill" style="font-size: 1.05rem;">Propósito Único: Ler</span>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item"><span><strong>Sem Notificações Flutuantes:</strong> Desativação total de avisos intrusivos no topo da tela.</span></li>
+              <li class="hero-bullet-item"><span><strong>Eliminação de Estímulos:</strong> Neutralização de cores e supressão de animações desnecessárias.</span></li>
+              <li class="hero-bullet-item"><span><strong>Atenção Plena:</strong> O dispositivo se torna uma ferramenta de estudo estritamente mono-tarefa.</span></li>
+            </ul>
+          </div>
+
+          <div style="display: flex; justify-content: center; align-items: center; position: relative;">
+            <div class="m3-squircle m3-asymmetric-b" style="padding: 34px; text-align: center; border: 1px solid var(--m3-outline); background: #040E07;">
+              <img src="assets/bugdroid-06-zen.svg" alt="Bugdroid meditando zen" style="width: 200px; height: 200px; margin-bottom: 12px;">
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--m3-primary);">Interface Baseada em Tipografia</div>
+              <p style="font-size: 0.9rem; color: #80E89E; margin-top: 6px;">
+                Sem gaveta de apps caótica • Apenas seus livros e textos
+              </p>
             </div>
           </div>
         </div>
@@ -282,10 +277,7 @@
          ==================================================================== -->
     <section class="deck-slide" id="slide-07">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">06. Hardware Alvo</span>
-          <h2 class="slide-title">O Objeto de Estudo: <strong>Multilaser M8 4G</strong></h2>
-        </div>
+        <h2 class="slide-title">O Objeto de Estudo: <strong>Multilaser M8 4G</strong></h2>
         <span class="slide-category">Rede Estadual da Bahia (SEC-BA)</span>
       </header>
 
@@ -293,76 +285,28 @@
         <div class="split-keynote">
           <div class="floating-hero-text">
             <h2 class="floating-lead">
-              O hardware comum distribuído para milhares de estudantes da rede pública.
+              O tablet escolar oficial distribuído aos estudantes da rede pública baiana.
             </h2>
             <p class="floating-paragraph">
-              Equipamento com tela LCD IPS de 8 polegadas (1280x800) e processador quad-core de baixo consumo. Com o sistema de fábrica, o tablet engasgava em tarefas triviais devido ao peso dos serviços de background.
+              Um dispositivo com excelente ergonomia física, mas paralisado pelo peso do sistema original de fábrica.
             </p>
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
-              <div class="m3-pill" style="justify-content: space-between;">
-                <strong>SoC / Processador:</strong> <span>Unisoc Quad-Core 1.4 GHz</span>
-              </div>
-              <div class="m3-pill" style="justify-content: space-between;">
-                <strong>Memória RAM:</strong> <span>2 GB LPDDR3 (Gargalo Crítico)</span>
-              </div>
-              <div class="m3-pill" style="justify-content: space-between;">
-                <strong>Painel de Exibição:</strong> <span>8" IPS LCD (Taxa nativa: 60Hz / 30Hz)</span>
-              </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
+              <div class="m3-chip">SoC Unisoc SC9863A (Octa-core)</div>
+              <div class="m3-chip">2 GB Memória RAM LPDDR4</div>
+              <div class="m3-chip">Tela 8.0" IPS LCD (1280x800)</div>
+              <div class="m3-chip">Bateria Íon-Lítio 4000 mAh</div>
+            </div>
+            <div style="margin-top: 12px; font-size: 0.9rem; color: var(--m3-on-surface-variant);">
+              Sistema Original: <strong>Android 11 Go Edition</strong> • Armazenamento eMMC 5.1
             </div>
           </div>
 
-          <!-- Bugdroid com Tablet em Destaque Aberto e Formas M3 -->
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-orbit-ring" style="width: 360px; height: 360px;"></div>
-            <div class="m3-flower-4" style="width: 320px; height: 320px; opacity: 0.25;"></div>
-            <img src="assets/bugdroid-07-tablet.svg" alt="Bugdroid com tablet Multilaser M8" style="position: absolute; width: 260px; height: 260px; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5));">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         SLIDE 08: METODOLOGIA: PROTOCOLO ADB E SEGURANÇA RSA
-         ==================================================================== -->
-    <section class="deck-slide" id="slide-08">
-      <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">07. Metodologia Técnica</span>
-          <h2 class="slide-title">Protocolo ADB: <strong>Segurança & Chaves RSA</strong></h2>
-        </div>
-        <span class="slide-category">Tanenbaum (2016) & AOSP (2025)</span>
-      </header>
-
-      <div class="slide-main-content">
-        <div class="split-keynote">
-          <div class="floating-hero-text">
-            <h2 class="floating-lead">
-              Arquitetura Cliente-Servidor Oficial sem Violação de Garantia ou Root.
-            </h2>
-            <p class="floating-paragraph">
-              O Android Debug Bridge opera através de autenticação assimétrica de pares de chaves criptográficas RSA (<code>adbkey</code> e <code>adbkey.pub</code>), garantindo acesso seguro ao Shell Unix no nível do usuário especial <code>shell</code>.
-            </p>
-            <ul class="hero-bullets">
-              <li class="hero-bullet-item">
-                <span><strong>Zero Root:</strong> Não modifica partições de boot nem quebra integridade SELinux.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><strong>Zero Risco de Brick:</strong> Todas as alterações rodam no espaço do usuário primário (<code>--user 0</code>).</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><strong>Rastreabilidade Total:</strong> Histórico de ações registrado em <code>debloatlog.txt</code>.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="m3-squircle m3-asymmetric-b" style="position: relative; display: flex; align-items: center; justify-content: center; height: 80%;">
-            <img src="assets/bugdroid-08-adb.svg" alt="Bugdroid com cabo USB e chave RSA" class="bugdroid-peeking-top" style="right: 30px;">
-            <div style="text-align: center;">
-              <span class="m3-pill" style="background: var(--m3-primary-container); color: var(--m3-on-primary-container); font-size: 1.1rem; font-weight: 800;">
-                🔒 Protocolo Confiável AOSP
-              </span>
-              <p class="floating-paragraph" style="font-size: 1.05rem; margin-top: 14px; max-width: 380px;">
-                Criptografia RSA 2048-bit nativa entre o computador hospedeiro e o daemon <code>adbd</code> do tablet.
+          <div style="display: flex; justify-content: center; align-items: center; position: relative;">
+            <div class="m3-squircle m3-asymmetric-a" style="padding: 34px; text-align: center; border: 1px solid var(--m3-outline);">
+              <img src="assets/bugdroid-07-tablet.svg" alt="Bugdroid segurando o tablet M8" style="width: 220px; height: 220px; margin-bottom: 12px;">
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--m3-primary);">Modelo NB380</div>
+              <p style="font-size: 0.95rem; color: var(--m3-on-surface-variant); margin-top: 4px;">
+                Objeto central de todos os testes práticos do TCC
               </p>
             </div>
           </div>
@@ -371,522 +315,742 @@
     </section>
 
     <!-- ====================================================================
-         SLIDE 09: ANATOMIA DA PILHA ANDROID
+         SLIDE 08: DIAGNÓSTICO & METODOLOGIA TRIPARTITE
+         ==================================================================== -->
+    <section class="deck-slide" id="slide-08">
+      <header class="slide-header">
+        <h2 class="slide-title">Metodologia: <strong>Aplicação, Framework e Kernel</strong></h2>
+        <span class="slide-category">Abordagem Aplicada e Experimental</span>
+      </header>
+
+      <div class="slide-main-content">
+        <div class="split-keynote">
+          <div class="m3-squircle m3-asymmetric-b" style="padding: 34px; border: 1px solid var(--m3-outline);">
+            <span class="slide-tag" style="background: var(--m3-primary-container);">Estrutura de Três Camadas</span>
+            <ul class="hero-bullets" style="margin-top: 12px;">
+              <li class="hero-bullet-item"><span><strong>1. Aplicação:</strong> Debloat de pacotes GMS e instalação de suíte de leitura focada.</span></li>
+              <li class="hero-bullet-item"><span><strong>2. Framework:</strong> Ajustes no settings.db, SurfaceFlinger e políticas de bateria.</span></li>
+              <li class="hero-bullet-item"><span><strong>3. Kernel:</strong> Mapeamento de governadores de CPU e governança do SELinux.</span></li>
+            </ul>
+            <div style="margin-top: 14px; font-size: 0.85rem; color: var(--m3-outline);">Intervenção não-invasiva baseada no Android Debug Bridge (ADB)</div>
+          </div>
+
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              A validação por Desejabilidade Composta, Throughput e Slowdown.
+            </h2>
+            <p class="floating-paragraph">
+              A pesquisa utiliza modelos quantitativos de Desejabilidade Composta (Pontes et al., 2017) para assegurar o equilíbrio ideal entre ganho de autonomia energética e fluidez de navegação.
+            </p>
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+              <div class="m3-chip">Throughput</div>
+              <div class="m3-chip">Slowdown</div>
+              <div class="m3-chip">Desejabilidade Composta</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 09: ENGENHARIA NÃO-INVASIVA VIA ADB (COM CARD EXPANSÍVEL)
          ==================================================================== -->
     <section class="deck-slide" id="slide-09">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">08. Arquitetura do Sistema</span>
-          <h2 class="slide-title">Anatomia do Android: <strong>Da API ao Driver Linux</strong></h2>
-        </div>
-        <span class="slide-category">Yaghmour (2013) & AOSP (2024)</span>
+        <h2 class="slide-title">A Abordagem Segura: <strong>Sem Root & Não-Invasiva</strong></h2>
+        <span class="slide-category">ADB & Chaves RSA de 2048 bits</span>
       </header>
 
       <div class="slide-main-content">
-        <div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 36px; align-items: center; height: 100%;">
-          
-          <!-- Pilha em Superelipses Dinâmicas Conectadas -->
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div class="m3-pill" style="background: rgba(61,220,132,0.18); border-color: var(--m3-primary); font-size: 1.1rem; justify-content: space-between;">
-              <strong>1. Java API & Android Runtime (ART)</strong>
-              <span>User Space • Validação</span>
-            </div>
-            <div class="m3-pill" style="background: rgba(61,220,132,0.14); border-color: var(--m3-outline); font-size: 1.1rem; justify-content: space-between;">
-              <strong>2. Daemons C++ & IPC Binder</strong>
-              <span>audioserver, surfaceflinger</span>
-            </div>
-            <div class="m3-pill" style="background: rgba(61,220,132,0.10); border-color: var(--m3-outline-variant); font-size: 1.1rem; justify-content: space-between;">
-              <strong>3. Hardware Abstraction Layer (HAL)</strong>
-              <span>Módulos dos Fabricantes</span>
-            </div>
-            <div class="m3-pill" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); font-size: 1.1rem; justify-content: space-between;">
-              <strong>4. Kernel Linux & Drivers Nativos</strong>
-              <span>ALSA, DRM/KMS, CPUFreq</span>
-            </div>
+        <div class="split-keynote">
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              Nenhuma alteração física ou violação de bootloader.
+            </h2>
+            <p class="floating-paragraph">
+              Procedimentos com root anulam garantias, corrompem certificados e arriscam a integridade física de tablets escolares. O InkDroid atua exclusivamente pelas permissões nativas do usuário shell via ADB.
+            </p>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item"><span><strong>Partição <code>/system</code> Intacta:</strong> Binários originais preservados com assinatura íntegra.</span></li>
+              <li class="hero-bullet-item"><span><strong>Usuário Principal (<code>--user 0</code>):</strong> Desinstalação isolada no espaço de execução local.</span></li>
+              <li class="hero-bullet-item"><span><strong>Zero Risco de Hard-Brick:</strong> Inicialização e kernel do aparelho não são violados.</span></li>
+            </ul>
           </div>
 
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-orbit-ring" style="width: 360px; height: 360px;"></div>
-            <div class="m3-flower-8" style="width: 300px; height: 300px; opacity: 0.2;"></div>
-            <img src="assets/bugdroid-09-stack.svg" alt="Bugdroid com a pilha Android" class="bugdroid-floating-side" style="position: relative; width: 260px; height: 260px;">
-          </div>
+          <!-- M3 Container Transform Card Expansível para Detalhes Técnicos do ADB -->
+          <div class="m3-expandable-card" id="card-tech-adb">
+            <div class="card-collapsed">
+              <img src="assets/bugdroid-08-adb.svg" alt="Bugdroid com terminal ADB" style="width: 140px; height: 140px; align-self: center;">
+              <span class="slide-tag" style="background: var(--m3-primary-container);">Protocolo ADB Seguro</span>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--m3-primary);">Handshake Criptográfico</div>
+              <p class="floating-paragraph" style="font-size: 0.95rem;">
+                Comunicação segura entre host e tablet protegida por chaves assimétricas RSA de 2048 bits.
+              </p>
+              <div class="expand-badge">Ver Detalhes Técnicos ⊕</div>
+            </div>
 
+            <div class="card-expanded">
+              <span class="slide-tag">Especificação Técnica Aprofundada</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--m3-primary); margin: 12px 0;">Arquitetura do Protocolo Android Debug Bridge (ADB)</h3>
+              <p class="floating-paragraph">
+                O subsistema ADB estabelece uma sessão multiplexada sobre transporte USB. O daemon interno (<code>adbd</code>) roda sob o contexto SELinux restrito <code>u:r:adbd:s0</code>:
+              </p>
+              <div class="bento-terminal" style="margin: 16px 0;">
+                <div style="color: #80E89E; font-weight: bold;">$ adb shell pm uninstall -k --user 0 &lt;package_name&gt;</div>
+                <div style="color: var(--m3-on-surface-variant); margin-top: 4px;"># A flag -k mantém os dados de cache caso o pacote seja reativado no futuro.</div>
+                <div style="color: var(--m3-on-surface-variant);"># Executa com UID 2000 (shell), sem violar o modelo de segurança do Android.</div>
+              </div>
+              <ul class="hero-bullets">
+                <li class="hero-bullet-item"><span><strong>Segurança:</strong> O bootloader permanece trancado, mantendo as verificações de integridade <code>dm-verity</code>.</span></li>
+                <li class="hero-bullet-item"><span><strong>Portabilidade:</strong> Funciona em qualquer aparelho Android homologado sem adaptações físicas.</span></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 10: CAMADA 1: DEBLOAT DECLARATIVO E BLACKLIST
+         SLIDE 10: DEBLOAT DECLARATIVO (COM CARD EXPANSÍVEL)
          ==================================================================== -->
     <section class="deck-slide" id="slide-10">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">09. Nível de Aplicação</span>
-          <h2 class="slide-title">Debloat Declarativo: <strong>blacklist.json</strong></h2>
-        </div>
-        <span class="slide-category">Purificação Não-Invasiva</span>
+        <h2 class="slide-title">A Purificação: <strong>Debloat Declarativo</strong></h2>
+        <span class="slide-category">blacklist.json</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
-          <div class="floating-hero-text">
-            <h2 class="floating-lead">
-              Remoção seletiva e auditada sem modificação de partições do sistema.
-            </h2>
-            <p class="floating-paragraph">
-              A arquitetura declarativa separa os alvos de limpeza em um catálogo JSON auditável (redes sociais, telemetrias do GMS e bloatwares de parceiros de venda).
-            </p>
-            <div class="bento-terminal" style="font-size: 1.05rem;">
-              <span class="prompt">$</span> adb shell pm uninstall -k --user 0 "$pkg"<br>
-              <span style="color: var(--m3-primary);">[SUCCESS] com.google.android.apps.photos removido com sucesso</span>
+          <!-- M3 Container Transform Card Expansível para Lista de Pacotes -->
+          <div class="m3-expandable-card" id="card-tech-debloat">
+            <div class="card-collapsed">
+              <img src="assets/bugdroid-10-broom.svg" alt="Bugdroid varrendo bloatware" style="width: 140px; height: 140px; align-self: center;">
+              <span class="slide-tag" style="background: var(--m3-primary-container);">Estrutura Declarativa JSON</span>
+              <div class="colossal-metric" style="font-size: 3.8rem;"><span data-counter-target="100">100</span><span class="colossal-unit">+ Pacotes</span></div>
+              <p class="floating-paragraph" style="font-size: 0.95rem;">
+                Remoção de serviços do Google Mobile Services (GMS), jogos e telemetrias OEM.
+              </p>
+              <div class="expand-badge">Ver Categorias e Pacotes ⊕</div>
+            </div>
+
+            <div class="card-expanded">
+              <span class="slide-tag">Catálogo Declarativo JSON</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--m3-primary); margin: 12px 0;">Categorização Cirúrgica no blacklist.json</h3>
+              <p class="floating-paragraph">
+                O arquivo de configuração separa os alvos por criticidade e escopo de atuação para garantir que componentes vitais de hardware nunca sejam tocados:
+              </p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0;">
+                <div class="bento-card">
+                  <strong style="color: var(--m3-primary);">Google Mobile Services & Telemetria</strong>
+                  <p style="font-size: 0.85rem; color: var(--m3-on-surface-variant); margin-top: 4px;">
+                    com.google.android.youtube, com.google.android.apps.tachyon, com.google.android.feedback, com.google.android.gms.location.history.
+                  </p>
+                </div>
+                <div class="bento-card">
+                  <strong style="color: var(--m3-amber);">OEM & Multilaser Bundles</strong>
+                  <p style="font-size: 0.85rem; color: var(--m3-on-surface-variant); margin-top: 4px;">
+                    com.multilaser.launcher, com.adups.fota, com.spreadtrum.dm, pacotes pré-instalados de jogos e lojas de operadoras.
+                  </p>
+                </div>
+              </div>
+              <p class="floating-paragraph" style="font-size: 0.9rem;">
+                Auditoria Temporal: Cada remoção bem-sucedida é registrada com carimbo de data e hora no documento <code>debloatlog.txt</code>.
+              </p>
             </div>
           </div>
 
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-orbit-ring" style="width: 360px; height: 360px;"></div>
-            <div class="m3-blob" style="width: 300px; height: 300px;"></div>
-            <img src="assets/bugdroid-10-broom.svg" alt="Bugdroid varrendo bloatware" class="bugdroid-peeking-top" style="top: 20px; right: 50px; width: 220px; height: 220px;">
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              Eliminação cirúrgica do ruído digital sem comprometer o hardware.
+            </h2>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item"><span><strong>Memória Recuperada:</strong> A memória RAM livre salta de 240 MB para mais de 1.100 MB.</span></li>
+              <li class="hero-bullet-item"><span><strong>Sem Throttling Térmico:</strong> O processador deixa de operar aquecido continuamente.</span></li>
+              <li class="hero-bullet-item"><span><strong>Fluidez Instantânea:</strong> O leitor de PDFs abre sem acionar o Low Memory Killer do Linux.</span></li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 11: CAMADA 1: DESPLIEGUE DE APPS & OLAUNCHER ROLE
+         SLIDE 11: O SANTUÁRIO MINIMALISTA (OLAUNCHER)
          ==================================================================== -->
     <section class="deck-slide" id="slide-11">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">10. Nível de Aplicação</span>
-          <h2 class="slide-title">Ambiente de Leitura & <strong>Olauncher Role</strong></h2>
-        </div>
-        <span class="slide-category">Suíte Open-Source Focada</span>
+        <h2 class="slide-title">O Santuário Minimalista: <strong>Olauncher</strong></h2>
+        <span class="slide-category">android.app.role.HOME</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
           <div class="floating-hero-text">
             <h2 class="floating-lead">
-              Download dinâmico das releases do GitHub e imposição do Launcher.
+              A substituição da tela inicial por uma interface puramente tipográfica.
             </h2>
             <p class="floating-paragraph">
-              Sem depender da Google Play Store, o InkDroid consulta diretamente a API REST dos repositórios open-source do <strong>KOReader</strong> e <strong>Olauncher</strong>, instalando as versões mais recentes e configurando o RoleManager:
+              A tela de fábrica do Multilaser M8 é saturada de feeds e recomendações de consumo. O InkDroid define o Olauncher como gerenciador oficial via RoleManager do Android.
             </p>
-            <div class="bento-terminal" style="font-size: 1rem;">
-              <span class="prompt">$</span> adb shell cmd role add-role-holder android.app.role.HOME app.olauncher
-            </div>
-            <p class="floating-paragraph" style="font-size: 1.15rem;">
-              O botão Home passa a invocar exclusivamente o ambiente tipográfico minimalista.
-            </p>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item"><span><strong>Comando Oficial:</strong> <code>adb shell cmd role add-role-holder android.app.role.HOME app.olauncher</code>.</span></li>
+              <li class="hero-bullet-item"><span><strong>Zero Publicidade:</strong> Software livre sob licença GPLv3 sem rastreadores.</span></li>
+              <li class="hero-bullet-item"><span><strong>Foco em Estudo:</strong> Somente os títulos dos aplicativos de leitura ficam visíveis.</span></li>
+            </ul>
           </div>
 
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-squircle-morph" style="width: 300px; height: 300px; opacity: 0.85;"></div>
-            <img src="assets/bugdroid-11-apk.svg" alt="Bugdroid com APKs" class="bugdroid-floating-side" style="position: relative; width: 260px; height: 260px;">
+          <div style="display: flex; justify-content: center; align-items: center; position: relative;">
+            <div class="m3-squircle m3-asymmetric-b" style="padding: 34px; text-align: center; border: 1px solid var(--m3-outline); background: #000;">
+              <img src="assets/bugdroid-06-zen.svg" alt="Bugdroid zen no Olauncher" style="width: 200px; height: 200px; margin-bottom: 12px;">
+              <div style="font-size: 1.15rem; font-weight: 800; color: #FFF; font-family: monospace;">KOReader • Mihon • LNReader</div>
+              <p style="font-size: 0.9rem; color: #888; margin-top: 6px;">
+                Sem distrações visuais • Conforme o Minimalismo Digital (Newport, 2019)
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 12: CAMADA 2: POLÍTICAS DO SETTINGS.DB E TAXA DE 30HZ
+         SLIDE 12: A SUÍTE DE LEITURA LIVRE (COM CARD EXPANSÍVEL)
          ==================================================================== -->
     <section class="deck-slide" id="slide-12">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">11. Nível de Framework</span>
-          <h2 class="slide-title">Políticas settings.db & <strong>Taxa em 30Hz</strong></h2>
-        </div>
-        <span class="slide-category">SurfaceFlinger & WindowManager</span>
+        <h2 class="slide-title">A Suíte de Leitura: <strong>KOReader, Mihon & LNReader</strong></h2>
+        <span class="slide-category">Ecossistema FOSS</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
           <div class="floating-hero-text">
             <h2 class="floating-lead">
-              Desoneração gráfica total: zero animações e taxa de atualização contida.
+              Três motores abertos de leitura para livros, quadrinhos e obras digitais.
             </h2>
             <p class="floating-paragraph">
-              Manipulação das regras de negócio do Android via injeção atômica no banco SQLite nativo (<code>settings.db</code>):
+              Instalação automatizada via script com identificação dinâmica da arquitetura do aparelho (<code>DEVICE_ABI</code>), garantindo que o APK ideal seja instalado sem erros.
             </p>
             <ul class="hero-bullets">
-              <li class="hero-bullet-item">
-                <span><code>window_animation_scale 0</code>, <code>transition_animation_scale 0</code>: elimina travamentos de GPU.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span>Identificação de modos do painel via <code>dumpsys display</code> e fixação no limite mínimo (30 Hz).</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span>Menor consumo de ciclos de renderização e estabilidade térmica do display.</span>
-              </li>
+              <li class="hero-bullet-item"><span><strong>KOReader:</strong> Motor C++/Lua especializado em EPUB, PDF Reflow (K2pdfopt) e OCR offline.</span></li>
+              <li class="hero-bullet-item"><span><strong>Mihon:</strong> Leitor livre de alta performance para quadrinhos, mangás e graphic novels.</span></li>
+              <li class="hero-bullet-item"><span><strong>LNReader:</strong> Leitor leve e offline para Light Novels e literatura seriada web.</span></li>
             </ul>
           </div>
 
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-squircle m3-asymmetric-a" style="width: 320px; height: 320px; display: flex; align-items: center; justify-content: center;">
-              <div class="colossal-metric" style="font-size: 6rem;">30<span class="colossal-unit">Hz</span></div>
+          <!-- M3 Container Transform Card Expansível para Recursos dos Leitores -->
+          <div class="m3-expandable-card" id="card-tech-suite">
+            <div class="card-collapsed">
+              <img src="assets/bugdroid-11-apk.svg" alt="Bugdroid com livro digital" style="width: 140px; height: 140px; align-self: center;">
+              <span class="slide-tag" style="background: var(--m3-primary-container);">Tríade Aberta de Leitura</span>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--m3-primary);">100% Offline & Sem Telemetria</div>
+              <p class="floating-paragraph" style="font-size: 0.95rem;">
+                Dicionários StarDict integrados, controle de gestos e sincronização OPDS.
+              </p>
+              <div class="expand-badge">Ver Especificações da Suíte ⊕</div>
             </div>
-            <img src="assets/bugdroid-12-gauge.svg" alt="Bugdroid com manômetro" class="bugdroid-peeking-top" style="top: 0px; right: 20px;">
+
+            <div class="card-expanded">
+              <span class="slide-tag">Especificação dos Leitores FOSS</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--m3-primary); margin: 12px 0;">Recursos Técnicos da Suíte InkDroid</h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0;">
+                <div class="bento-card">
+                  <strong style="color: var(--m3-primary);">KOReader</strong>
+                  <p style="font-size: 0.85rem; color: var(--m3-on-surface-variant); margin-top: 4px;">
+                    Renderizador C++ e Lua. PDF Reflow para adequar artigos de duas colunas à tela de 8", OCR offline e dicionários embutidos.
+                  </p>
+                </div>
+                <div class="bento-card">
+                  <strong style="color: var(--m3-primary);">Mihon</strong>
+                  <p style="font-size: 0.85rem; color: var(--m3-on-surface-variant); margin-top: 4px;">
+                    Aplicativo Kotlin com filtros de imagem para atenuar contraste excessivo e renderizar ilustrações com fluidez.
+                  </p>
+                </div>
+                <div class="bento-card">
+                  <strong style="color: var(--m3-primary);">LNReader</strong>
+                  <p style="font-size: 0.85rem; color: var(--m3-on-surface-variant); margin-top: 4px;">
+                    Interface limpa para literatura seriada em texto, com download de capítulos para leitura sem internet.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 13: CAMADA 2: ERGONOMIA MONOCROMÁTICA & LUZ NOTURNA
+         SLIDE 13: ERGONOMIA VISUAL (COM CARD EXPANSÍVEL)
          ==================================================================== -->
     <section class="deck-slide" id="slide-13">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">12. Nível de Framework</span>
-          <h2 class="slide-title">Ergonomia: <strong>Escala de Cinza & 3000K</strong></h2>
-        </div>
-        <span class="slide-category">Simulação de E-ink por Software</span>
+        <h2 class="slide-title">A Ilusão de E-Ink: <strong>30Hz & Luz Âmbar 3000K</strong></h2>
+        <span class="slide-category">Ergonomia & SurfaceFlinger</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
-          <div class="floating-hero-text">
-            <h2 class="floating-lead">
-              Mitigando a inibição de melatonina e o cansaço visual sem troca de tela.
-            </h2>
-            <p class="floating-paragraph">
-              A exposição desregulada à luz azul inibe a secreção de melatonina (Knez 2001). O InkDroid aciona o daltonizador de acessibilidade e o filtro de luz noturna nativo:
-            </p>
-            <div class="bento-terminal" style="font-size: 1rem;">
-              <span class="prompt">$</span> adb settings put secure accessibility_display_daltonizer_enabled 1<br>
-              <span class="prompt">$</span> adb settings put secure accessibility_display_daltonizer 0<br>
-              <span class="prompt">$</span> adb settings put secure night_display_color_temperature 3000
+          <!-- M3 Container Transform Card Expansível para SurfaceFlinger -->
+          <div class="m3-expandable-card" id="card-tech-display">
+            <div class="card-collapsed">
+              <img src="assets/bugdroid-12-gauge.svg" alt="Bugdroid velocímetro 30Hz" style="width: 140px; height: 140px; align-self: center;">
+              <span class="slide-tag" style="background: var(--m3-primary-container);">Parâmetros Gráficos AOSP</span>
+              <div class="colossal-metric"><span data-counter-target="30">30</span><span class="colossal-unit">Hz / Anims 0.0x</span></div>
+              <p class="floating-paragraph" style="font-size: 0.95rem;">
+                Supressão de animações na GPU e ancoragem na frequência estável de 30Hz.
+              </p>
+              <div class="expand-badge">Ver Comandos SurfaceFlinger ⊕</div>
+            </div>
+
+            <div class="card-expanded">
+              <span class="slide-tag">Políticas Gráficas no settings.db</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--m3-primary); margin: 12px 0;">Comandos de Modificação de Framebuffer e Cores</h3>
+              <p class="floating-paragraph">
+                O InkDroid programa as camadas do compositor de janelas do Android para se comportar com a sobriedade estática do papel impresso:
+              </p>
+              <div class="bento-terminal" style="margin: 16px 0;">
+                <div style="color: #80E89E;"># Desativação de Animações Globais:</div>
+                <div>settings put global window_animation_scale 0</div>
+                <div>settings put global transition_animation_scale 0</div>
+                <div>settings put global animator_duration_scale 0</div>
+                <div style="color: #80E89E; margin-top: 8px;"># Forçamento de Daltonismo Monocromático:</div>
+                <div>settings put secure accessibility_display_daltonizer_enabled 1</div>
+                <div>settings put secure accessibility_display_daltonizer 0</div>
+                <div style="color: #80E89E; margin-top: 8px;"># Calibração do Filtro Noturno Âmbar:</div>
+                <div>settings put secure night_display_color_temperature 3000</div>
+              </div>
             </div>
           </div>
 
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-orbit-ring" style="width: 360px; height: 360px;"></div>
-            <div class="m3-blob" style="width: 300px; height: 300px;"></div>
-            <img src="assets/bugdroid-13-tint.svg" alt="Bugdroid com paleta monocromática" class="bugdroid-floating-side" style="position: relative; width: 260px; height: 260px;">
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              A tela IPS simulando o comportamento visual do papel impresso.
+            </h2>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item"><span><strong>Supressão de Animações:</strong> Escala 0.0x remove travamentos da GPU e poupa energia gráfica.</span></li>
+              <li class="hero-bullet-item"><span><strong>Escala de Cinza:</strong> Matriz daltonizadora neutraliza cores saturadas e reduz o estímulo visual.</span></li>
+              <li class="hero-bullet-item"><span><strong>Temperatura 3000K:</strong> Filtro de luz azul calibrado para não inibir a síntese de melatonina à noite.</span></li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 14: CAMADA 2: PRESERVAÇÃO ENERGÉTICA AGRESSIVA
+         SLIDE 14: PRESERVAÇÃO ENERGÉTICA (COM CARD EXPANSÍVEL)
          ==================================================================== -->
     <section class="deck-slide" id="slide-14">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">13. Nível de Framework</span>
-          <h2 class="slide-title">Preservação Energética: <strong>Idle Drain -11,76%</strong></h2>
-        </div>
-        <span class="slide-category">Monteiro et al. (2023)</span>
+        <h2 class="slide-title">Preservação Energética: <strong>Bateria e Autonomia</strong></h2>
+        <span class="slide-category">Contenção de Processos & Deep Sleep</span>
       </header>
 
       <div class="slide-main-content">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; height: 100%;">
-          
-          <div class="m3-squircle m3-asymmetric-c" style="padding: 40px; position: relative;">
-            <img src="assets/bugdroid-14-battery.svg" alt="Bugdroid com bateria verde" class="bugdroid-peeking-top" style="right: 30px;">
-            <div class="colossal-metric"><span data-counter-target="11.8">-11.8</span><span class="colossal-unit">% dreno</span></div>
-            <h3 class="floating-lead" style="font-size: 1.6rem;">Redução do Consumo Ocioso</h3>
-            <p class="floating-paragraph">
-              A eliminação de telemetrias em background do Google Mobile Services impede que o processador acorde desnecessariamente em repouso.
-            </p>
-            <div style="margin-top: 10px; font-size: 0.8rem; color: var(--m3-outline);">Mapeamento Sistemático • SBC Reviews (2023)</div>
-          </div>
-
+        <div class="split-keynote">
           <div class="floating-hero-text">
-            <h3 class="floating-lead">Medidas Injetadas no settings.db:</h3>
+            <h2 class="floating-lead">
+              Extensão da autonomia com destruição imediata de rotinas ociosas.
+            </h2>
+            <p class="floating-paragraph">
+              Enquanto tablets Android comerciais mantêm dezenas de serviços concorrentes esgotando a bateria na gaveta, o InkDroid impõe diretivas rígidas de conservação energética.
+            </p>
             <ul class="hero-bullets">
-              <li class="hero-bullet-item">
-                <span><code>always_finish_activities 1</code>: impede que qualquer app rode em segundo plano.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><code>low_power_trigger_level 100</code>: modo de economia permanente como padrão.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span>Desativação de varreduras ocultas de Wi-Fi, Bluetooth BLE e vibração háptica.</span>
-              </li>
+              <li class="hero-bullet-item"><span><strong>always_finish_activities 1:</strong> Destruição imediata de atividades em segundo plano.</span></li>
+              <li class="hero-bullet-item"><span><strong>low_power_trigger_level 100:</strong> Modo econômico permanente mesmo após reinicializações.</span></li>
+              <li class="hero-bullet-item"><span><strong>screen_off_timeout 1800000:</strong> 30 minutos de tela ligada para leituras concentradas.</span></li>
+              <li class="hero-bullet-item"><span><strong>Varreduras Suprimidas:</strong> Wi-Fi e Bluetooth BLE não realizam buscas contínuas ocultas.</span></li>
             </ul>
           </div>
 
+          <!-- M3 Container Transform Card Expansível para Diretivas Energéticas -->
+          <div class="m3-expandable-card" id="card-tech-battery">
+            <div class="card-collapsed">
+              <img src="assets/bugdroid-14-battery.svg" alt="Bugdroid com bateria verde" style="width: 140px; height: 140px; align-self: center;">
+              <span class="slide-tag" style="background: var(--m3-primary-container);">Eficiência em Repouso</span>
+              <div class="colossal-metric"><span data-counter-target="30">30</span><span class="colossal-unit">Minutos Timeout</span></div>
+              <p class="floating-paragraph" style="font-size: 0.95rem;">
+                Eliminação de drenos por atuadores sonoros, vibrações hápticas e sincronizações em segundo plano.
+              </p>
+              <div class="expand-badge">Ver Diretivas Energéticas ⊕</div>
+            </div>
+
+            <div class="card-expanded">
+              <span class="slide-tag">Políticas Energéticas AOSP</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--m3-primary); margin: 12px 0;">Contenção no settings.db</h3>
+              <p class="floating-paragraph">
+                O método implementado em <code>applyFrameworkTweaks()</code> atua diretamente nas tabelas do sistema:
+              </p>
+              <div class="bento-terminal" style="margin: 16px 0;">
+                <div>settings put global always_finish_activities 1</div>
+                <div>settings put global low_power 1</div>
+                <div>settings put global low_power_trigger_level 100</div>
+                <div>settings put system screen_off_timeout 1800000</div>
+                <div>settings put global wifi_scan_always_enabled 0</div>
+                <div>settings put global ble_scan_always_enabled 0</div>
+                <div>settings put system haptic_feedback_enabled 0</div>
+                <div>settings put global zen_mode 1</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 15: CAMADA 3: O DESAFIO DE KERNEL & SEGURANÇA
+         SLIDE 15: LIMITAÇÕES DE KERNEL & SELINUX (COM CARD EXPANSÍVEL)
          ==================================================================== -->
     <section class="deck-slide" id="slide-15">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">14. Nível de Kernel</span>
-          <h2 class="slide-title">O Desafio de Kernel & <strong>Governança SELinux</strong></h2>
-        </div>
-        <span class="slide-category">Transparência Acadêmica & Decisão de Projeto</span>
+        <h2 class="slide-title">Limitações de Kernel: <strong>A Barreira do SELinux</strong></h2>
+        <span class="slide-category">Governança & Modelo de Segurança</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
-          <div class="floating-hero-text">
-            <span class="slide-tag" style="background: var(--m3-amber-container); color: var(--m3-amber);">Compromisso de Zero Brick</span>
-            <h2 class="floating-lead">
-              Por que o InkDroid v1.0 optou por NÃO automatizar o Kernel?
-            </h2>
-            <p class="floating-paragraph">
-              Embora a proposta inicial considerasse underclocking direto em <code>sysfs</code>, testes técnicos demonstraram que forçar tais comandos sem root viola as políticas de segurança do SELinux:
-            </p>
-            <ul class="hero-bullets">
-              <li class="hero-bullet-item">
-                <span><strong>Heterogeneidade de SoCs:</strong> Chips Unisoc, MediaTek e Exynos usam controladores proprietários de clock; rotinas genéricas causam <em>kernel panic</em>.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><strong>Segurança do Usuário:</strong> Concentrar os ganhos energéticos no Framework entregou estabilidade total com 100% de segurança contra <em>softbricks</em>.</span>
-              </li>
-            </ul>
+          <!-- M3 Container Transform Card Expansível para SELinux -->
+          <div class="m3-expandable-card" id="card-tech-selinux">
+            <div class="card-collapsed">
+              <img src="assets/bugdroid-15-shield.svg" alt="Bugdroid com escudo SELinux" style="width: 140px; height: 140px; align-self: center;">
+              <span class="slide-tag" style="background: var(--m3-primary-container);">Transparência Acadêmica</span>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--m3-primary);">Decisão de Projeto: Sem Root</div>
+              <p class="floating-paragraph" style="font-size: 0.95rem;">
+                Por que a intervenção direta no cpufreq do kernel foi descartada em prol da estabilidade e segurança.
+              </p>
+              <div class="expand-badge">Ver Justificativa Técnica ⊕</div>
+            </div>
+
+            <div class="card-expanded">
+              <span class="slide-tag">Governança e Segurança de Kernel</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--m3-primary); margin: 12px 0;">Restrições de Arquitetura em Nível de Kernel</h3>
+              <p class="floating-paragraph">
+                Conforme detalhado na Seção 4.3 do TCC, a manipulação direta dos nós virtuais de frequência em <code>/sys/devices/system/cpu/cpu*/cpufreq/</code> exige permissões bloqueadas pelo SELinux no Android 11 Go:
+              </p>
+              <div class="bento-terminal" style="margin: 16px 0;">
+                <div style="color: #FF5252;">type=1400 audit: avc: denied { write } for name="scaling_governor" dev="sysfs" scontext=u:r:shell:s0 tcontext=u:object_r:sysfs_devices_system_cpu:s0</div>
+              </div>
+              <ul class="hero-bullets">
+                <li class="hero-bullet-item"><span><strong>Risco de Bricking:</strong> Rotinas genéricas de underclock em SoCs proprietários (Unisoc) geram kernel panic ou bootloops críticos.</span></li>
+                <li class="hero-bullet-item"><span><strong>Portabilidade:</strong> Preservar o SELinux Enforcing garante que o InkDroid rode em qualquer tablet escolar sem risco de inutilização.</span></li>
+              </ul>
+            </div>
           </div>
 
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-orbit-ring" style="width: 360px; height: 360px; border-color: rgba(249, 171, 0, 0.22);"></div>
-            <div class="m3-blob" style="width: 300px; height: 300px; border-color: var(--m3-amber);"></div>
-            <img src="assets/bugdroid-15-shield.svg" alt="Bugdroid com escudo SELinux" class="bugdroid-floating-side" style="position: relative; width: 250px; height: 250px;">
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              A maturidade da engenharia está em reconhecer os limites seguros do sistema.
+            </h2>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item"><span><strong>Segurança Intacta:</strong> O tablet permanece protegido contra malwares e softwares maliciosos.</span></li>
+              <li class="hero-bullet-item"><span><strong>Sem Perda de Garantia:</strong> Nenhuma partição assinada é sobrescrita.</span></li>
+              <li class="hero-bullet-item"><span><strong>Módulos Futuros:</strong> Abertura para investigação de módulos controlados como KernelSU em bancada de laboratório.</span></li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 16: A CLI UNIFICADA (INK)
+         SLIDE 16: AUTOMAÇÃO MODULAR (CLI INK)
          ==================================================================== -->
     <section class="deck-slide" id="slide-16">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">15. Ferramental Desenvolvido</span>
-          <h2 class="slide-title">Orquestrador Unificado: <strong>CLI ink</strong></h2>
-        </div>
-        <span class="slide-category">Arquitetura Modular em Bash & Python</span>
+        <h2 class="slide-title">Automação Modular: <strong>A Ferramenta CLI ink</strong></h2>
+        <span class="slide-category">Arquitetura Shell Script (Bash) & Python</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
           <div class="floating-hero-text">
             <h2 class="floating-lead">
-              Ponto único de entrada com flags inteligentes e diagnósticos dinâmicos.
+              Uma suíte de linha de comando orientada a funções e modular.
             </h2>
-            <div class="bento-terminal" style="font-size: 1.05rem; padding: 22px;">
-              <span class="prompt">$</span> ./ink status<br>
-              <span style="color: #80E89E;">[OK] Conectado: Multilaser M8 4G • Android 11 • 30Hz • Bateria: 94%</span><br><br>
-              <span class="prompt">$</span> ./ink install -y<br>
-              <span style="color: #80E89E;">[OK] 38 pacotes debloatados • KOReader & Olauncher ativos</span><br><br>
-              <span class="prompt">$</span> ./ink display monochrome<br>
-              <span style="color: #80E89E;">[OK] Perfil E-ink aplicado em tempo real</span>
+            <p class="floating-paragraph">
+              A CLI evoluiu de uma sequência rígida de comandos para uma arquitetura orientada a funções, suportando execução interativa e não-interativa (<code>-y</code> / <code>--yes</code>).
+            </p>
+            <div style="display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap;">
+              <span class="m3-chip">parseArguments()</span>
+              <span class="m3-chip">checkDevice()</span>
+              <span class="m3-chip">initLog()</span>
+              <span class="m3-chip">Auditoria debloatlog.txt</span>
             </div>
           </div>
 
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-orbit-ring" style="width: 360px; height: 360px;"></div>
-            <div class="m3-flower-8" style="width: 300px; height: 300px; opacity: 0.2;"></div>
-            <img src="assets/bugdroid-16-terminal.svg" alt="Bugdroid programando na CLI" class="bugdroid-floating-side" style="position: relative; width: 260px; height: 260px;">
+          <div class="bento-terminal" style="font-size: 0.92rem; padding: 24px;">
+            <div style="color: #80E89E; font-weight: bold;">$ ink status</div>
+            <div style="color: #B0C9B8; margin-top: 6px;">[DEVICE] Multilaser M8 4G (Android 11, arm64-v8a)</div>
+            <div style="color: #B0C9B8;">[SCREEN] 800x1280 @ 30Hz • Monocromático: ATIVO</div>
+            <div style="color: #80E89E; font-weight: bold; margin-top: 10px;">$ ink push ~/Livros/DomCasmurro.epub</div>
+            <div style="color: #B0C9B8; margin-top: 6px;">[TRANSFERÊNCIA] Enviado para /sdcard/Books/</div>
+            <div style="color: #80E89E;">[BROADCAST] Sinal MEDIA_SCANNER emitido com sucesso!</div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 17: FETCHBOOK & RESILIÊNCIA DESCENTRALIZADA
+         SLIDE 17: RESILIÊNCIA DE REDE (FETCHBOOK & IPFS)
          ==================================================================== -->
     <section class="deck-slide" id="slide-17">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">16. Aquisição de Conteúdo</span>
-          <h2 class="slide-title">fetchbook: <strong>Resiliência Descentralizada & IPFS</strong></h2>
-        </div>
-        <span class="slide-category">Superando Bloqueios e CAPTCHAs</span>
+        <h2 class="slide-title">Aquisição de Conteúdo: <strong>fetchbook & IPFS</strong></h2>
+        <span class="slide-category">Arquitetura Multicamada Resiliente</span>
       </header>
 
       <div class="slide-main-content">
-        <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; height: 100%;">
-          
+        <div class="split-keynote">
           <div class="floating-hero-text">
             <h2 class="floating-lead">
-              Arquitetura multicamada tolerante a falhas de borda e bloqueios judiciais.
+              Garantindo acesso ao conhecimento mesmo diante de bloqueios de rede.
             </h2>
+            <p class="floating-paragraph">
+              Para superar a instabilidade de espelhos HTTP tradicionais e desafios de borda (Cloudflare/CAPTCHA), o utilitário <code>fetchbook</code> adota uma arquitetura em 3 níveis hierárquicos:
+            </p>
             <ul class="hero-bullets">
-              <li class="hero-bullet-item">
-                <span><strong>Nível 1 (Gutenberg API):</strong> Domínio público oficial com metadados estruturados.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><strong>Nível 2 (Open Library):</strong> Catalogação por ISBN e espelhos Internet Archive.</span>
-              </li>
-              <li class="hero-bullet-item">
-                <span><strong>Nível 3 (Gateways IPFS):</strong> Extração de hash IPFS contornando desafios Cloudflare.</span>
-              </li>
+              <li class="hero-bullet-item"><span><strong>1. Camada Primária:</strong> API estruturada do Project Gutenberg (obras em domínio público).</span></li>
+              <li class="hero-bullet-item"><span><strong>2. Camada Secundária:</strong> Open Library para metadados e catalogação internacional.</span></li>
+              <li class="hero-bullet-item"><span><strong>3. Camada Terciária:</strong> Gateways IPFS descentralizados (ipfs.io, dweb.link, cloudflare-ipfs.com).</span></li>
             </ul>
-            <div class="bento-terminal" style="font-size: 0.95rem; margin-top: 10px;">
-              <span class="prompt">$</span> ./ink book "Dom Casmurro" -a -p
+          </div>
+
+          <!-- M3 Container Transform Card Expansível para Fluxo do fetchbook -->
+          <div class="m3-expandable-card" id="card-tech-ipfs">
+            <div class="card-collapsed">
+              <img src="assets/bugdroid-17-ipfs.svg" alt="Bugdroid com nó IPFS" style="width: 140px; height: 140px; align-self: center;">
+              <span class="slide-tag" style="background: var(--m3-primary-container);">Híbrido Bash-Python</span>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--m3-primary);">Parsing JSON & IPFS Fallback</div>
+              <p class="floating-paragraph" style="font-size: 0.95rem;">
+                Sanitização UTF-8 em Python inline e transferência automatizada via pushToDevice com broadcast nativo.
+              </p>
+              <div class="expand-badge">Ver Fluxo de Resiliência ⊕</div>
+            </div>
+
+            <div class="card-expanded">
+              <span class="slide-tag">Topologia Multicamada de Busca</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--m3-primary); margin: 12px 0;">Fluxo Operacional do utilitário fetchbook</h3>
+              <p class="floating-paragraph">
+                Conforme a Figura 1 e Tabela 1 do TCC, o utilitário evita falhas genéricas de conexão alternando automaticamente as fontes de dados:
+              </p>
+              <div class="bento-terminal" style="margin: 16px 0;">
+                <div>$ fetchbook "Machado de Assis Dom Casmurro"</div>
+                <div style="color: #80E89E;">[HTTP 403 Detectado no espelho primário]</div>
+                <div style="color: #80E89E;">[Ativando Camada Terciária: Hash IPFS extraído]</div>
+                <div style="color: #80E89E;">[Download via Gateway descentralizado: ipfs.io] Concluído!</div>
+                <div>[pushToDevice] Enviado para /sdcard/Books/ e indexado no KOReader.</div>
+              </div>
             </div>
           </div>
-
-          <div style="position: relative; height: 100%; display: flex; align-items: center; justify-content: center;">
-            <img src="assets/fluxgram.jpg" alt="Fluxograma condicional do fetchbook" style="max-width: 100%; max-height: 380px; object-fit: contain; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-          </div>
-
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 18: ARQUITETURA DE REVERSIBILIDADE TOTAL
+         SLIDE 18: ARQUITETURA DE REVERSIBILIDADE
          ==================================================================== -->
     <section class="deck-slide" id="slide-18">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">17. Governança & Auditoria</span>
-          <h2 class="slide-title">Reversibilidade Total: <strong>Sem Formatação</strong></h2>
-        </div>
+        <h2 class="slide-title">Paz de Espírito: <strong>Reversibilidade 100%</strong></h2>
         <span class="slide-category">InkDroid_uninstall.sh</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
-          <div class="floating-hero-text">
-            <h2 class="floating-lead">
-              Restauração íntegra ao estado de fábrica sem perda de arquivos pessoais.
-            </h2>
-            <p class="floating-paragraph">
-              A conformidade com princípios éticos de governança exige que qualquer modificação seja 100% reversível. A rotina de restauração reabilita os pacotes com uma única instrução nativa:
-            </p>
-            <div class="bento-terminal" style="font-size: 1.05rem;">
-              <span class="prompt">$</span> adb shell cmd package install-existing &lt;package_name&gt;
-            </div>
-            <p class="floating-paragraph" style="font-size: 1.15rem;">
-              Restaura o launcher de fábrica, reativa animações originais e devolve o tablet ao estado inicial sem risco de perda de fotos ou documentos.
+          <div class="m3-squircle m3-asymmetric-a" style="padding: 34px; border: 1px solid var(--m3-outline); text-align: center;">
+            <img src="assets/bugdroid-18-restore.svg" alt="Bugdroid restaurando configurações" style="width: 200px; height: 200px; margin-bottom: 12px;">
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--m3-primary);">Restauração Sem Formatação</div>
+            <p style="font-size: 0.95rem; color: var(--m3-on-surface-variant); margin-top: 6px;">
+              Reativação via <code>cmd package install-existing</code> preserva os arquivos pessoais do usuário.
             </p>
           </div>
 
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-orbit-ring" style="width: 360px; height: 360px;"></div>
-            <div class="m3-squircle-morph" style="width: 300px; height: 300px; opacity: 0.35;"></div>
-            <img src="assets/bugdroid-18-restore.svg" alt="Bugdroid restaurando backup" class="bugdroid-floating-side" style="position: relative; width: 250px; height: 250px;">
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              A garantia de conformidade com o patrimônio escolar.
+            </h2>
+            <ul class="hero-bullets">
+              <li class="hero-bullet-item"><span><strong>Sem Perda de Dados:</strong> O tablet não precisa ser restaurado para o padrão de fábrica via Wipe Data.</span></li>
+              <li class="hero-bullet-item"><span><strong>Reversão de Framework:</strong> As 15 configurações de tela, bateria e animações retornam ao padrão de fábrica.</span></li>
+              <li class="hero-bullet-item"><span><strong>Restauração do Launcher:</strong> O gerenciador de tela original volta a ser o padrão via RoleManager.</span></li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====================================================================
-         SLIDE 19: SIMULADOR HANDS-ON DO TABLET M8
+         SLIDE 19: SIMULADOR HANDS-ON (MULTILASER M8 4G)
          ==================================================================== -->
     <section class="deck-slide" id="slide-19">
       <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">18. Demonstração Interativa</span>
-          <h2 class="slide-title">Simulador Hands-On: <strong>Multilaser M8 4G</strong></h2>
-        </div>
-        <span class="slide-category">Teste Visual em Tempo Real</span>
-      </header>
-
-      <div class="slide-main-content">
-        <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; height: 100%;">
-          
-          <div class="floating-hero-text">
-            <h2 class="floating-lead">
-              Alterne os modos de exibição e veja o comportamento do display:
-            </h2>
-            <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 10px;">
-              <button class="dock-btn sim-trigger-btn active" data-mode="monochrome" style="justify-content: space-between; padding: 14px 24px; font-size: 1.05rem;">
-                <span>Modo InkDroid Monocromático</span>
-                <span style="color: var(--m3-primary); font-weight: 800;">(E-ink / 30Hz)</span>
-              </button>
-              <button class="dock-btn sim-trigger-btn" data-mode="blue" style="justify-content: space-between; padding: 14px 24px; font-size: 1.05rem;">
-                <span>Filtro de Luz Azul Noturno</span>
-                <span style="color: var(--m3-amber); font-weight: 800;">(3000K)</span>
-              </button>
-              <button class="dock-btn sim-trigger-btn" data-mode="default" style="justify-content: space-between; padding: 14px 24px; font-size: 1.05rem;">
-                <span>Padrão de Fábrica (Reset)</span>
-                <span style="color: var(--m3-danger); font-weight: 800;">(60Hz / Bloatware)</span>
-              </button>
-            </div>
-            <div style="margin-top: 16px; background: var(--m3-surface-container); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--m3-outline-variant);">
-              <div style="font-size: 0.8rem; color: var(--m3-outline); text-transform: uppercase;">Estado Ativo no Painel:</div>
-              <div id="sim-current-mode" style="font-size: 1.3rem; font-weight: 900; color: var(--m3-primary);">E-Ink Monocromático</div>
-              <div id="sim-current-hz" style="font-size: 1rem; color: var(--m3-on-surface-variant); margin-top: 2px;">30 Hz (Anims: 0.0x)</div>
-            </div>
-          </div>
-
-          <!-- Mockup do Tablet M8 Ampliado com Bugdroid Flutuando -->
-          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div id="tablet-frame" class="tablet-frame-m3 mode-monochrome">
-              <div style="width: 8px; height: 8px; background: #000; border-radius: 50%; margin: 8px auto 0;"></div>
-              <div class="tablet-screen-content">
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #8A9A90;">
-                  <span>09:41</span>
-                  <span>LTE • 94% 🔋</span>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 10px; margin: auto 0;">
-                  <div style="font-size: 0.85rem; color: var(--m3-primary); font-weight: bold;">OLAUNCHER</div>
-                  <div style="background: rgba(255,255,255,0.08); padding: 8px; border-radius: 6px; font-size: 0.9rem;">
-                    📖 KOReader
-                  </div>
-                  <div style="background: rgba(255,255,255,0.08); padding: 8px; border-radius: 6px; font-size: 0.9rem;">
-                    📚 Dom Casmurro
-                  </div>
-                  <div style="background: rgba(255,255,255,0.08); padding: 8px; border-radius: 6px; font-size: 0.9rem;">
-                    ⚙️ Configurações
-                  </div>
-                </div>
-                <div style="font-size: 0.7rem; color: var(--m3-primary); border-top: 1px dashed rgba(61,220,132,0.4); padding-top: 6px;">
-                  [OK] Standby Otimizado
-                </div>
-              </div>
-            </div>
-            <img src="assets/bugdroid-19-demo.svg" alt="Bugdroid demonstrador" class="bugdroid-floating-side" style="right: -10px; bottom: 20px; width: 180px; height: 180px;">
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         SLIDE 20: CONCLUSÃO, GREEN IT & REFERÊNCIAS ABNT
-         ==================================================================== -->
-    <section class="deck-slide" id="slide-20">
-      <header class="slide-header">
-        <div class="slide-title-group">
-          <span class="slide-tag">19. Encerramento</span>
-          <h2 class="slide-title">Conclusão: <strong>Green IT & Economia Circular</strong></h2>
-        </div>
-        <span class="slide-category">Considerações Finais & Fontes ABNT</span>
+        <h2 class="slide-title">O Teste Vivo: <strong>Simulador Hands-On</strong></h2>
+        <span class="slide-category">Multilaser M8 4G em Tempo Real</span>
       </header>
 
       <div class="slide-main-content">
         <div class="split-keynote">
           <div class="floating-hero-text">
             <h2 class="floating-lead">
-              A engenharia consciente transforma potenciais resíduos em ferramentas de emancipação intelectual.
+              Alterne entre as facetas visuais do Multilaser M8 4G ao vivo.
             </h2>
             <p class="floating-paragraph">
-              O InkDroid comprova que o descarte prematuro decorre de modelos de consumo predatórios, e não de insuficiência física de hardware.
+              Experimente a transformação drástica da interface através dos controles interativos abaixo:
+            </p>
+            <div style="display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap;">
+              <button class="sim-trigger-btn active" data-mode="stock">1. Padrão Fábrica</button>
+              <button class="sim-trigger-btn" data-mode="monochrome">2. E-Ink Monocromático</button>
+              <button class="sim-trigger-btn" data-mode="blue">3. Filtro Âmbar 3000K</button>
+            </div>
+            <div style="margin-top: 16px; font-size: 0.95rem; color: var(--m3-on-surface-variant);">
+              Modo Atual: <strong id="sim-current-mode" style="color: var(--m3-primary);">Padrão Fábrica (Bloatware)</strong> • Taxa: <span id="sim-current-hz" style="color: var(--m3-primary);">60 Hz</span>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <div class="tablet-frame-m3 mode-stock" id="tablet-frame">
+              <div class="tablet-camera-notch"></div>
+              <div class="tablet-screen-m3">
+                <div class="sim-status-bar">
+                  <span>10:42</span>
+                  <div class="sim-status-icons">
+                    <span>LTE</span>
+                    <span>📶</span>
+                    <span>98%</span>
+                  </div>
+                </div>
+
+                <!-- Interface Padrão de Fábrica (Stock / Poluída) -->
+                <div class="sim-content-stock" id="sim-content-stock">
+                  <div class="sim-search-bar">🔍 Pesquisar na web e apps...</div>
+                  <div class="sim-bloat-banner">
+                    <div style="font-size: 0.65rem; color: #FFA726; font-weight: bold; margin-bottom: 2px;">NOTÍCIAS & RECOMENDAÇÕES</div>
+                    <div style="font-size: 0.68rem; color: #DDD;">Feed de notícias, jogos patrocinados e sugestões ativas...</div>
+                  </div>
+                  <div class="sim-stock-grid">
+                    <div class="sim-stock-app">
+                      <div class="sim-icon-box red">▶</div>
+                      <span>Vídeos</span>
+                    </div>
+                    <div class="sim-stock-app">
+                      <div class="sim-icon-box blue">🌐</div>
+                      <span>Browser</span>
+                    </div>
+                    <div class="sim-stock-app">
+                      <div class="sim-icon-box green">🛍️</div>
+                      <span>Loja</span>
+                    </div>
+                    <div class="sim-stock-app">
+                      <div class="sim-icon-box orange">🎮</div>
+                      <span>Jogos</span>
+                    </div>
+                    <div class="sim-stock-app">
+                      <div class="sim-icon-box purple">🎵</div>
+                      <span>Música</span>
+                    </div>
+                    <div class="sim-stock-app">
+                      <div class="sim-icon-box teal">💬</div>
+                      <span>Social</span>
+                    </div>
+                  </div>
+                  <div class="sim-ram-warning">⚠️ RAM Livre: 240 MB / 2 GB (CPU: 82%)</div>
+                </div>
+
+                <!-- Interface Olauncher Minimalista / InkDroid -->
+                <div class="sim-content-ink" id="sim-content-ink">
+                  <div class="sim-ink-clock">10:42</div>
+                  <div class="sim-ink-date">Segunda-feira, 2 de Nov</div>
+                  <div class="sim-ink-list">
+                    <div class="sim-ink-item">KOReader</div>
+                    <div class="sim-ink-item">Mihon</div>
+                    <div class="sim-ink-item">LNReader</div>
+                    <div class="sim-ink-item">Configurações</div>
+                  </div>
+                  <div class="sim-ink-footer">✓ RAM Livre: 1.150 MB (61%) • 30 Hz</div>
+                </div>
+
+                <div class="sim-nav-bar">
+                  <div class="sim-nav-pill"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 20: RESULTADOS & GREEN IT
+         ==================================================================== -->
+    <section class="deck-slide" id="slide-20">
+      <header class="slide-header">
+        <h2 class="slide-title">Resultados & <strong>Green IT</strong></h2>
+        <span class="slide-category">Economia Circular & Tecnologia Verde</span>
+      </header>
+
+      <div class="slide-main-content">
+        <div class="split-keynote">
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              A engenharia de software consciente convertendo potenciais resíduos em ferramentas educacionais.
+            </h2>
+            <p class="floating-paragraph">
+              O InkDroid comprova a viabilidade técnica de reutilizar dispositivos móveis considerados obsoletos através de intervenções não-invasivas de software livre.
             </p>
             <div style="margin-top: 8px;">
               <strong style="color: var(--m3-primary); font-size: 1.05rem;">Trabalhos Futuros:</strong>
               <ul class="hero-bullets" style="gap: 8px; margin-top: 6px;">
-                <li class="hero-bullet-item" style="font-size: 1rem;"><span>Medição precisa de consumo em Joules via analisadores de corrente.</span></li>
-                <li class="hero-bullet-item" style="font-size: 1rem;"><span>Investigação de módulos KernelSU em ambiente controlado de bancada.</span></li>
-                <li class="hero-bullet-item" style="font-size: 1rem;"><span>Ensaios clínicos com estudantes mensurando a taxa real de piscadas.</span></li>
+                <li class="hero-bullet-item" style="font-size: 0.95rem;"><span>Ensaios de consumo energético em Joules via analisadores de corrente física / BatteryStats.</span></li>
+                <li class="hero-bullet-item" style="font-size: 0.95rem;"><span>Investigação de módulos KernelSU em ambiente controlado com root prévio.</span></li>
+                <li class="hero-bullet-item" style="font-size: 0.95rem;"><span>Testes ergonômicos clínicos com estudantes mensurando a taxa de piscamento ocular.</span></li>
               </ul>
-            </div>
-            <div style="margin-top: 12px; font-size: 0.85rem; color: var(--m3-outline);">
-              Repositório Oficial: <strong>github.com/bagi-sh/InkDroid</strong> (MIT License) • CEAAT 2026
             </div>
           </div>
 
           <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <div class="m3-squircle m3-asymmetric-a" style="padding: 30px; text-align: center;">
+            <div class="m3-squircle m3-asymmetric-a" style="padding: 34px; text-align: center; border: 1px solid var(--m3-outline);">
+              <img src="assets/bugdroid-engineer.svg" alt="Bugdroid engenheiro de Green IT" style="width: 200px; height: 200px; margin-bottom: 12px;">
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--m3-primary);">Sustentabilidade Comprovada</div>
+              <p style="font-size: 0.95rem; color: var(--m3-on-surface-variant); margin-top: 4px;">
+                Mitigação do lixo eletrônico aliada ao acesso gratuito à literatura
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 21: EPÍLOGO & AGRADECIMENTOS OFICIAIS
+         ==================================================================== -->
+    <section class="deck-slide" id="slide-21">
+      <header class="slide-header">
+        <h2 class="slide-title">Conclusão: <strong>Agradecimentos & Repositório</strong></h2>
+        <span class="slide-category">Considerações Finais</span>
+      </header>
+
+      <div class="slide-main-content">
+        <div class="split-keynote">
+          <div class="floating-hero-text">
+            <h2 class="floating-lead">
+              "A engenharia consciente transforma potenciais resíduos em ferramentas de emancipação intelectual."
+            </h2>
+            <div style="margin-top: 14px;">
+              <strong style="color: var(--m3-primary); font-size: 1.1rem;">Agradecimentos Especiais:</strong>
+              <ul class="hero-bullets" style="margin-top: 8px; gap: 8px;">
+                <li class="hero-bullet-item"><span><strong>Prof. Gilberto Monteiro:</strong> Orientador, pela paciência, conselhos e direção metodológica.</span></li>
+                <li class="hero-bullet-item"><span><strong>Sra. Valdeci:</strong> Minha mãe, alicerce fundamental em todas as etapas e incentivo aos estudos.</span></li>
+                <li class="hero-bullet-item"><span><strong>Pedro Francisco & Maria Felipa Lab:</strong> Pelo suporte e experiências compartilhadas.</span></li>
+                <li class="hero-bullet-item"><span><strong>Bianca:</strong> Minha melhor amiga há 5 anos, pelo apoio constante em todos os momentos.</span></li>
+                <li class="hero-bullet-item"><span><strong>Colegas de curso:</strong> Pelo companheirismo, discussões e treinos de apresentação.</span></li>
+              </ul>
+            </div>
+            <div style="margin-top: 16px; font-size: 0.9rem; color: var(--m3-outline);">
+              Repositório Oficial: <strong style="color: var(--m3-primary);">github.com/bagi-sh/InkDroid</strong> (Licença MIT) • Salvador/BA 2026
+            </div>
+          </div>
+
+          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+            <div class="m3-squircle m3-asymmetric-a" style="padding: 34px; text-align: center; border: 1px solid var(--m3-outline);">
               <img src="assets/bugdroid-20-grad.svg" alt="Bugdroid acadêmico de capelo" style="width: 220px; height: 220px; object-fit: contain; margin-bottom: 12px;">
-              <div style="font-size: 1.15rem; font-weight: 800; color: var(--m3-primary);">
-                Agradecimentos Especiais:
-              </div>
-              <div style="font-size: 0.95rem; color: var(--m3-on-surface-variant); margin-top: 4px;">
-                Prof. Gilberto Monteiro • Sra. Valdeci • Maria Felipa Lab • Bianca e Amigos!
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--m3-primary);">Muito Obrigado!</div>
+              <div style="font-size: 0.95rem; color: var(--m3-on-surface-variant); margin-top: 6px;">
+                Espaço Aberto para Perguntas da Banca Examinadora
               </div>
             </div>
           </div>
@@ -899,8 +1063,9 @@
   <!-- Dock Flutuante de Controle do Keynote (M3 Floating Pill) -->
   <nav class="keynote-dock" aria-label="Controles do Keynote">
     <button id="dock-prev" class="dock-btn" aria-label="Slide Anterior">← Voltar</button>
-    <div id="dock-counter" class="dock-counter">01 / 20</div>
+    <div id="dock-counter" class="dock-counter">01 / 21</div>
     <button id="dock-next" class="dock-btn" aria-label="Próximo Slide">Avançar →</button>
+    <button id="dock-mode" class="dock-btn" aria-label="Alternar Modo de Leitura">📜 Scroll Livre</button>
     <button id="dock-fullscreen" class="dock-btn" aria-label="Tela Cheia">⛶ Tela Cheia</button>
     <button id="dock-theme" class="dock-btn" aria-label="Alternar Tema">☀️ Claro</button>
   </nav>
