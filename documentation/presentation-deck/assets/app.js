@@ -16,7 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnFullscreen = document.getElementById('dock-fullscreen');
   const btnTheme = document.getElementById('dock-theme');
   const btnMode = document.getElementById('dock-mode');
+  const btnToc = document.getElementById('dock-toc');
   const viewport = document.getElementById('deck-viewport');
+
+  // Elementos do Sumário (Table of Contents M3)
+  const tocOverlay = document.getElementById('m3-toc-overlay');
+  const tocBackdrop = document.getElementById('m3-toc-backdrop');
+  const btnCloseToc = document.getElementById('m3-toc-close');
+  const tocList = document.getElementById('m3-toc-list');
 
   // ==========================================================================
   // 1. MOTOR DO FUNDO ANIMADO LAVA LAMP MATERIAL YOU (M3 Polar Morphing)
@@ -272,11 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
     isFreeScroll = freeScroll;
     if (isFreeScroll) {
       viewport.classList.add('mode-free-scroll');
-      if (btnMode) btnMode.textContent = '🎴 Modo Slides';
+      if (btnMode) btnMode.textContent = 'Modo Slides';
       initFreeScrollObserver();
     } else {
       viewport.classList.remove('mode-free-scroll');
-      if (btnMode) btnMode.textContent = '📜 Scroll Livre';
+      if (btnMode) btnMode.textContent = 'Scroll Livre';
       scrollToSlide(currentSlideIndex);
     }
   }
@@ -359,16 +366,85 @@ document.addEventListener('DOMContentLoaded', () => {
     currentSlideIndex = index;
     slides[index].scrollIntoView({ behavior: 'smooth' });
     updateDock(index);
+    updateTocActiveItem();
     setTimeout(() => {
       isNavigating = false;
     }, 650);
   }
+
+  // ==========================================================================
+  // 6. MOTOR DO SUMÁRIO (TABLE OF CONTENTS M3)
+  // ==========================================================================
+  function buildToc() {
+    if (!tocList) return;
+    tocList.innerHTML = '';
+    slides.forEach((slide, index) => {
+      const rawTitle = slide.querySelector('.slide-title')?.textContent.trim() || `Slide ${index + 1}`;
+      const cleanTitle = rawTitle.replace(/\s+/g, ' ');
+      const numStr = String(index + 1).padStart(2, '0');
+
+      const itemBtn = document.createElement('button');
+      itemBtn.className = `m3-toc-item ${index === currentSlideIndex ? 'active' : ''}`;
+      itemBtn.setAttribute('data-index', index);
+      itemBtn.setAttribute('type', 'button');
+      itemBtn.innerHTML = `
+        <span class="m3-toc-item-num">${numStr}</span>
+        <span class="m3-toc-item-title">${cleanTitle}</span>
+      `;
+
+      itemBtn.addEventListener('click', () => {
+        scrollToSlide(index);
+        closeToc();
+      });
+
+      tocList.appendChild(itemBtn);
+    });
+  }
+
+  function updateTocActiveItem() {
+    if (!tocList) return;
+    const items = tocList.querySelectorAll('.m3-toc-item');
+    items.forEach((item, idx) => {
+      if (idx === currentSlideIndex) {
+        item.classList.add('active');
+        item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  function openToc() {
+    if (!tocOverlay) return;
+    updateTocActiveItem();
+    tocOverlay.classList.add('active');
+    tocOverlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeToc() {
+    if (!tocOverlay) return;
+    tocOverlay.classList.remove('active');
+    tocOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  if (btnToc) btnToc.addEventListener('click', openToc);
+  if (btnCloseToc) btnCloseToc.addEventListener('click', closeToc);
+  if (tocBackdrop) tocBackdrop.addEventListener('click', closeToc);
+
+  buildToc();
 
   if (btnPrev) btnPrev.addEventListener('click', () => scrollToSlide(currentSlideIndex - 1));
   if (btnNext) btnNext.addEventListener('click', () => scrollToSlide(currentSlideIndex + 1));
 
   // Navegação por teclado
   window.addEventListener('keydown', (e) => {
+    if (tocOverlay && tocOverlay.classList.contains('active')) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeToc();
+      }
+      return;
+    }
     if (modalOverlay && modalOverlay.classList.contains('active')) return;
     if (['ArrowRight', 'Space', 'PageDown', 'KeyJ'].includes(e.code) && !isFreeScroll) {
       e.preventDefault();

@@ -33,6 +33,23 @@
     </div>
   </div>
 
+  <!-- Modal Dialog do Sumário (Table of Contents M3) -->
+  <div id="m3-toc-overlay" class="m3-toc-overlay" aria-hidden="true">
+    <div class="m3-toc-backdrop" id="m3-toc-backdrop"></div>
+    <div class="m3-toc-dialog" role="dialog" aria-modal="true" aria-label="Sumário da Apresentação">
+      <div class="m3-toc-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="slide-tag" style="font-size: 0.82rem; padding: 4px 10px;">Navegação Rápida</span>
+          <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--m3-on-surface); margin: 0;">Sumário da Apresentação</h3>
+        </div>
+        <button class="m3-toc-close" id="m3-toc-close" aria-label="Fechar Sumário">✕</button>
+      </div>
+      <div class="m3-toc-list" id="m3-toc-list">
+        <!-- Populado dinamicamente via JS com todos os 23 slides -->
+      </div>
+    </div>
+  </div>
+
   <!-- Master Slide Viewport Container com Suporte a Keynote Snap e Scroll Livre -->
   <div class="deck-viewport" id="deck-viewport">
 
@@ -1206,7 +1223,8 @@
     <button id="dock-prev" class="dock-btn" aria-label="Slide Anterior">← Voltar</button>
     <div id="dock-counter" class="dock-counter">01 / 23</div>
     <button id="dock-next" class="dock-btn" aria-label="Próximo Slide">Avançar →</button>
-    <button id="dock-mode" class="dock-btn" aria-label="Alternar Modo de Leitura">📜 Scroll Livre</button>
+    <button id="dock-toc" class="dock-btn" aria-label="Abrir Sumário da Apresentação">Sumário</button>
+    <button id="dock-mode" class="dock-btn" aria-label="Alternar Modo de Leitura">Scroll Livre</button>
     <button id="dock-fullscreen" class="dock-btn" aria-label="Tela Cheia">⛶ Tela Cheia</button>
     <button id="dock-theme" class="dock-btn" aria-label="Alternar Tema">☀️ Claro</button>
   </nav>
