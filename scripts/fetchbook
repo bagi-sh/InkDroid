@@ -57,159 +57,32 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$QUERY" ]; then
-  echo "Error: No title or metadata provided." >&2
-  showHelp
+  if [ -t 0 ]; then
+    echo -e "\e[36m=== InkDroid Fetchbook ===\e[0m"
+    read -r -p "Digite o título, autor ou assunto do livro: " QUERY
+    if [ -z "$QUERY" ]; then
+      echo "Nenhuma busca informada. Operação cancelada."
+      exit 0
+    fi
+  else
+    echo "Error: No title or metadata provided." >&2
+    showHelp
+  fi
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CORE_ENGINE="${SCRIPT_DIR}/fetchbook_core.py"
+
+if [ ! -f "$CORE_ENGINE" ]; then
+  echo "Error: Core engine fetchbook_core.py not found at $CORE_ENGINE" >&2
+  exit 1
 fi
 
 mkdir -p "$DEST_DIR"
 
 echo "Searching for: \"$QUERY\" [Format: $FORMAT | Language: $LANG_CODE | Source: $SOURCE]..."
 
-# Multi-tier book search engine in Python
-PYTHON_ENGINE=$(cat << 'EOF'
-import sys, urllib.request, urllib.parse, json, ssl, re
-
-query = sys.argv[1]
-lang = sys.argv[2].lower()
-fmt = sys.argv[3].lower()
-source = sys.argv[4].lower()
-
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
-
-headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
-results = []
-
-def search_gutenberg(q, l, f):
-    url = f"https://gutendex.com/books/?search={urllib.parse.quote(q)}"
-    if l and l != "all":
-        url += f"&languages={l}"
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=8, context=ctx) as resp:
-            data = json.loads(resp.read().decode('utf-8'))
-            for b in data.get("results", [])[:10]:
-                title = b.get("title", "").strip()
-                authors = ", ".join([a.get("name") for a in b.get("authors", [])]) or "Unknown"
-                formats = b.get("formats", {})
-                dl_link = ""
-                matched_fmt = f.upper()
-                if f == "epub":
-                    dl_link = formats.get("application/epub+zip") or formats.get("application/epub+zip; charset=utf-8")
-                elif f == "mobi":
-                    dl_link = formats.get("application/x-mobipocket-ebook")
-                elif f == "pdf":
-                    dl_link = formats.get("application/pdf")
-
-                if not dl_link and "application/epub+zip" in formats:
-                    dl_link = formats["application/epub+zip"]
-                    matched_fmt = "EPUB"
-
-                if dl_link:
-                    results.append({
-                        'source': 'Gutenberg',
-                        'title': title,
-                        'author': authors,
-                        'format': matched_fmt,
-                        'link': dl_link,
-                        'direct': True
-                    })
-    except Exception:
-        pass
-
-def search_archive(q, l, f):
-    url = f"https://openlibrary.org/search.json?q={urllib.parse.quote(q)}&limit=10"
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=8, context=ctx) as resp:
-            data = json.loads(resp.read().decode('utf-8'))
-            for doc in data.get("docs", [])[:8]:
-                title = doc.get("title", "").strip()
-                authors = ", ".join(doc.get("author_name", [])) or "Unknown"
-                ia_list = doc.get("ia", [])
-                if not ia_list:
-                    continue
-                ia_id = ia_list[0]
-                dl_url = f"https://archive.org/download/{ia_id}/{ia_id}.{f}"
-                results.append({
-                    'source': 'OpenLibrary',
-                    'title': title,
-                    'author': authors,
-                    'format': f.upper(),
-                    'link': dl_url,
-                    'direct': True
-                })
-    except Exception:
-        pass
-
-def search_libgen(q, l, f):
-    mirrors = ["https://libgen.li", "https://libgen.vg"]
-    for mirror in mirrors:
-        try:
-            url = f"{mirror}/index.php?req={urllib.parse.quote(q)}&columns[]=t&columns[]=a&objects[]=f&topics[]=l&topics[]=f&res=25"
-            req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req, timeout=6, context=ctx) as resp:
-                html = resp.read().decode('utf-8', errors='ignore')
-                rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
-                for r in rows[1:]:
-                    cols = re.findall(r'<td[^>]*>(.*?)</td>', r, re.DOTALL)
-                    if len(cols) >= 8:
-                        clean_cols = [re.sub(r'<[^>]+>', ' ', c).strip() for c in cols]
-                        title_cell = clean_cols[0]
-                        author = clean_cols[1] or "Unknown"
-                        book_lang = clean_cols[4].lower() if len(clean_cols) > 4 else ""
-                        extension = clean_cols[7].lower() if len(clean_cols) > 7 else ""
-
-                        if l and l != "all":
-                            if l in ["pt", "por", "portuguese"] and not any(k in book_lang for k in ["pt", "por", "portuguese"]):
-                                continue
-                            elif l in ["en", "eng", "english"] and not any(k in book_lang for k in ["en", "eng", "english"]):
-                                continue
-                            elif l in ["es", "spa", "spanish"] and not any(k in book_lang for k in ["es", "spa", "spanish"]):
-                                continue
-
-                        if f and extension and f.lower() != extension:
-                            continue
-
-                        links = re.findall(r'href=[\"\x27]([^\s\"\x27]+)[\"\x27]', r)
-                        dl_link = ""
-                        for lk in links:
-                            if "md5=" in lk:
-                                md5 = lk.split("md5=")[-1].split("&")[0]
-                                dl_link = f"https://libgen.rocks/ads.php?md5={md5}"
-                                break
-                            elif "get.php" in lk or "annas-archive" in lk or "libgen.me" in lk:
-                                dl_link = lk if lk.startswith("http") else f"{mirror}{lk}"
-                                break
-
-                        clean_title = re.sub(r'\s+', ' ', title_cell)[:90].strip()
-                        if clean_title and (dl_link or links):
-                            results.append({
-                                'source': 'LibGen',
-                                'title': clean_title,
-                                'author': author[:50],
-                                'format': (extension or f).upper(),
-                                'link': dl_link or links[0],
-                                'direct': False
-                            })
-            if results:
-                break
-        except Exception:
-            continue
-
-if source in ['all', 'gutenberg']:
-    search_gutenberg(query, lang, fmt)
-if source in ['all', 'archive', 'openlibrary'] and len(results) < 5:
-    search_archive(query, lang, fmt)
-if source in ['all', 'libgen'] and len(results) < 15:
-    search_libgen(query, lang, fmt)
-
-print(json.dumps(results))
-EOF
-)
-
-RAW_JSON=$(python3 -c "$PYTHON_ENGINE" "$QUERY" "$LANG_CODE" "$FORMAT" "$SOURCE" 2>/dev/null || echo "[]")
+RAW_JSON=$(python3 "$CORE_ENGINE" search "$QUERY" "$LANG_CODE" "$FORMAT" "$SOURCE" 2>/dev/null || echo "[]")
 NUM_RESULTS=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(len(json.load(sys.stdin)))" 2>/dev/null || echo 0)
 
 if [ "$NUM_RESULTS" -eq 0 ]; then
@@ -217,16 +90,12 @@ if [ "$NUM_RESULTS" -eq 0 ]; then
   exit 1
 fi
 
-SELECTED_LINK=""
-SELECTED_TITLE=""
-IS_DIRECT="false"
+SELECTED_ITEM_JSON=""
 
 # Result selection logic
 if [ "$AUTO_PICK" = true ] || [ "$NUM_RESULTS" -eq 1 ]; then
   echo "Selecting first result found..."
-  SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['link'])")
-  SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[0]['title'])")
-  IS_DIRECT=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(str(json.load(sys.stdin)[0].get('direct', False)).lower())")
+  SELECTED_ITEM_JSON=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.dumps(json.load(sys.stdin)[0]))")
 else
   echo -e "\nFound $NUM_RESULTS results:"
 
@@ -234,8 +103,9 @@ else
     SELECTED_ITEM=$(echo "$RAW_JSON" | python3 -c "
 import sys, json
 for i, r in enumerate(json.load(sys.stdin)):
-    print(f\"{i+1} | [{r['source']}] {r['title']} - {r['author']} ({r['format']})\")
-" | fzf --prompt="Select book > " --reverse)
+    size_str = f\" [{r.get('size')}]\" if r.get('size') and r.get('size') != 'N/A' else ''
+    print(f\"{i+1} | [{r['source']}]{size_str} {r['title']} - {r['author']} ({r['format']})\")
+" | fzf --prompt="📖 Selecione o livro > " --reverse --height=50% --border)
 
     if [ -z "$SELECTED_ITEM" ]; then
       echo "Operation canceled."
@@ -244,14 +114,13 @@ for i, r in enumerate(json.load(sys.stdin)):
 
     INDEX=$(echo "$SELECTED_ITEM" | cut -d' ' -f1)
     INDEX=$((INDEX - 1))
-    SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['link'])")
-    SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['title'])")
-    IS_DIRECT=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(str(json.load(sys.stdin)[$INDEX].get('direct', False)).lower())")
+    SELECTED_ITEM_JSON=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.dumps(json.load(sys.stdin)[$INDEX]))")
   else
     echo "$RAW_JSON" | python3 -c "
 import sys, json
 for i, r in enumerate(json.load(sys.stdin)):
-    print(f\"  [{i+1}] [{r['source']}] {r['title']} - {r['author']} ({r['format']})\")
+    size_str = f\" [{r.get('size')}]\" if r.get('size') and r.get('size') != 'N/A' else ''
+    print(f\"  [{i+1}] [{r['source']}]{size_str} {r['title']} - {r['author']} ({r['format']})\")
 "
     while true; do
       read -r -p "Enter option number [1-$NUM_RESULTS] or 'q' to cancel: " choice
@@ -261,9 +130,7 @@ for i, r in enumerate(json.load(sys.stdin)):
       fi
       if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$NUM_RESULTS" ]; then
         INDEX=$((choice - 1))
-        SELECTED_LINK=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['link'])")
-        SELECTED_TITLE=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)[$INDEX]['title'])")
-        IS_DIRECT=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(str(json.load(sys.stdin)[$INDEX].get('direct', False)).lower())")
+        SELECTED_ITEM_JSON=$(echo "$RAW_JSON" | python3 -c "import sys, json; print(json.dumps(json.load(sys.stdin)[$INDEX]))")
         break
       else
         echo "Invalid option. Please enter a valid number."
@@ -272,63 +139,38 @@ for i, r in enumerate(json.load(sys.stdin)):
   fi
 fi
 
-# Resolve direct download URL if needed
-DIRECT_URL="$SELECTED_LINK"
-
-if [ "$IS_DIRECT" != "true" ]; then
-  echo "Resolving mirror download URL..."
-  RESOLVE_SCRIPT=$(cat << 'EOF'
-import sys, urllib.request, ssl, re
-
-link = sys.argv[1]
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
-headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'}
-
-try:
-    req = urllib.request.Request(link, headers=headers)
-    with urllib.request.urlopen(req, timeout=8, context=ctx) as resp:
-        html = resp.read().decode('utf-8', errors='ignore')
-        m = re.search(r'href=[\"\x27](https?://[^\s\"\x27]+/(?:main|get)/[^\s\"\x27]+)[\"\x27]', html)
-        if m:
-            print(m.group(1))
-        else:
-            m2 = re.search(r'href=[\"\x27](https?://[^\s\"\x27]+\.(?:epub|pdf|mobi)[^\s\"\x27]*)[\"\x27]', html, re.IGNORECASE)
-            if m2:
-                print(m2.group(1))
-            else:
-                print(link)
-except Exception:
-    print(link)
-EOF
-  )
-  DIRECT_URL=$(python3 -c "$RESOLVE_SCRIPT" "$SELECTED_LINK" 2>/dev/null || echo "$SELECTED_LINK")
-fi
-
 # Sanitize file name
-SAFE_FILENAME=$(echo "$SELECTED_TITLE" | sed 's/[^a-zA-Z0-9 _-]/_/g' | tr -s '_' | cut -c1-60)
+SELECTED_TITLE=$(echo "$SELECTED_ITEM_JSON" | python3 -c "import sys, json; print(json.loads(sys.stdin.read()).get('title', 'Livro'))")
+SAFE_FILENAME=$(echo "$SELECTED_TITLE" | sed 's/[^a-zA-Z0-9 _-]/_/g' | tr -s '_' | cut -c1-60 | sed 's/^_*//;s/_*$//')
+[ -z "$SAFE_FILENAME" ] && SAFE_FILENAME="book"
 OUTPUT_FILE="${DEST_DIR}/${SAFE_FILENAME}.${FORMAT}"
 
 echo "Saving to: $OUTPUT_FILE"
-curl -# -L "$DIRECT_URL" -o "$OUTPUT_FILE" --user-agent "Mozilla/5.0"
 
-# Verify downloaded file
-FILE_VALID=false
-if [ -f "$OUTPUT_FILE" ]; then
-  FILE_SIZE=$(wc -c < "$OUTPUT_FILE" || echo 0)
-  if [ "$FILE_SIZE" -gt 1024 ]; then
-    FILE_VALID=true
-  fi
-fi
+# Execute stream download and integrity validation via fetchbook_core.py
+DOWNLOAD_OUT=$(python3 "$CORE_ENGINE" download "$SELECTED_ITEM_JSON" "$OUTPUT_FILE" "$FORMAT") || {
+  ERR_MSG=$(echo "$DOWNLOAD_OUT" | python3 -c "import sys, json; print(json.loads(sys.stdin.read()).get('error', 'Download falhou'))" 2>/dev/null || echo "Falha na conexão ou integridade do arquivo.")
+  echo -e "\n\e[31m[ERROR]\e[0m $ERR_MSG"
+  exit 1
+}
 
-if [ "$FILE_VALID" = true ]; then
-  echo -e "\n\e[32m[SUCCESS]\e[0m Download completed successfully!"
+IS_SUCCESS=$(echo "$DOWNLOAD_OUT" | python3 -c "import sys, json; print(str(json.loads(sys.stdin.read()).get('success', False)).lower())" 2>/dev/null || echo "false")
+
+if [ "$IS_SUCCESS" = "true" ]; then
+  echo -e "\n\e[32m[SUCCESS]\e[0m Download and integrity check completed successfully!"
+  echo "$DOWNLOAD_OUT" | python3 -c "
+import sys, json
+rep = json.loads(sys.stdin.read()).get('report', {})
+print(f\"  Title: {rep.get('title')}\")
+print(f\"  Author: {rep.get('author')}\")
+if rep.get('chapters'):
+    print(f\"  Integrity: {rep.get('chapters')} verified chapters ({rep.get('sample_chars', 0)} chars sampled)\")
+size_kb = rep.get('size_bytes', 0) / 1024
+print(f\"  Size: {size_kb:.1f} KB\")
+"
 else
-  echo -e "\n\e[33m[NOTICE]\e[0m Direct download could not be completed automatically."
-  echo "Opening mirror in browser: $SELECTED_LINK"
-  xdg-open "$SELECTED_LINK" 2>/dev/null || sensible-browser "$SELECTED_LINK" 2>/dev/null || true
-  exit 0
+  echo -e "\n\e[31m[ERROR]\e[0m Direct download could not be completed."
+  exit 1
 fi
 
 # Push to tablet function
