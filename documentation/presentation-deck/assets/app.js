@@ -392,9 +392,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="m3-toc-item-title">${cleanTitle}</span>
       `;
 
-      itemBtn.addEventListener('click', () => {
-        scrollToSlide(index);
+      itemBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         closeToc();
+        scrollToSlide(index);
       });
 
       tocList.appendChild(itemBtn);
@@ -425,6 +427,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!tocOverlay) return;
     tocOverlay.classList.remove('active');
     tocOverlay.setAttribute('aria-hidden', 'true');
+    if (document.activeElement && tocOverlay.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
   }
 
   if (btnToc) btnToc.addEventListener('click', openToc);

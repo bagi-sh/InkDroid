@@ -1170,21 +1170,22 @@ code {
    Modal do Sumário (Table of Contents M3)
    ========================================================================== */
 .m3-toc-overlay {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   z-index: 3500;
-  display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--m3-duration-medium) var(--m3-easing-emphasized);
+  transition: opacity var(--m3-duration-short) var(--m3-easing-emphasized);
 }
 
 .m3-toc-overlay.active {
+  display: flex;
   opacity: 1;
   pointer-events: auto;
 }
