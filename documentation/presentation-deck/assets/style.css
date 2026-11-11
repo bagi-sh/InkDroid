@@ -280,10 +280,18 @@ html, body {
 }
 
 .hero-bullet-item::before {
-  content: "✦";
+  content: "✷";
   color: var(--m3-primary);
-  font-size: 1.3rem;
-  margin-top: 1px;
+  font-size: 1.25rem;
+  line-height: 1;
+  margin-top: 2px;
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), color 0.2s ease;
+}
+
+.hero-bullet-item:hover::before {
+  transform: rotate(45deg) scale(1.2);
+  color: var(--m3-tertiary, var(--m3-primary));
 }
 
 /* Números Colossais de Destaque */
