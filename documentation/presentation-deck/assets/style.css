@@ -58,7 +58,7 @@
   --m3-surface-bright: #FFFFFF;
   --m3-background: #F4FAF5;
   --m3-on-surface: #0E2415;
-  --m3-on-surface-variant: #2D4736;
+  --m3-on-surface-variant: #243D2D;
 
   --m3-surface-container-lowest: #FFFFFF;
   --m3-surface-container-low: #EBF5EE;
@@ -66,22 +66,22 @@
   --m3-surface-container-high: #D5E9DA;
   --m3-surface-container-highest: #CAE2D0;
   --m3-surface-variant: #D2E7D7;
-  --m3-outline: #5B8568;
-  --m3-outline-variant: #A4C5AF;
+  --m3-outline: #3E664A;
+  --m3-outline-variant: #9EBEA9;
 
   --m3-primary: #006D37;
   --m3-on-primary: #FFFFFF;
   --m3-primary-container: #80E89E;
   --m3-on-primary-container: #00210D;
 
-  --m3-secondary: #386646;
+  --m3-secondary: #2C573A;
   --m3-on-secondary: #FFFFFF;
   --m3-secondary-container: #BCE3C7;
 
   --m3-tertiary: #006874;
   --m3-on-tertiary: #FFFFFF;
 
-  --m3-amber: #855400;
+  --m3-amber: #7A4C00;
   --m3-amber-container: #FFE085;
   --m3-danger: #B3261E;
   --m3-danger-container: #FFDAD6;
@@ -103,6 +103,26 @@
 
 [data-theme="light"] .m3-orbit-ring {
   border-color: rgba(0, 109, 55, 0.25);
+}
+
+[data-theme="light"] .keynote-dock {
+  box-shadow: 0 4px 20px rgba(14, 36, 21, 0.12);
+}
+
+[data-theme="light"] .m3-modal-backdrop {
+  background: rgba(14, 36, 21, 0.40);
+}
+
+[data-theme="light"] .m3-modal-dialog {
+  box-shadow: 0 16px 40px rgba(14, 36, 21, 0.16);
+}
+
+[data-theme="light"] .m3-modal-dialog.expanded {
+  box-shadow: 0 24px 64px rgba(14, 36, 21, 0.22);
+}
+
+[data-theme="light"] .tablet-frame-m3 {
+  box-shadow: 0 20px 48px rgba(14, 36, 21, 0.25), 0 0 0 1px rgba(0, 109, 55, 0.2);
 }
 
 /* ==========================================================================
@@ -292,6 +312,40 @@ html, body {
 .hero-bullet-item:hover::before {
   transform: rotate(45deg) scale(1.2);
   color: var(--m3-tertiary, var(--m3-primary));
+}
+
+/* Material Design 3 Chips */
+.m3-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: var(--m3-surface-container-low);
+  border: 1px solid var(--m3-outline-variant);
+  color: var(--m3-on-surface);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+  transition: all 0.2s var(--m3-easing-emphasized);
+}
+
+.m3-chip:hover {
+  background: var(--m3-surface-container-high);
+  border-color: var(--m3-primary);
+  transform: translateY(-1px);
+}
+
+/* Inline Code Snippets M3 */
+code {
+  font-family: ui-monospace, SFMono-Regular, "Roboto Mono", Menlo, monospace;
+  font-size: 0.88em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--m3-surface-container-high);
+  border: 1px solid var(--m3-outline-variant);
+  color: var(--m3-primary);
+  font-weight: 600;
 }
 
 /* Números Colossais de Destaque */
