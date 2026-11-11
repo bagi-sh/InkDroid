@@ -46,11 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Partículas orgânicas com visibilidade balanceada e estética M3
     const blobs = [
-      { x: width * 0.18, y: height * 0.22, vx: 0.32, vy: 0.20, r: 160, time: 0.0, speed: 0.014, color: 'rgba(61, 220, 132, 0.22)' },
-      { x: width * 0.82, y: height * 0.28, vx: -0.26, vy: 0.18, r: 190, time: 2.1, speed: 0.010, color: 'rgba(21, 70, 42, 0.35)' },
-      { x: width * 0.48, y: height * 0.70, vx: 0.22, vy: -0.22, r: 175, time: 4.3, speed: 0.012, color: 'rgba(53, 84, 63, 0.28)' },
-      { x: width * 0.20, y: height * 0.80, vx: -0.18, vy: -0.20, r: 145, time: 1.2, speed: 0.015, color: 'rgba(61, 220, 132, 0.18)' },
-      { x: width * 0.80, y: height * 0.78, vx: 0.20, vy: 0.24, r: 165, time: 3.5, speed: 0.011, color: 'rgba(166, 212, 222, 0.20)' }
+      { x: width * 0.18, y: height * 0.22, vx: 0.32, vy: 0.20, r: 160, time: 0.0, rot: 0.0, rotSpeed: 0.0050, speed: 0.014, color: 'rgba(61, 220, 132, 0.22)' },
+      { x: width * 0.82, y: height * 0.28, vx: -0.26, vy: 0.18, r: 190, time: 2.1, rot: 1.2, rotSpeed: 0.0040, speed: 0.010, color: 'rgba(21, 70, 42, 0.35)' },
+      { x: width * 0.48, y: height * 0.70, vx: 0.22, vy: -0.22, r: 175, time: 4.3, rot: 2.4, rotSpeed: 0.0045, speed: 0.012, color: 'rgba(53, 84, 63, 0.28)' },
+      { x: width * 0.20, y: height * 0.80, vx: -0.18, vy: -0.20, r: 145, time: 1.2, rot: 0.8, rotSpeed: 0.0055, speed: 0.015, color: 'rgba(61, 220, 132, 0.18)' },
+      { x: width * 0.80, y: height * 0.78, vx: 0.20, vy: 0.24, r: 165, time: 3.5, rot: 3.1, rotSpeed: 0.0038, speed: 0.011, color: 'rgba(166, 212, 222, 0.20)' }
     ];
 
     function drawLavaLamp() {
@@ -74,7 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Curva de interpolação sinusoidal natural (0 = estrela, 1 = pílula)
         const t = (Math.sin(b.time - Math.PI / 2) + 1) / 2;
-        ctx.rotate(t * (Math.PI / 2) + b.time * 0.12);
+
+        // Rotação contínua e unidirecional no sentido horário (nunca volta para trás)
+        b.rot += b.rotSpeed * (1 + 0.35 * Math.sin(b.time * 2));
+        ctx.rotate(b.rot);
 
         ctx.beginPath();
         const points = 120;
